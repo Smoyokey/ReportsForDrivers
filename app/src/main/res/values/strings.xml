@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">ReportsForDrivers</string>
+
+    <string name="create_report">Create report</string>
+    <string name="be_continued">To be continued</string>
+    <string name="report_history">Report history</string>
+    <string name="settings">Settings</string>
+    <string name="enter_information_yourself">Enter information about yourself (to make
+        reporting easier)</string>
+    <string name="entered_data_change_later">You can use the entered data for reports. You
+        can change this later.</string>
+    <string name="last_name">Last name</string>
+    <string name="first_name">First name</string>
+    <string name="patronymic">Patronymic</string>
+    <string name="add_makes_registration_vehicles_trailers">Add the makes and registration
+        numbers of the vehicles and trailers that you are driving (optional).</string>
+    <string name="vehicle">Vehicle</string>
 </resources>
