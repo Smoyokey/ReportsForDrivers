@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,6 +80,7 @@ fun FirstEntryScreen() {
         ) {
             Button(
                 onClick = {},
+                enabled = false
             ) {
                 Text(
                     text = stringResource(R.string.add)
@@ -106,6 +109,41 @@ fun FirstEntryScreen() {
             )
         }
         TableMakeRn(type = "vehicle", make = "DAF", rn = "1234IT 5")
+
+        /**
+         * Разделитель
+         */
+
+        Row() {
+            Text(
+                text = stringResource(R.string.save_entered_data),
+                modifier = Modifier.weight(1f)
+            )
+//            CheckBox(
+//                checked = false,
+//                onCheckedChange = {}
+//            )
+        }
+
+        /**
+         * Разделитель
+         */
+
+        Row() {
+            Button(
+                onClick = {},
+                Modifier.weight(1f)
+            ) {
+                Text(text = stringResource(R.string.skip))
+            }
+            Button(
+                onClick = {},
+                enabled = false, //StateUI
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(text = stringResource(R.string.save))
+            }
+        }
     }
 }
 
