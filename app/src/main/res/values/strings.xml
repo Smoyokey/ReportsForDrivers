@@ -58,6 +58,7 @@
     <string name="distance">Distance, kilometres</string>
     <string name="cargo_weight">Cargo weight, tonnes</string>
     <string name="preview">Preview</string>
+    <string name="reports_name">Reports name</string>
     <string name="result">Result</string>
     <string name="share">Share</string>
     <string name="save_pdf">Save to PDF</string>
