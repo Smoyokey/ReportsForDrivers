@@ -3,6 +3,7 @@ plugins {
 //    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 
@@ -18,7 +19,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "runner.HiltTestRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -82,6 +84,7 @@ dependencies {
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
 //    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+    kapt("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
 
     //Testing
     debugImplementation("androidx.compose.ui:ui-test-manifest")
@@ -100,6 +103,8 @@ dependencies {
     androidTestAnnotationProcessor(
         "com.google.dagger:hilt-compiler:${rootProject.extra["hilt_version"]}"
     )
+    kaptTest("com.google.dagger:hilt-android-compiler:${rootProject.extra["hilt_version"]}")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:${rootProject.extra["hilt_version"]}")
     //For local unit tests (HILT)
     testImplementation("com.google.dagger:hilt-android-testing:${rootProject.extra["hilt_version"]}")
     testAnnotationProcessor("com.google.dagger:hilt-compiler:${rootProject.extra["hilt_version"]}")

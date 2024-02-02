@@ -5,7 +5,13 @@
       <entry key="FirstEntryScreenPreview">
         <State />
       </entry>
+      <entry key="PersonalInfoDaoTest">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="daoInsert_insertsItemDaoIntoDb()">
         <State />
       </entry>
       <entry key="daoInsert_insertsItemIntoDB()">
