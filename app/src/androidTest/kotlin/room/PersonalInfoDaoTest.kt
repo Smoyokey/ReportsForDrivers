@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,7 +21,9 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
-
+/**
+ * Класс тестирования SQL запросов класса [PersonalInfoDao].
+ */
 @HiltAndroidTest
 class PersonalInfoDaoTest{
 
@@ -45,9 +49,7 @@ class PersonalInfoDaoTest{
 
     @Before
     fun createDb() {
-        Log.i("TAG", "test - 1")
         hiltRule.inject()
-        Log.i("TAG", "test - 2")
         personalInfoDao = database.personalInfoDao()
     }
 
@@ -59,11 +61,61 @@ class PersonalInfoDaoTest{
 
     @Test
     @Throws(Exception::class)
-    fun daoInsert_insertsItemDaoIntoDb() = runBlocking {
+    fun daoInsert_insertsOneItemDaoIntoDb() = runBlocking {
         addOneElement()
         val allItems = personalInfoDao.getAllItem().first()
         assertEquals(allItems[0], item1)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun daoInsert_insertsAllItemsDaoIntoDb() = runBlocking {
+        addTwoElements()
+        val allItems = personalInfoDao.getAllItem().first()
+        assertEquals(allItems[0], item1)
+        assertEquals(allItems[1], item2)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoUpdatesItems_updatesItemsInDb() = runBlocking {
+        addTwoElements()
+        personalInfoDao.update(PersonalInfo(1, "One", "Two", "Three"))
+        personalInfoDao.update(PersonalInfo(2, "One", "Two", "Three"))
+
+        val allItems = personalInfoDao.getAllItem().first()
+        assertEquals(allItems[0], PersonalInfo(1, "One", "Two", "Three"))
+        assertEquals(allItems[1], PersonalInfo(2, "One", "Two", "Three"))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoDeleteItems_deletesItemsInDb() = runBlocking {
+        addTwoElements()
+        personalInfoDao.delete(item1)
+        personalInfoDao.delete(item2)
+
+        val allItems = personalInfoDao.getAllItem().first()
+        assertTrue(allItems.isEmpty())
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoSelectOneItem_selectItemInDb() = runBlocking {
+        addTwoElements()
+
+        val oneItem = personalInfoDao.getOneItem(1).first()
+        assertEquals(oneItem, item1)
+    }
+
+    /**
+     * Вопрос, нужен ли этот тест, что будет происходить при неверном вытягивании
+     */
+    @Test
+    @Throws(Exception::class)
+    fun daoSelectOneItem_selectItemInDb_exception() = runBlocking {
+        val oneItem = personalInfoDao.getOneItem(1).first()
+        assertNotEquals(oneItem, item1)
+    }
 
 }
