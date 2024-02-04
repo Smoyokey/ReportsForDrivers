@@ -80,6 +80,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+
     //Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
