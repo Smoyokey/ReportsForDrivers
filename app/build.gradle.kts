@@ -97,7 +97,7 @@ dependencies {
 
     //Hilt
     implementation("com.google.dagger:hilt-android:${rootProject.extra["hilt_version"]}")
-    annotationProcessor("com.google.dagger:hilt-compiler:${rootProject.extra["hilt_version"]}")
+    kapt("com.google.dagger:hilt-compiler:${rootProject.extra["hilt_version"]}")
     //For instrumentation test (HILT)
     androidTestImplementation(
         "com.google.dagger:hilt-android-testing:${rootProject.extra["hilt_version"]}"

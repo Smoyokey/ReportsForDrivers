@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -36,9 +37,9 @@ fun SettingDataVehiclesTrailersScreen() {
             )
         )
 
-        /**
-         * Бахаем разделитель тута
-         */
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -61,9 +62,10 @@ fun SettingDataVehiclesTrailersScreen() {
                 )
             }
         }
-        /**
-         * Разделитель тута
-         */
+
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         //Дальше идет таблица
         //Надо подумать как красиво реализовать

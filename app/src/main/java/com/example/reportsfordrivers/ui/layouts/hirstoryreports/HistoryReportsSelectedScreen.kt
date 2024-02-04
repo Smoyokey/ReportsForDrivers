@@ -3,7 +3,9 @@ package com.example.reportsfordrivers.ui.layouts.hirstoryreports
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +28,9 @@ fun HistoryReportsSelectedScreen() {
             text = stringResource(R.string.test)
         )
 
-        //DIVIDER
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         HistoryReportsButton(R.string.preview)
         HistoryReportsButton(R.string.edit)
