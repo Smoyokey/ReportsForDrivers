@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
 
 @Composable
-fun CreateReportsDataFillingTwoScreen() {
+fun CreateReportsDataFillingTwoScreen(
+    onProgressReport: () -> Unit
+) {
     Column() {
         //TOP APP BAR
 
@@ -60,7 +62,7 @@ fun CreateReportsDataFillingTwoScreen() {
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {}
+                onClick = onProgressReport
             ) {
                 Text(
                     text = stringResource(R.string.next)
@@ -113,5 +115,5 @@ fun LineDataFillingPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateReportsDataFillingTwoScreenPreview() {
-    CreateReportsDataFillingTwoScreen()
+    CreateReportsDataFillingTwoScreen(onProgressReport = {})
 }

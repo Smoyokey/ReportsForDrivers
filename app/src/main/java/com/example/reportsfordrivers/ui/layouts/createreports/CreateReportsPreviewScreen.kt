@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
 
 @Composable
-fun CreateReportsPreviewScreen() {
+fun CreateReportsPreviewScreen(
+    onResult: () -> Unit
+) {
     Column() {
         Text(
             text = stringResource(R.string.preview),
@@ -93,7 +95,7 @@ fun CreateReportsPreviewScreen() {
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {}
+                onClick = onResult
             ) {
                 Text(
                     text = stringResource(R.string.next)
@@ -177,5 +179,5 @@ fun LinePreviewTextPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateReportsPreviewScreenPreview() {
-    CreateReportsPreviewScreen()
+    CreateReportsPreviewScreen(onResult = {})
 }

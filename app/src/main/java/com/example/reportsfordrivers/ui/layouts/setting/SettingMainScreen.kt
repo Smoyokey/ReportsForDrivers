@@ -22,23 +22,26 @@ import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
 
 @Composable
-fun SettingMainScreen(modifier: Modifier = Modifier) {
+fun SettingMainScreen(onPersonalData: () -> Unit,
+                      onVehicleAndTrailerDate: () -> Unit,
+                      onFeedback: () -> Unit,
+                      modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
             .padding(10.dp)
     ) {
-        ButtonSetting(R.string.personal_data)
-        ButtonSetting(R.string.data_vehicles_trailers)
-        ButtonSetting(R.string.feedback)
+        ButtonSetting(R.string.personal_data, onClick = onPersonalData)
+        ButtonSetting(R.string.data_vehicles_trailers, onClick = onVehicleAndTrailerDate)
+        ButtonSetting(R.string.feedback, onClick = onFeedback)
     }
 }
 
 @Composable
-fun ButtonSetting(text: Int, modifier: Modifier = Modifier) {
+fun ButtonSetting(text: Int, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
-        onClick = { },
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
@@ -55,5 +58,5 @@ fun ButtonSetting(text: Int, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SettingMainScreenPreview() {
-    SettingMainScreen()
+    SettingMainScreen({}, {}, {})
 }

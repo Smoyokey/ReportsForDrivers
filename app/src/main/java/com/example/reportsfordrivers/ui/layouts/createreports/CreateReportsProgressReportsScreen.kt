@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
 
 @Composable
-fun CreateReportsProgressReportsScreen() {
+fun CreateReportsProgressReportsScreen(
+    onPreview: () -> Unit
+) {
     Column {
         Text(
             text = stringResource(R.string.progress_report),
@@ -98,7 +100,7 @@ fun CreateReportsProgressReportsScreen() {
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {}
+                onClick = onPreview
             ) {
                 Text(
                     text = stringResource(R.string.next)
@@ -163,5 +165,5 @@ fun OutlinedTextFieldProgressReportsPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateReportsProgressReportsScreenPreview() {
-    CreateReportsProgressReportsScreen()
+    CreateReportsProgressReportsScreen(onPreview = {})
 }

@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
 
 @Composable
-fun CreateReportsDataFillingOneScreen() {
+fun CreateReportsDataFillingOneScreen(
+    onDataFillingTwo: () -> Unit
+) {
     Column() {
         //Верхнее меню
 
@@ -79,7 +81,7 @@ fun CreateReportsDataFillingOneScreen() {
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {}
+                onClick = onDataFillingTwo
             ) {
                 Text(
                     text = stringResource(R.string.next)
@@ -116,5 +118,5 @@ fun OutlinedTextFieldDataFillingPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateReportsDataFillingOneScreenPreview() {
-    CreateReportsDataFillingOneScreen()
+    CreateReportsDataFillingOneScreen(onDataFillingTwo = {})
 }

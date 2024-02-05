@@ -2,6 +2,7 @@ package com.example.reportsfordrivers
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -73,11 +75,14 @@ fun ReportsForDriversApp(
         topBar = {
             ReportsForDriversTopBar(
                 currentScreen = currentScreen,
-                canNavigateBack = false) {
-            }
+                canNavigateBack = navController.currentBackStackEntry != null
+            ) { navController.navigateUp() }
         }
     ) { innerPadding ->
-        ReportsForDriversNavHost(navController = navController)
+        ReportsForDriversNavHost(
+            navController = navController,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 
 }

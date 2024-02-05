@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.example.reportsfordrivers.R
 
 @Composable
-fun CreateReportsSelectedMaketScreen() {
+fun CreateReportsSelectedMaketScreen(
+    onFillingDataOne: () -> Unit
+) {
     Column() {
         //Тут верхняя навигация
 
@@ -36,7 +38,7 @@ fun CreateReportsSelectedMaketScreen() {
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {}
+                onClick = onFillingDataOne
             ) {
                 Text(
                     text = stringResource(R.string.next)
@@ -64,5 +66,5 @@ fun CardMaket(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateReportsSelectedMaketScreenPreview() {
-    CreateReportsSelectedMaketScreen()
+    CreateReportsSelectedMaketScreen( onFillingDataOne = {} )
 }
