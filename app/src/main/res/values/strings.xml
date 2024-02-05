@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">ReportsForDrivers</string>
 
+    <string name="driver_report">Driver Report</string>
+    <string name="history_report">History Reports</string>
+    <string name="setting">Setting</string>
 
     <string name="enter_information_yourself">Enter information about yourself (to make
         reporting easier)</string>

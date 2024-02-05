@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedIconButton
@@ -24,17 +25,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
+import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 
 @Composable
-fun FirstEntryScreen() {
+fun FirstEntryScreen(
+    viewModel: FirstEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
         Row {
             Text(
                 text = stringResource(R.string.enter_information_yourself),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+
             )
             OutlinedIconButton(
                 onClick = {}
@@ -46,13 +53,13 @@ fun FirstEntryScreen() {
             }
         }
 
-        OutlinedTextFieldDef(R.string.last_name)
-        OutlinedTextFieldDef(R.string.first_name)
-        OutlinedTextFieldDef(R.string.patronymic)
+        OutlinedTextFieldDef(R.string.last_name, viewModel)
+        OutlinedTextFieldDef(R.string.first_name, viewModel)
+        OutlinedTextFieldDef(R.string.patronymic, viewModel)
 
-        /**
-         * Тут добавить разделитель
-         */
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         Text(
             text = stringResource(R.string.add_makes_registration_vehicles_trailers),
@@ -65,8 +72,8 @@ fun FirstEntryScreen() {
             RadioButtonDef(R.string.trailer, modifier = Modifier.weight(1f))
         }
 
-        OutlinedTextFieldDef(R.string.make_vehicle_trailer)
-        OutlinedTextFieldDef(R.string.rn_vehicle_trailer)
+        OutlinedTextFieldDef(R.string.make_vehicle_trailer, viewModel)
+        OutlinedTextFieldDef(R.string.rn_vehicle_trailer, viewModel)
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -104,24 +111,20 @@ fun FirstEntryScreen() {
         }
         TableMakeRn(type = "vehicle", make = "DAF", rn = "1234IT 5")
 
-        /**
-         * Разделитель
-         */
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         Row() {
             Text(
                 text = stringResource(R.string.save_entered_data),
                 modifier = Modifier.weight(1f)
             )
-//            CheckBox(
-//                checked = false,
-//                onCheckedChange = {}
-//            )
         }
 
-        /**
-         * Разделитель
-         */
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         Row() {
             Button(
@@ -193,10 +196,10 @@ fun RadioButtonDef(text: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OutlinedTextFieldDef(label: Int) {
+fun OutlinedTextFieldDef(label: Int, viewModel: FirstEntryViewModel) {
     OutlinedTextField(
         value = "",
-        onValueChange = { },
+        onValueChange = { viewModel.setLastName(it) },
         label = {
             Text(
                 text = stringResource(label)

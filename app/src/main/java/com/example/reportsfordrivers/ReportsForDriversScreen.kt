@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.reportsfordrivers.navigate.ReportsForDriversNavHost
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.MainMenuScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataFillingOneScreen
@@ -37,15 +38,15 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScree
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportsForDriversTopBar(
-    @StringRes title: Int,
+    currentScreen: ReportsForDriversSchema,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit
 ) {
     TopAppBar(
-        title = { Text(text = stringResource(title))},
+        title = { Text(text = stringResource(currentScreen.title)) },
 
         navigationIcon = {
-            if(canNavigateBack) {
+            if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -59,66 +60,24 @@ fun ReportsForDriversTopBar(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ReportsForDriversScreen(
+fun ReportsForDriversApp(
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
 
+    val currentScreen = ReportsForDriversSchema.valueOf(
+        backStackEntry?.destination?.route ?: ReportsForDriversSchema.Start.name
+    )
+
     Scaffold(
         topBar = {
             ReportsForDriversTopBar(
-                R.string.test,
-                navController.previousBackStackEntry != null
-            ) { navController.navigateUp()}
+                currentScreen = currentScreen,
+                canNavigateBack = false) {
+            }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = ReportsForDriversSchema.Start.name,
-        ) {
-            composable(route = ReportsForDriversSchema.Start.name) {
-                MainMenuScreen()
-            }
-            composable(route = ReportsForDriversSchema.FirstEntry.name) {
-                FirstEntryScreen()
-            }
-            composable(route = ReportsForDriversSchema.SelectLayout.name) {
-                CreateReportsSelectedMaketScreen()
-            }
-            composable(route = ReportsForDriversSchema.FillingDataOne.name) {
-                CreateReportsDataFillingOneScreen()
-            }
-            composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
-                CreateReportsDataFillingTwoScreen()
-            }
-            composable(route = ReportsForDriversSchema.ProgressReport.name) {
-                CreateReportsProgressReportsScreen()
-            }
-            composable(route = ReportsForDriversSchema.Preview.name) {
-                CreateReportsPreviewScreen()
-            }
-            composable(route = ReportsForDriversSchema.Result.name) {
-                CreateReportsResultScreen()
-            }
-            composable(route = ReportsForDriversSchema.ListHistory.name) {
-                HistoryReportsScreen()
-            }
-            composable(route = ReportsForDriversSchema.SelectElementHistory.name) {
-                HistoryReportsSelectedScreen()
-            }
-            composable(route = ReportsForDriversSchema.SettingStart.name) {
-                SettingMainScreen()
-            }
-            composable(route = ReportsForDriversSchema.PersonalInformation.name) {
-                SettingPersonalDataScreen()
-            }
-            composable(route = ReportsForDriversSchema.VehicleAndTrailerData.name) {
-                SettingDataVehiclesTrailersScreen()
-            }
-            composable(route = ReportsForDriversSchema.Feedback.name) {
-                SettingFeedbackScreen()
-            }
-        }
+        ReportsForDriversNavHost(navController = navController)
     }
 
 }

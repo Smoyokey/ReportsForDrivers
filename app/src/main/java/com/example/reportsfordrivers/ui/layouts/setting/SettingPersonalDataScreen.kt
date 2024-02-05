@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -49,17 +50,17 @@ fun SettingPersonalDataScreen() {
             ),
             modifier = Modifier.fillMaxWidth(),
         )
-        /**
-         * Тут нужен еще разделитель
-         */
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         SettingPersonalDataOutlinedTextFieldScreen(R.string.last_name)
         SettingPersonalDataOutlinedTextFieldScreen(R.string.first_name)
         SettingPersonalDataOutlinedTextFieldScreen(R.string.patronymic)
 
-        /**
-         * Тут бахаем еще один разделитель
-         */
+        Divider(
+            modifier = Modifier.padding(10.dp)
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth()
