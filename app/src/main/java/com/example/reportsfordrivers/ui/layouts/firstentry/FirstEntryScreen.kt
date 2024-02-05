@@ -53,9 +53,9 @@ fun FirstEntryScreen(
             }
         }
 
-        OutlinedTextFieldDef(R.string.last_name)
-        OutlinedTextFieldDef(R.string.first_name)
-        OutlinedTextFieldDef(R.string.patronymic)
+        OutlinedTextFieldDef(R.string.last_name, viewModel)
+        OutlinedTextFieldDef(R.string.first_name, viewModel)
+        OutlinedTextFieldDef(R.string.patronymic, viewModel)
 
         Divider(
             modifier = Modifier.padding(10.dp)
@@ -72,8 +72,8 @@ fun FirstEntryScreen(
             RadioButtonDef(R.string.trailer, modifier = Modifier.weight(1f))
         }
 
-        OutlinedTextFieldDef(R.string.make_vehicle_trailer)
-        OutlinedTextFieldDef(R.string.rn_vehicle_trailer)
+        OutlinedTextFieldDef(R.string.make_vehicle_trailer, viewModel)
+        OutlinedTextFieldDef(R.string.rn_vehicle_trailer, viewModel)
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -196,10 +196,10 @@ fun RadioButtonDef(text: Int, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OutlinedTextFieldDef(label: Int) {
+fun OutlinedTextFieldDef(label: Int, viewModel: FirstEntryViewModel) {
     OutlinedTextField(
         value = "",
-        onValueChange = { },
+        onValueChange = { viewModel.setLastName(it) },
         label = {
             Text(
                 text = stringResource(label)
