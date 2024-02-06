@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
 //    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
     kapt("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //Testing
     debugImplementation("androidx.compose.ui:ui-test-manifest")

@@ -2,22 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CreateReportNavigationTest">
-        <State />
-      </entry>
-      <entry key="HistoryReportNavigationTest">
-        <State />
-      </entry>
-      <entry key="NavigationTest">
-        <State />
-      </entry>
       <entry key="SettingNavigationTest">
-        <State />
-      </entry>
-      <entry key="app">
-        <State />
-      </entry>
-      <entry key="reportsForDriversNavHost_moveToCreateReport_inFillingDataOne()">
         <State />
       </entry>
     </value>
