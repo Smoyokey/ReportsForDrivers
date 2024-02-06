@@ -2,22 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PersonalInfoDaoTest">
-        <State />
-      </entry>
-      <entry key="ProgressReportDaoTest">
-        <State />
-      </entry>
-      <entry key="TrailerDaoTest">
-        <State />
-      </entry>
-      <entry key="VehicleDaoTest">
+      <entry key="SettingNavigationTest">
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="daoSelectOneItem_selectItemInDb_exception()">
         <State />
       </entry>
     </value>
