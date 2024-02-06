@@ -12,6 +12,7 @@ import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsPrevi
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsProgressReportsScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsSelectedMaketScreen
+import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
 import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrailersScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
@@ -101,6 +102,10 @@ fun ReportsForDriversNavHost(
         }
         composable(route = ReportsForDriversSchema.Feedback.name) {
             SettingFeedbackScreen()
+        }
+
+        composable(route = ReportsForDriversSchema.FirstEntry.name) {
+            FirstEntryScreen()
         }
     }
 }
