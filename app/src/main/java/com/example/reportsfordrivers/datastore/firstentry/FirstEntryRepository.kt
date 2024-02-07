@@ -1,4 +1,4 @@
-package com.example.reportsfordrivers.datastore
+package com.example.reportsfordrivers.datastore.firstentry
 
 interface FirstEntryRepository {
 

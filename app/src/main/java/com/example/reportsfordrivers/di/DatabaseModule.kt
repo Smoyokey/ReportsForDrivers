@@ -8,6 +8,7 @@ import com.example.reportsfordrivers.data.dao.ProgressReportDao
 import com.example.reportsfordrivers.data.dao.ReportNameDao
 import com.example.reportsfordrivers.data.dao.RouteDao
 import com.example.reportsfordrivers.data.dao.TrailerDao
+import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.dao.VehicleDao
 import dagger.Module
 import dagger.Provides
@@ -48,6 +49,11 @@ object DatabaseModule {
     @Provides
     fun provideVehicleDao(database: AppDatabase) : VehicleDao {
         return database.vehicleDao()
+    }
+
+    @Provides
+    fun provideVehicleAndTrailer(database: AppDatabase): VehicleAndTrailerSaveDataDao {
+        return database.vehicleAndTrailerDao()
     }
 
     @Provides

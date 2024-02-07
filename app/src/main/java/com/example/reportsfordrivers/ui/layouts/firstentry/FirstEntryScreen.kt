@@ -32,7 +32,8 @@ import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 
 @Composable
 fun FirstEntryScreen(
-    viewModel: FirstEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: FirstEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    onMainMenu: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(10.dp)
@@ -128,13 +129,13 @@ fun FirstEntryScreen(
 
         Row() {
             Button(
-                onClick = {},
+                onClick = onMainMenu,
                 Modifier.weight(1f)
             ) {
                 Text(text = stringResource(R.string.skip))
             }
             Button(
-                onClick = {},
+                onClick = onMainMenu,
                 enabled = false, //StateUI
                 modifier = Modifier.weight(1f)
             ) {
@@ -215,7 +216,7 @@ fun OutlinedTextFieldDef(label: Int, viewModel: FirstEntryViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun FirstEntryScreenPreview() {
-    FirstEntryScreen()
+    FirstEntryScreen(onMainMenu = {})
 }
 
 @Preview(showBackground = true)

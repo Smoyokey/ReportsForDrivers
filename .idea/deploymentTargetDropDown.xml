@@ -5,6 +5,12 @@
       <entry key="SettingNavigationTest">
         <State />
       </entry>
+      <entry key="VehicleAndTrailerDao">
+        <State />
+      </entry>
+      <entry key="app">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package com.example.reportsfordrivers.datastore
+package com.example.reportsfordrivers.datastore.firstentry
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -34,7 +34,7 @@ class MyFirstEntryRepo @Inject constructor(
                 .map { preferences ->
                      preferences[IS_FIRST_ENTRY]
                 }
-            val value = flow.firstOrNull() ?: false
+            val value = flow.firstOrNull() ?: true
             value
         }
     }

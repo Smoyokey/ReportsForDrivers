@@ -2,6 +2,7 @@ package com.example.reportsfordrivers.navigate
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,9 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrail
 import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScreen
+import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
+import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ReportsForDriversNavHost(
@@ -30,15 +34,30 @@ fun ReportsForDriversNavHost(
         modifier = modifier
     ) {
         composable(route = ReportsForDriversSchema.Start.name) {
-            MainMenuScreen(onCreateReport = {
-                navController.navigate(ReportsForDriversSchema.SelectLayout.name)
+            val viewModel = hiltViewModel<MainMenuViewModel>()
+
+            if(viewModel.isFirstEntry()) {
+                val viewModelFirstEntry = hiltViewModel<FirstEntryViewModel>()
+                FirstEntryScreen(
+                    onMainMenu = {
+                        navController.navigate(ReportsForDriversSchema.Start.name)
+                        viewModelFirstEntry.onFirstEntry()
+                    },
+                    viewModel = viewModelFirstEntry
+                )
+            } else {
+                MainMenuScreen(onCreateReport = {
+                    navController.navigate(ReportsForDriversSchema.SelectLayout.name)
                 },
-                onHistoryReports = {
-                    navController.navigate(ReportsForDriversSchema.ListHistory.name)
-                },
-                onSetting = {
-                    navController.navigate(ReportsForDriversSchema.SettingStart.name)
-                })
+                    onHistoryReports = {
+                        navController.navigate(ReportsForDriversSchema.ListHistory.name)
+                    },
+                    onSetting = {
+                        navController.navigate(ReportsForDriversSchema.SettingStart.name)
+                    },
+                    viewModel = viewModel
+                )
+            }
         }
         composable(route = ReportsForDriversSchema.SelectLayout.name) {
             CreateReportsSelectedMaketScreen(
@@ -105,7 +124,11 @@ fun ReportsForDriversNavHost(
         }
 
         composable(route = ReportsForDriversSchema.FirstEntry.name) {
-            FirstEntryScreen()
+            FirstEntryScreen(
+                onMainMenu = {
+                    navController.navigate(ReportsForDriversSchema.Start.name)
+                }
+            )
         }
     }
 }

@@ -44,3 +44,9 @@
 5. Расстояние (distance)
 6. Вес груза (weight)
 7. Связь c первой таблице (reportNameId)
+
+Седьмая таблица (VehicleTrailerSaveData)
+1. Порядковый номер (id)
+2. Машина или прицеп (VehicleOrTrailer)
+3. Марка (make)
+4. Гос номер (registrationNumber)

@@ -9,18 +9,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
+import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
+import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
 
+@ViewModelScoped
 @Composable
 fun MainMenuScreen(
     modifier: Modifier = Modifier,
     onCreateReport: () -> Unit,
     onHistoryReports: () -> Unit,
-    onSetting: () -> Unit
+    onSetting: () -> Unit,
+    viewModel: MainMenuViewModel = viewModel()
 ) {
+
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
@@ -28,7 +37,7 @@ fun MainMenuScreen(
         Button(onClick = onCreateReport) {
             Text(text = stringResource(R.string.create_report))
         }
-        Button(onClick = {}) {
+        Button(onClick = {viewModel.logs()}) {
             Text(text = stringResource(R.string.be_continued))
         }
         Button(onClick = onHistoryReports) {
