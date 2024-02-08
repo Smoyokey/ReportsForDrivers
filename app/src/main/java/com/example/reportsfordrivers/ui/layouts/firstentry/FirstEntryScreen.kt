@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
@@ -42,8 +43,8 @@ import com.example.reportsfordrivers.viewmodel.firstentry.UiState
 
 @Composable
 fun FirstEntryScreen(
-    viewModel: FirstEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    onMainMenu: () -> Unit
+    viewModel: FirstEntryViewModel = hiltViewModel(),
+    onMainMenu: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
