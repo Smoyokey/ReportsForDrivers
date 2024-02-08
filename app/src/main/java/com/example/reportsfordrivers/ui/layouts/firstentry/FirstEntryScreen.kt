@@ -1,10 +1,13 @@
 package com.example.reportsfordrivers.ui.layouts.firstentry
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
@@ -21,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,7 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
+import com.example.reportsfordrivers.viewmodel.firstentry.FioItemDetails
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
+import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTrailer
+import com.example.reportsfordrivers.viewmodel.firstentry.MakeRnItemDetails
+import com.example.reportsfordrivers.viewmodel.firstentry.UiState
 
 @Composable
 fun FirstEntryScreen(
@@ -43,7 +51,7 @@ fun FirstEntryScreen(
                 text = stringResource(R.string.enter_information_yourself),
                 fontSize = 20.sp,
 
-            )
+                )
             OutlinedIconButton(
                 onClick = {}
             ) {
@@ -54,9 +62,10 @@ fun FirstEntryScreen(
             }
         }
 
-        OutlinedTextFieldDef(R.string.last_name, viewModel)
-        OutlinedTextFieldDef(R.string.first_name, viewModel)
-        OutlinedTextFieldDef(R.string.patronymic, viewModel)
+        ItemInputFormFio(
+            itemDetails = viewModel.uiState.value.itemDetails,
+            onValueChange = viewModel::updateFio
+        )
 
         Divider(
             modifier = Modifier.padding(10.dp)
@@ -68,13 +77,33 @@ fun FirstEntryScreen(
         )
 
         Row(
+            modifier = Modifier.selectableGroup()
         ) {
-            RadioButtonDef(R.string.vehicle, modifier = Modifier.weight(1f))
-            RadioButtonDef(R.string.trailer, modifier = Modifier.weight(1f))
+            RadioButtonDef(
+                R.string.vehicle,
+                modifier = Modifier.weight(1f),
+                selected = viewModel.uiState.value.isSelected.stateRadioGroup,
+                onClick = {
+                    viewModel.selectedPosition(
+                        IsSelectedVehicleAndTrailer(true)
+                    )
+                })
+            RadioButtonDef(
+                R.string.trailer,
+                modifier = Modifier.weight(1f),
+                selected = !viewModel.uiState.value.isSelected.stateRadioGroup,
+                onClick = {
+                    viewModel.selectedPosition(
+                        IsSelectedVehicleAndTrailer(false)
+                    )
+                })
         }
 
-        OutlinedTextFieldDef(R.string.make_vehicle_trailer, viewModel)
-        OutlinedTextFieldDef(R.string.rn_vehicle_trailer, viewModel)
+        ItemInputFromMakeAndRn(
+            makeRnItemDetails = viewModel.uiState.value.makeRnItemDetails,
+            onValueChange = viewModel::updateMakeRn,
+            isSelected = viewModel.uiState.value.isSelected
+        )
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -82,7 +111,7 @@ fun FirstEntryScreen(
         ) {
             Button(
                 onClick = {},
-                enabled = false
+                //enabled = viewModel.validateInput()
             ) {
                 Text(
                     text = stringResource(R.string.add)
@@ -181,36 +210,93 @@ fun TableMakeRn(type: String, make: String, rn: String) {
 }
 
 @Composable
-fun RadioButtonDef(text: Int, modifier: Modifier = Modifier) {
+fun RadioButtonDef( //Вроде бы работает
+    text: Int, modifier: Modifier = Modifier, selected: Boolean,
+    onClick: () -> Unit
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = false,
-            onClick = {}
+            selected = selected,
+            onClick = onClick
         )
         Text(
-            text = stringResource(text)
+            text = stringResource(text),
         )
     }
 }
 
 @Composable
-fun OutlinedTextFieldDef(label: Int, viewModel: FirstEntryViewModel) {
-    OutlinedTextField(
-        value = "",
-        onValueChange = { viewModel.setLastName(it) },
-        label = {
-            Text(
-                text = stringResource(label)
-            )
-        },
-        trailingIcon = {
-            Icon(Icons.Outlined.Clear, stringResource(R.string.clear))
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
+fun ItemInputFromMakeAndRn(
+    makeRnItemDetails: MakeRnItemDetails,
+    modifier: Modifier = Modifier,
+    onValueChange: (MakeRnItemDetails) -> Unit = {},
+    isSelected: IsSelectedVehicleAndTrailer
+) {
+    Column(
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            value = makeRnItemDetails.make,
+            onValueChange = { onValueChange(makeRnItemDetails.copy(make = it)) },
+            label = {
+                Text(
+                    text = if (isSelected.stateRadioGroup) stringResource(R.string.make_vehicle)
+                        else stringResource(R.string.make_trailer)
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = makeRnItemDetails.rn,
+            onValueChange = { onValueChange(makeRnItemDetails.copy(rn = it)) },
+            label = {
+                Text(
+                    text = if (isSelected.stateRadioGroup) stringResource(R.string.rn_vehicle)
+                        else stringResource(R.string.rn_trailer)
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+    }
+}
+
+@SuppressLint("StateFlowValueCalledInComposition")
+@Composable
+fun ItemInputFormFio( //Вроде бы работает
+    itemDetails: FioItemDetails,
+    onValueChange: (FioItemDetails) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        OutlinedTextField(
+            value = itemDetails.lastName,
+            onValueChange = { onValueChange(itemDetails.copy(lastName = it)) },
+            label = { Text(stringResource(R.string.last_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.firstName,
+            onValueChange = { onValueChange(itemDetails.copy(firstName = it)) },
+            label = { Text(stringResource(R.string.first_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = itemDetails.patronymic,
+            onValueChange = { onValueChange(itemDetails.copy(patronymic = it)) },
+            label = { Text(stringResource(R.string.patronymic)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+    }
 }
 
 @Preview(showBackground = true)

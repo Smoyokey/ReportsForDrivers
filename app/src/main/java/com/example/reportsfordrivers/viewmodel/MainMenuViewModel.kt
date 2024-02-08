@@ -2,7 +2,7 @@ package com.example.reportsfordrivers.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.reportsfordrivers.datastore.firstentry.FirstEntryRepository
+import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -11,7 +11,7 @@ private const val TAG = "MainMenuViewModel"
 
 @HiltViewModel
 class MainMenuViewModel @Inject constructor(
-    private val firstEntryPreferencesRepository: FirstEntryRepository
+    private val firstEntryPreferencesRepository: FioFirstEntryRepository
 ): ViewModel() {
 
     fun logs() {

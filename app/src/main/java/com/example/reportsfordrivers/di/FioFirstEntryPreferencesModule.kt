@@ -4,38 +4,39 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.reportsfordrivers.datastore.firstentry.FirstEntryRepository
-import com.example.reportsfordrivers.datastore.firstentry.MyFirstEntryRepo
+import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepo
+import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
-val Context.firstEnterDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = "com.example.reportsfordrivers.first_entry"
+val Context.fioFirstEntryDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "com.example.reportfordrivers.fio_first_entry"
 )
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class FirstEntryPreferencesModule {
+abstract class FioFirstEntryPreferencesModule {
 
     @Binds
     @Singleton
-    abstract fun bindFirstEntryPreferencesRepository(
-        firstEntryPreferencesRepository: MyFirstEntryRepo
-    ): FirstEntryRepository
+    abstract fun bindFioFirstEntryPreferencesRepository(
+        fioFirstEntryPreferencesRepository: FioFirstEntryRepo
+    ): FioFirstEntryRepository
 
     companion object {
 
         @Provides
         @Singleton
-        fun provideFirstEntryDataStorePreferences(
+        fun provideFioFirstEntryDataStorePreferences(
             @ApplicationContext applicationContext: Context
         ): DataStore<Preferences> {
-            return applicationContext.firstEnterDataStore
+            return applicationContext.fioFirstEntryDataStore
         }
     }
 }

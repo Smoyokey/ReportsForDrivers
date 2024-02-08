@@ -1,56 +1,65 @@
-package com.example.reportsfordrivers.datastore.fio
+package com.example.reportsfordrivers.datastore.fiofirstentry
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.reportsfordrivers.datastore.DataStoreName
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class FioRepo @Inject constructor (
+class FioFirstEntryRepo @Inject constructor(
     private val dataStore: DataStore<Preferences>
-): FioRepository {
+): FioFirstEntryRepository {
 
-    private companion object {
-        val FIRST_NAME = stringPreferencesKey(
-            name = "first_name"
-        )
-        val LAST_NAME = stringPreferencesKey(
-            name = "last_name"
-        )
-        val PATRONYMIC = stringPreferencesKey(
-            name = "patronymic"
-        )
+    override suspend fun setFirstEntry(isFirstEntry: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.IS_FIRST_ENTRY] = isFirstEntry
+        }
     }
 
     override suspend fun setFirstName(firstName: String) {
-        dataStore.edit{ preferences ->
-            preferences[FIRST_NAME] = firstName
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.FIRST_NAME] = firstName
         }
     }
 
     override suspend fun setLastName(lastName: String) {
-        dataStore.edit{ preferences ->
-            preferences[LAST_NAME] = lastName
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.LAST_NAME] = lastName
         }
     }
 
     override suspend fun setPatronymic(patronymic: String) {
         dataStore.edit { preferences ->
-            preferences[PATRONYMIC] = patronymic
+            preferences[DataStoreName.PATRONYMIC] = patronymic
         }
     }
 
-    override suspend fun getFirstName() : Result<String> {
+    override suspend fun getFirstEntry(): Result<Boolean> {
         return Result.runCatching {
             val flow = dataStore.data
                 .catch { exception ->
 
                 }
                 .map { preferences ->
-                    preferences[FIRST_NAME]
+                    preferences[DataStoreName.IS_FIRST_ENTRY]
+                }
+            val value = flow.firstOrNull() ?: true
+            value
+        }
+    }
+
+    override suspend fun getFirstName(): Result<String> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch { exception ->
+
+                }
+                .map { preferences ->
+                    preferences[DataStoreName.FIRST_NAME]
                 }
             val value = flow.firstOrNull() ?: ""
             value
@@ -64,7 +73,7 @@ class FioRepo @Inject constructor (
 
                 }
                 .map { preferences ->
-                    preferences[LAST_NAME]
+                    preferences[DataStoreName.LAST_NAME]
                 }
             val value = flow.firstOrNull() ?: ""
             value
@@ -78,7 +87,7 @@ class FioRepo @Inject constructor (
 
                 }
                 .map { preferences ->
-                    preferences[PATRONYMIC]
+                    preferences[DataStoreName.PATRONYMIC]
                 }
             val value = flow.firstOrNull() ?: ""
             value
