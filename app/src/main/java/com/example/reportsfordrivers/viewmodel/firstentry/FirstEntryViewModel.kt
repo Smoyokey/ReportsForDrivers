@@ -1,16 +1,10 @@
 package com.example.reportsfordrivers.viewmodel.firstentry
 
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -22,48 +16,80 @@ class FirstEntryViewModel @Inject constructor (
 ): ViewModel(
 ){
 
+    /**
+     * [uiState] - хранилище ФИО и списка машин с прицепами типа [FirstEntryUiState()].
+     * [vehicleUiState] - Хранилище введенных данных о машине или прицепе типа [VehicleObject()]
+     */
     var uiState = mutableStateOf(FirstEntryUiState())
         private set
+    var vehicleUiState = mutableStateOf(VehicleObject())
+        private set
 
+    /**
+     * Метод для обновления значения ФИО в текстовых полях
+     */
     fun updateFio(itemDetails: FioItemDetails) {
-        uiState.value = uiState.value.copy(itemDetails = itemDetails)
+        uiState.value = uiState.value.copy(fioItemDetails = itemDetails)
     }
 
+    /**
+     * Метод для выбора VEHICLE(true) или TRAILER(false)
+     */
     fun selectedPosition(isSelected: IsSelectedVehicleAndTrailer) {
-        uiState.value = uiState.value.copy(isSelected = isSelected)
+        vehicleUiState.value = vehicleUiState.value.copy(isSelected = isSelected)
     }
 
+    /**
+     * Метод для обновления значения данных в текстовых полях MAKE и RN
+     */
     fun updateMakeRn(makeRnItemDetails: MakeRnItemDetails) {
-        uiState.value = uiState.value.copy(makeRnItemDetails = makeRnItemDetails)
+        vehicleUiState.value = vehicleUiState.value.copy(makeRnItemDetails = makeRnItemDetails)
     }
 
+    /**
+     * Метод для активации кнопки Add при условии если текстовые поля MAKE и RN заполненные
+     */
+    fun validateAddVehicle(): Boolean {
+        return vehicleUiState.value.makeRnItemDetails.make != "" && vehicleUiState.value.makeRnItemDetails.rn != ""
+    }
 
-    //    fun selectedPosition(isSelected: IsSelectedVehicleAndTrailer) {
-////        _uiState.isSelected = isSelected
-//        _uiState.update { i ->
-//            i.copy (
-//                isSelected = isSelected
-//            )
-//        }
-//    }
+    /**
+     * Добавление элемента в список [uiState] при условии что [validateAddVehicle()] возвращает true
+     * Так же после добавления элемента полностью обновляются поля MAKE и RN, а так же RadioButton
+     * сбрасывается до значения VEHICLE
+     */
+    fun addElementVehicle() {
+        if(validateAddVehicle()) {
+            uiState.value.listVehicles.add(createObjectVehicle())
+            resetVehicle()
 
-//    fun updateMakeRnUiState(makeRnItemDetails: MakeRnItemDetails) {
-//        uiState = FirstEntryUiState(makeRnItemDetails = makeRnItemDetails)
-//        _uiState.makeRnItemDetails = makeRnItemDetails
-//        _uiState.update { i ->
-//            i.copy (
-//                makeRnItemDetails = makeRnItemDetails
-//            )
-//        }
-//    }
-//
-//    fun validateInput(itemUiState: MakeRnItemDetails = _uiState.value.makeRnItemDetails): Boolean {
-//        return with(itemUiState) {
-//            make.isNotBlank() && rn.isNotBlank()
-//        }
-//    }
-//
+            Log.i(TAG, "Add Element vehicle")
+        } else {
 
+        }
+    }
+
+    /**
+     * Метод, который сбрасывает значения текстовых полей MAKE и RN, а так же RadioButton сбрасывается
+     * до значения VEHICLE, путем создания нового объекта VehicleObject()
+     */
+    private fun resetVehicle() {
+        vehicleUiState.value = VehicleObject()
+    }
+
+    /**
+     * Создает объект для списка [uiState]
+     */
+    private fun createObjectVehicle(): ObjectVehicle {
+        return ObjectVehicle(
+            make = vehicleUiState.value.makeRnItemDetails.make,
+            rn = vehicleUiState.value.makeRnItemDetails.rn,
+            vehicleOrTrailer = if(vehicleUiState.value.isSelected.stateRadioGroup)
+                VehicleOrTrailer.VEHICLE
+            else
+                VehicleOrTrailer.TRAILER
+        )
+    }
 
     fun onFirstEntry() = runBlocking {
         fioFirstEntryPreferencesRepository.setFirstEntry(false)

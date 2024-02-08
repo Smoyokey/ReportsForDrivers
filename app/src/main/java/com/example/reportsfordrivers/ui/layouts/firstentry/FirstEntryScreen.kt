@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
@@ -43,8 +45,11 @@ fun FirstEntryScreen(
     viewModel: FirstEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
     onMainMenu: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier.padding(10.dp)
+            .verticalScroll(state = scrollState)
     ) {
         Row {
             Text(
@@ -63,7 +68,7 @@ fun FirstEntryScreen(
         }
 
         ItemInputFormFio(
-            itemDetails = viewModel.uiState.value.itemDetails,
+            itemDetails = viewModel.uiState.value.fioItemDetails,
             onValueChange = viewModel::updateFio
         )
 
@@ -82,7 +87,7 @@ fun FirstEntryScreen(
             RadioButtonDef(
                 R.string.vehicle,
                 modifier = Modifier.weight(1f),
-                selected = viewModel.uiState.value.isSelected.stateRadioGroup,
+                selected = viewModel.vehicleUiState.value.isSelected.stateRadioGroup,
                 onClick = {
                     viewModel.selectedPosition(
                         IsSelectedVehicleAndTrailer(true)
@@ -91,7 +96,7 @@ fun FirstEntryScreen(
             RadioButtonDef(
                 R.string.trailer,
                 modifier = Modifier.weight(1f),
-                selected = !viewModel.uiState.value.isSelected.stateRadioGroup,
+                selected = !viewModel.vehicleUiState.value.isSelected.stateRadioGroup,
                 onClick = {
                     viewModel.selectedPosition(
                         IsSelectedVehicleAndTrailer(false)
@@ -100,9 +105,9 @@ fun FirstEntryScreen(
         }
 
         ItemInputFromMakeAndRn(
-            makeRnItemDetails = viewModel.uiState.value.makeRnItemDetails,
+            makeRnItemDetails = viewModel.vehicleUiState.value.makeRnItemDetails,
             onValueChange = viewModel::updateMakeRn,
-            isSelected = viewModel.uiState.value.isSelected
+            isSelected = viewModel.vehicleUiState.value.isSelected
         )
 
         Row(
@@ -110,8 +115,8 @@ fun FirstEntryScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                onClick = {},
-                //enabled = viewModel.validateInput()
+                onClick = {viewModel.addElementVehicle()},
+                enabled = viewModel.validateAddVehicle()
             ) {
                 Text(
                     text = stringResource(R.string.add)
@@ -139,7 +144,12 @@ fun FirstEntryScreen(
                 textAlign = TextAlign.Center
             )
         }
-        TableMakeRn(type = "vehicle", make = "DAF", rn = "1234IT 5")
+
+        for(i in 0..<viewModel.uiState.value.listVehicles.size) {
+            val a = viewModel.uiState.value.listVehicles[i]
+            TableMakeRn(type = a.vehicleOrTrailer.name, make = a.make, rn = a.rn)
+        }
+
 
         Divider(
             modifier = Modifier.padding(10.dp)
