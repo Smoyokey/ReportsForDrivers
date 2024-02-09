@@ -26,7 +26,9 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun ReportsForDriversNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModelFirst: FirstEntryViewModel = hiltViewModel<FirstEntryViewModel>(),
+    viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>()
 ) {
     NavHost(
         navController = navController,
@@ -34,16 +36,16 @@ fun ReportsForDriversNavHost(
         modifier = modifier
     ) {
         composable(route = ReportsForDriversSchema.Start.name) {
-            val viewModel = hiltViewModel<MainMenuViewModel>()
+//            viewModelMain = hiltViewModel<MainMenuViewModel>()
 
-            if(viewModel.isFirstEntry()) {
-                val viewModelFirstEntry = hiltViewModel<FirstEntryViewModel>()
+            if(viewModelMain.isFirstEntry()) {
+//                val viewModelFirstEntry = hiltViewModel<FirstEntryViewModel>()
                 FirstEntryScreen(
                     onMainMenu = {
                         navController.navigate(ReportsForDriversSchema.Start.name)
-                        viewModelFirstEntry.onFirstEntry()
+                        viewModelFirst.onFirstEntry()
                     },
-                    viewModel = viewModelFirstEntry
+                    viewModel = viewModelFirst
                 )
             } else {
                 MainMenuScreen(onCreateReport = {
@@ -55,7 +57,7 @@ fun ReportsForDriversNavHost(
                     onSetting = {
                         navController.navigate(ReportsForDriversSchema.SettingStart.name)
                     },
-                    viewModel = viewModel
+                    viewModel = viewModelMain
                 )
             }
         }

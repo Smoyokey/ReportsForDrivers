@@ -74,6 +74,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-testing:2.7.6")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
+    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("com.google.ar:core:1.41.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -92,11 +94,12 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
-    //Testing
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+//    //Testing
+//    debugImplementation("androidx.compose.ui:ui-test-manifest")
+//    debugImplementation("androidx.compose.ui:ui-tooling")
+//    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+//    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+
 
 
     //Hilt

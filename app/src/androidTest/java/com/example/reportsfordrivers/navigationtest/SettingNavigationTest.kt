@@ -1,36 +1,45 @@
 package com.example.reportsfordrivers.navigationtest
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import com.example.reportsfordrivers.MainActivity
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ReportsForDriversApp
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.navigationtest.helpmethods.assertCurrentRouteName
 import com.example.reportsfordrivers.navigationtest.helpmethods.onNodeWithStringId
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@HiltAndroidTest
 class SettingNavigationTest {
 
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     private lateinit var navController: TestNavHostController
 
     @Before
     fun setupReportsForDriversApp() {
-        composeTestRule.setContent {
+        composeTestRule.activity.setContent {
             navController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
             ReportsForDriversApp(navController = navController)
         }
+        start()
     }
 
     @Test
@@ -133,5 +142,11 @@ class SettingNavigationTest {
     private fun buttonNavigateUp() {
         val backButton = composeTestRule.activity.getString(R.string.back_button)
         composeTestRule.onNodeWithContentDescription(backButton).performClick()
+    }
+
+    private fun start() {
+        try {
+            composeTestRule.onNodeWithStringId(R.string.skip).performClick()
+        } catch (e: AssertionError) {}
     }
 }

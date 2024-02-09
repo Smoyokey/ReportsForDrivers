@@ -49,7 +49,8 @@ fun FirstEntryScreen(
     val scrollState = rememberScrollState()
 
     Column(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
             .verticalScroll(state = scrollState)
     ) {
         Row {

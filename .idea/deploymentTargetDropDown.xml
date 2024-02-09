@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ExampleInstrumentedTest">
+      <entry key="CreateReportNavigationTest">
         <State />
       </entry>
       <entry key="HistoryReportNavigationTest">
         <State />
       </entry>
-      <entry key="TestUAI">
+      <entry key="HistoryReportNavigationTest (1)">
         <State />
       </entry>
-      <entry key="TestUI">
+      <entry key="SettingNavigationTest">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="f()">
+      <entry key="test">
         <State />
       </entry>
     </value>

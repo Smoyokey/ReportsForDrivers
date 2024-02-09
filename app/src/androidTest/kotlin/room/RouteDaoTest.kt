@@ -1,8 +1,13 @@
 package room
 
+import androidx.activity.compose.setContent
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import com.example.reportsfordrivers.MainActivity
+import com.example.reportsfordrivers.ReportsForDriversApp
 import com.example.reportsfordrivers.data.AppDatabase
 import com.example.reportsfordrivers.data.dao.RouteDao
 import com.example.reportsfordrivers.data.structure.Route
+import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -13,6 +18,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import runner.HiltTestRunner
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
@@ -20,7 +26,7 @@ import javax.inject.Named
 @HiltAndroidTest
 class RouteDaoTest {
 
-    @get:Rule
+    @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
     @Inject
