@@ -3,6 +3,8 @@ package com.example.reportsfordrivers
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -81,8 +83,7 @@ fun ReportsForDriversApp(
     ) { innerPadding ->
         ReportsForDriversNavHost(
             navController = navController,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.padding(innerPadding),
         )
     }
-
 }
