@@ -90,4 +90,6 @@
 
 
     <string name="test">TEST</string>
+    <string name="vehicle_test">VEHICLE</string>
+    <string name="trailer_test">TRAILER</string>
 </resources>

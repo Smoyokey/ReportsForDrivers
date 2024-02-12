@@ -25,6 +25,10 @@ class FirstEntryViewModel @Inject constructor (
     var vehicleUiState = mutableStateOf(VehicleObject())
         private set
 
+    fun deletePositionVehicle(listVehicles: MutableList<ObjectVehicle>) {
+        uiState.value = uiState.value.copy(listVehicles = listVehicles)
+    }
+
     /**
      * Метод для обновления значения ФИО в текстовых полях
      */

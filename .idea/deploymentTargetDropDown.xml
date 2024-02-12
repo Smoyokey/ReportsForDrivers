@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CreateReportNavigationTest">
+      <entry key="FirstEntryScreenTest">
         <State />
       </entry>
-      <entry key="HistoryReportNavigationTest">
-        <State />
-      </entry>
-      <entry key="HistoryReportNavigationTest (1)">
-        <State />
-      </entry>
-      <entry key="SettingNavigationTest">
+      <entry key="addAndScroll()">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="test">
+      <entry key="deleteTextField_deleteTextInLastName()">
+        <State />
+      </entry>
+      <entry key="isDisplayedButtonClear_inLastName()">
+        <State />
+      </entry>
+      <entry key="writeText_onTextFieldsMakeAndRnVehicle()">
         <State />
       </entry>
     </value>
