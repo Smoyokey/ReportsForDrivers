@@ -65,18 +65,13 @@ fun CreateReportsDataFillingOneScreen(
             }
         }
 
-        OutlinedTextFieldDataFilling(R.string.last_name)
-        OutlinedTextFieldDataFilling(R.string.first_name)
-        OutlinedTextFieldDataFilling(R.string.patronymic)
+        OutlinedTextFieldFio()
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextFieldDataFilling(R.string.make_vehicle)
-        OutlinedTextFieldDataFilling(R.string.registration_number_vehicle)
-        OutlinedTextFieldDataFilling(R.string.make_trailer)
-        OutlinedTextFieldDataFilling(R.string.registration_number_trailer)
+        OutlinedTextFieldVehicle()
 
         Column(
             modifier = Modifier.weight(1f)
@@ -139,6 +134,59 @@ fun OutlinedTextFieldFio() {
                     )
                 }
             }
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.patronymic)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if (true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChange(itemDetails.copy(patronymic = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC)
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun OutlinedTextFieldVehicle() {
+    Column() {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = {Text(stringResource(R.string.make_vehicle)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.rn_vehicle)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.make_trailer)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.rn_trailer)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
     }
 }
