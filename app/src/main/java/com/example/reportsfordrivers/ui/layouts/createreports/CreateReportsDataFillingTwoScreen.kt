@@ -47,7 +47,7 @@ fun CreateReportsDataFillingTwoScreen(
         Divider(
             modifier = Modifier.padding(10.dp)
         )
-        
+
         OutlinedTextField(
             value = "",
             onValueChange = {},
