@@ -7,23 +7,30 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RichTooltipBox
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,24 +40,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
 import com.example.reportsfordrivers.viewmodel.firstentry.FioItemDetails
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTrailer
 import com.example.reportsfordrivers.viewmodel.firstentry.MakeRnItemDetails
 import com.example.reportsfordrivers.viewmodel.firstentry.ObjectVehicle
-import com.example.reportsfordrivers.viewmodel.firstentry.UiState
-import com.example.reportsfordrivers.viewmodel.firstentry.VehicleObject
 import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
+
 
 @Composable
 fun FirstEntryScreen(
@@ -59,26 +64,33 @@ fun FirstEntryScreen(
 ) {
     val scrollState = rememberScrollState()
 
+    val openDialog = remember { mutableStateOf(false) } //Временно
+
     Column(
         modifier = Modifier
             .padding(10.dp)
             .verticalScroll(state = scrollState)
             .testTag(Tags.TAG_COLUMN_FIRST_ENTRY)
     ) {
-        Row {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
                 text = stringResource(R.string.enter_information_yourself),
                 fontSize = 20.sp,
-
+                modifier = Modifier.weight(1f)
                 )
             OutlinedIconButton(
-                onClick = {}
+                onClick = {
+                       openDialog.value = true
+                }
             ) {
                 Icon(
                     Icons.Outlined.Info,
                     contentDescription = stringResource(R.string.info)
                 )
             }
+            OpenDialogHelp()
         }
 
         ItemInputFormFio(
@@ -161,7 +173,11 @@ fun FirstEntryScreen(
 
         for (i in 0..<viewModel.uiState.value.listVehicles.size) {
             val a = viewModel.uiState.value.listVehicles[i]
-            TableMakeRn(vehicleObject = a, listObject = viewModel.uiState.value.listVehicles, onClick = viewModel::deletePositionVehicle)
+            TableMakeRn(
+                vehicleObject = a,
+                listObject = viewModel.uiState.value.listVehicles,
+                onClick = viewModel::deletePositionVehicle
+            )
         }
 
 
@@ -398,6 +414,26 @@ fun ItemInputFormFio(
     }
 }
 
+@Composable
+fun OpenDialogHelp(openDialog: MutableState<Boolean> = mutableStateOf(true)) {
+    if(openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false },
+            title = { Text(text = stringResource(R.string.test))},
+            text = { Text(text = stringResource(R.string.test))},
+            confirmButton = {},
+            dismissButton = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun OpenDialogHelpPreview() {
+    OpenDialogHelp()
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun FirstEntryScreenPreview() {
@@ -414,5 +450,11 @@ fun TableMakeRnPreview() {
             vehicleOrTrailer = VehicleOrTrailer.VEHICLE
         ),
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ItemInputFormFioPreview() {
+    ItemInputFormFio(FioItemDetails(), {})
 }
 

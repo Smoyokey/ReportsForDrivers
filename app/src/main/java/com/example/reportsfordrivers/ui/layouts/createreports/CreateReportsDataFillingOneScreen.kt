@@ -1,17 +1,22 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.Tags
 
 @Composable
 fun CreateReportsDataFillingOneScreen(
@@ -59,18 +65,13 @@ fun CreateReportsDataFillingOneScreen(
             }
         }
 
-        OutlinedTextFieldDataFilling(R.string.last_name)
-        OutlinedTextFieldDataFilling(R.string.first_name)
-        OutlinedTextFieldDataFilling(R.string.patronymic)
+        OutlinedTextFieldFio()
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextFieldDataFilling(R.string.make_vehicle)
-        OutlinedTextFieldDataFilling(R.string.registration_number_vehicle)
-        OutlinedTextFieldDataFilling(R.string.make_trailer)
-        OutlinedTextFieldDataFilling(R.string.registration_number_trailer)
+        OutlinedTextFieldVehicle()
 
         Column(
             modifier = Modifier.weight(1f)
@@ -88,6 +89,105 @@ fun CreateReportsDataFillingOneScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun OutlinedTextFieldFio() {
+    Column() {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.last_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if (true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChange(itemDetails.copy(lastName = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME)
+                    )
+                }
+            }
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.first_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if (true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+                                //onValueChange(itemDetails.copy(lastName = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME)
+                    )
+                }
+            }
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.patronymic)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if (true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChange(itemDetails.copy(patronymic = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC)
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun OutlinedTextFieldVehicle() {
+    Column() {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = {Text(stringResource(R.string.make_vehicle)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.rn_vehicle)) },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.make_trailer)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(stringResource(R.string.rn_trailer)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
+        )
     }
 }
 
