@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.setting
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,12 +26,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.Tags
 
 /**
  * Класс отображения экрана, возможность изменения персональных данных
  * Что надо сделать:
  * 1. Добавить разделители
- * 2. Оформить согласно проекту
  */
 
 @Composable
@@ -54,9 +56,7 @@ fun SettingPersonalDataScreen() {
             modifier = Modifier.padding(10.dp)
         )
 
-        SettingPersonalDataOutlinedTextFieldScreen(R.string.last_name)
-        SettingPersonalDataOutlinedTextFieldScreen(R.string.first_name)
-        SettingPersonalDataOutlinedTextFieldScreen(R.string.patronymic)
+        SettingPersonalDataOutlinedTextFieldScreen()
 
         Divider(
             modifier = Modifier.padding(10.dp)
@@ -86,20 +86,69 @@ fun SettingPersonalDataScreen() {
 }
 
 @Composable
-fun SettingPersonalDataOutlinedTextFieldScreen(label: Int) {
-    OutlinedTextField(
-        value = "",
-        onValueChange = { },
-        label = {
-            Text(
-                text = stringResource(label)
-            )
-        },
-        trailingIcon = {
-            Icon(Icons.Outlined.Clear, stringResource(R.string.clear))
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
+fun SettingPersonalDataOutlinedTextFieldScreen() {
+    Column() {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.last_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if(true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChane(itemDetails.copy(tt = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_SETTING_PERSONAL_DATA_LAST_NAME)
+                    )
+                }
+            }
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.first_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if(true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChane(itemDetails.copy(tt = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_SETTING_PERSONAL_DATA_FIRST_NAME)
+                    )
+                }
+            }
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.patronymic)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if(true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChane(itemDetails.copy(tt = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_SETTING_PERSONAL_DATA_PATRONYMIC)
+                    )
+                }
+            }
+        )
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)

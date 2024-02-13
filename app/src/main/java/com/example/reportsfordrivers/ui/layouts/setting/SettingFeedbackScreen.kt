@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.setting
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,10 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.Tags
 
 @Composable
 fun SettingFeedbackScreen() {
@@ -38,14 +41,32 @@ fun SettingFeedbackScreen() {
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextFieldSettingFeedback(R.string.your_name)
-        OutlinedTextFieldSettingFeedback(R.string.your_contact_email)
+        OutlinedTextFieldSettingFeedback()
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextFieldSettingFeedback(R.string.text_appeal, Modifier.weight(1f))
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.text_appeal)) },
+            modifier = Modifier.fillMaxWidth()
+                .weight(1f),
+            trailingIcon = {
+                if(true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChane(itemDetails.copy(tt = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_SETTING_FEEDBACK_TEXT),
+                    )
+                }
+            }
+        )
 
         Column(
             modifier = Modifier.weight(1f)
@@ -100,29 +121,55 @@ fun AttachedFilesLine(number: String, name: String, size: String) {
 }
 
 @Composable
-fun OutlinedTextFieldSettingFeedback(label: Int, modifier: Modifier = Modifier) {
-    OutlinedTextField(
-        value = "",
-        onValueChange = {},
-        label = {
-            Text(
-                text = stringResource(label)
-            )
-        },
-        modifier = modifier.fillMaxWidth()
-    )
+fun OutlinedTextFieldSettingFeedback() {
+    Column() {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.your_name)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if(true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChane(itemDetails.copy(tt = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_SETTING_FEEDBACK_YOUR_NAME)
+                    )
+                }
+            }
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(R.string.your_contact_email)) },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            trailingIcon = {
+                if(true) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+//                                onValueChane(itemDetails.copy(tt = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_SETTING_FEEDBACK_YOUR_EMAIL)
+                    )
+                }
+            }
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AttachedFilesLinePreview() {
     AttachedFilesLine("1.", "Test.doc", "235 bytes")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OutlinedTextFieldSettingFeedbackPreview() {
-    OutlinedTextFieldSettingFeedback(R.string.your_name)
 }
 
 @Preview(showBackground = true, showSystemUi = true)

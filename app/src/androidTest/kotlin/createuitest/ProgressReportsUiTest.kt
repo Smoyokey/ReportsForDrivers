@@ -1,4 +1,4 @@
-package uitest
+package createuitest
 
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed

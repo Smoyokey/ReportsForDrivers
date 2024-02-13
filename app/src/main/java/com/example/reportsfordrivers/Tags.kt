@@ -28,4 +28,21 @@ object Tags {
         "tagTestDataFillingTwoSpeedometerReturn"
     const val TAG_TEST_DATA_FILLING_TWO_FUELLED: String = "tagTestDataFillingTwoFuelled"
 
+    const val TAG_TEST_SETTING_DATA_VEHICLE_MAKE: String = "tagTestSettingDataVehicleMake"
+    const val TAG_TEST_SETTING_DATA_VEHICLE_RN: String = "tagTestSettingDataVehicleRn"
+    const val TAG_TEST_SETTING_DATA_RADIO_BUTTON_VEHICLE: String =
+        "tagTestSettingDataRadioButtonVehicle"
+    const val TAG_TEST_SETTING_DATA_RADIO_BUTTON_TRAILER: String =
+        "tagTestSettingDataRadioButtonTrailer"
+
+    const val TAG_TEST_SETTING_PERSONAL_DATA_LAST_NAME: String =
+        "tagTestSettingPersonalDataLastName"
+    const val TAG_TEST_SETTING_PERSONAL_DATA_FIRST_NAME: String =
+        "tagTestSettingPersonalDataFirstName"
+    const val TAG_TEST_SETTING_PERSONAL_DATA_PATRONYMIC: String =
+        "tagTestSettingPersonalDataPatronymic"
+
+    const val TAG_TEST_SETTING_FEEDBACK_YOUR_NAME: String = "tagTestSettingFeedbackYourName"
+    const val TAG_TEST_SETTING_FEEDBACK_YOUR_EMAIL: String = "tagTestSettingFeedbackYourEmail"
+    const val TAG_TEST_SETTING_FEEDBACK_TEXT: String = "tagTestSettingFeedbackText"
 }
