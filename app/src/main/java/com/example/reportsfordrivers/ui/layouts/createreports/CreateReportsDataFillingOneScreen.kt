@@ -24,12 +24,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.viewmodel.createreports.DataFillingOneViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.FioDataFillingOne
 
 @Composable
 fun CreateReportsDataFillingOneScreen(
-    onDataFillingTwo: () -> Unit
+    onDataFillingTwo: () -> Unit,
+    viewModel: DataFillingOneViewModel = hiltViewModel()
 ) {
     Column() {
         //Верхнее меню
@@ -65,13 +69,19 @@ fun CreateReportsDataFillingOneScreen(
             }
         }
 
-        OutlinedTextFieldFio()
+        OutlinedTextFieldFio(
+            viewModel.uiState.value.fioDataFillingOne,
+            onValueChange = viewModel::updateParam
+        )
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextFieldVehicle()
+        OutlinedTextFieldVehicle(
+            fioItemDetails = viewModel.uiState.value.fioDataFillingOne,
+            onValueChange = viewModel::updateParam
+        )
 
         Column(
             modifier = Modifier.weight(1f)
@@ -93,22 +103,25 @@ fun CreateReportsDataFillingOneScreen(
 }
 
 @Composable
-fun OutlinedTextFieldFio() {
+fun OutlinedTextFieldFio(
+    fioItemDetails: FioDataFillingOne,
+    onValueChange: (FioDataFillingOne) -> Unit = {}
+) {
     Column() {
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = fioItemDetails.lastName,
+            onValueChange = { onValueChange(fioItemDetails.copy(lastName = it)) },
             label = { Text(stringResource(R.string.last_name)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             trailingIcon = {
-                if (true) {
+                if (fioItemDetails.lastName.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChange(itemDetails.copy(lastName = ""))
+                                onValueChange(fioItemDetails.copy(lastName = ""))
                             }
                             .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME)
                     )
@@ -116,39 +129,39 @@ fun OutlinedTextFieldFio() {
             }
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = fioItemDetails.firstName,
+            onValueChange = { onValueChange(fioItemDetails.copy(firstName = it)) },
             label = { Text(stringResource(R.string.first_name)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             trailingIcon = {
-                if (true) {
+                if (fioItemDetails.firstName.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-                                //onValueChange(itemDetails.copy(lastName = ""))
+                                onValueChange(fioItemDetails.copy(firstName = ""))
                             }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME)
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME)
                     )
                 }
             }
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = fioItemDetails.patronymic,
+            onValueChange = { onValueChange(fioItemDetails.copy(patronymic = it)) },
             label = { Text(stringResource(R.string.patronymic)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             trailingIcon = {
-                if (true) {
+                if (fioItemDetails.patronymic.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChange(itemDetails.copy(patronymic = ""))
+                                onValueChange(fioItemDetails.copy(patronymic = ""))
                             }
                             .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC)
                     )
@@ -159,59 +172,39 @@ fun OutlinedTextFieldFio() {
 }
 
 @Composable
-fun OutlinedTextFieldVehicle() {
+fun OutlinedTextFieldVehicle(
+    fioItemDetails: FioDataFillingOne,
+    onValueChange: (FioDataFillingOne) -> Unit
+) {
     Column() {
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = {Text(stringResource(R.string.make_vehicle)) },
+            value = fioItemDetails.makeVehicle,
+            onValueChange = { onValueChange(fioItemDetails.copy(makeVehicle = it)) },
+            label = { Text(stringResource(R.string.make_vehicle)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = fioItemDetails.rnVehicle,
+            onValueChange = { onValueChange(fioItemDetails.copy(rnVehicle = it)) },
             label = { Text(stringResource(R.string.rn_vehicle)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = fioItemDetails.makeTrailer,
+            onValueChange = { onValueChange(fioItemDetails.copy(makeTrailer = it))},
             label = { Text(stringResource(R.string.make_trailer)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = fioItemDetails.rnTrailer,
+            onValueChange = { onValueChange(fioItemDetails.copy(rnTrailer = it)) },
             label = { Text(stringResource(R.string.rn_trailer)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
-    }
-}
-
-@Composable
-fun OutlinedTextFieldDataFilling(label: Int) {
-    OutlinedTextField(
-        value = "",
-        onValueChange = {},
-        label = {
-            Text(
-                text = stringResource(label)
-            )
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OutlinedTextFieldDataFillingPreview() {
-    Column() {
-        OutlinedTextFieldDataFilling(R.string.last_name)
-        OutlinedTextFieldDataFilling(R.string.first_name)
-        OutlinedTextFieldDataFilling(R.string.patronymic)
     }
 }
 

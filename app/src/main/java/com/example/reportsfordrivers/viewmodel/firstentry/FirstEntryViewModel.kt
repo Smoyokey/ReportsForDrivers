@@ -13,8 +13,7 @@ private const val TAG = "FirstEntryViewModel"
 @HiltViewModel
 class FirstEntryViewModel @Inject constructor (
     private val fioFirstEntryPreferencesRepository: FioFirstEntryRepository
-): ViewModel(
-){
+): ViewModel(){
 
     /**
      * [uiState] - хранилище ФИО и списка машин с прицепами типа [FirstEntryUiState()].

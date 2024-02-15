@@ -20,6 +20,7 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScreen
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.DataFillingOneViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 import kotlinx.coroutines.runBlocking
 
@@ -88,7 +89,8 @@ fun ReportsForDriversNavHost(
             CreateReportsDataFillingOneScreen(
                 onDataFillingTwo = {
                     navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
-                }
+                },
+                viewModel = hiltViewModel<DataFillingOneViewModel>()
             )
         }
         composable(route = ReportsForDriversSchema.FillingDataTwo.name) {

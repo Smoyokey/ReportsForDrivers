@@ -34,11 +34,6 @@ data class ObjectVehicle(
     val vehicleOrTrailer: VehicleOrTrailer = VehicleOrTrailer.VEHICLE
 )
 
-data class UiState(
-    val lastName: String = "",
-    val firstName: String = ""
-)
-
 enum class VehicleOrTrailer(b: String) {
     VEHICLE("Vehicle"),
     TRAILER("Trailer")

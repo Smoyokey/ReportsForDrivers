@@ -24,12 +24,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.viewmodel.createreports.DataFillingTwoViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataDetails
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun CreateReportsDataFillingTwoScreen(
-    onProgressReport: () -> Unit
+    onProgressReport: () -> Unit,
+    viewModel: DataFillingTwoViewModel = hiltViewModel()
 ) {
     Column() {
         //TOP APP BAR
@@ -49,18 +54,28 @@ fun CreateReportsDataFillingTwoScreen(
         )
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = viewModel.uiState.value.dataDetails.route,
+            onValueChange = {
+                viewModel.updateParamTextField(
+                    viewModel.uiState.value.dataDetails.copy(
+                        route = it
+                    )
+                )
+            },
             label = { Text(text = stringResource(R.string.route)) },
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
-                if(true) {
+                if (true) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChange(itemDetails.copy(route = ""))
+                                viewModel.updateParamTextField(
+                                    viewModel.uiState.value.dataDetails.copy(
+                                        route = ""
+                                    )
+                                )
                             }
                             .testTag(Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE)
                     )
@@ -73,7 +88,10 @@ fun CreateReportsDataFillingTwoScreen(
         LineDataFilling(R.string.date_border_crossing_departure)
         LineDataFilling(R.string.date_border_crossing_return)
 
-        OutlinedTextFieldDataFillingTwo()
+        OutlinedTextFieldDataFillingTwo(
+            viewModel.uiState.value.dataDetails,
+            viewModel::updateParamTextField
+        )
 
         Column(
             modifier = Modifier.weight(1f)
@@ -115,22 +133,25 @@ fun LineDataFilling(text: Int) {
 }
 
 @Composable
-fun OutlinedTextFieldDataFillingTwo() {
+fun OutlinedTextFieldDataFillingTwo(
+    dataDetails: DataDetails,
+    onValueChange: (DataDetails) -> Unit
+) {
     Column() {
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = dataDetails.speedometerDeparture,
+            onValueChange = { onValueChange(dataDetails.copy(speedometerDeparture = it)) },
             label = { Text(text = stringResource(R.string.speedometer_reading_departure)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             trailingIcon = {
-                if(true) {
+                if (dataDetails.speedometerDeparture.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChange(itemDetails.copy(tt = ""))
+                                onValueChange(dataDetails.copy(speedometerDeparture = ""))
                             }
                             .testTag(Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE)
                     )
@@ -138,19 +159,19 @@ fun OutlinedTextFieldDataFillingTwo() {
             }
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = dataDetails.speedometerReturn,
+            onValueChange = { onValueChange(dataDetails.copy(speedometerReturn = it)) },
             label = { Text(text = stringResource(R.string.speedometer_reading_return)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             trailingIcon = {
-                if(true) {
+                if (dataDetails.speedometerReturn.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChange(itemDetails.copy(tt = ""))
+                                onValueChange(dataDetails.copy(speedometerReturn = ""))
                             }
                             .testTag(Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN)
                     )
@@ -158,19 +179,19 @@ fun OutlinedTextFieldDataFillingTwo() {
             }
         )
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = dataDetails.fuelled,
+            onValueChange = { onValueChange(dataDetails.copy(fuelled = it)) },
             label = { Text(text = stringResource(R.string.fuelled)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             trailingIcon = {
-                if(true) {
+                if (dataDetails.fuelled.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Outlined.Clear,
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChange(itemDetails.copy(tt = ""))
+                                onValueChange(dataDetails.copy(fuelled = ""))
                             }
                             .testTag(Tags.TAG_TEST_DATA_FILLING_TWO_FUELLED)
                     )

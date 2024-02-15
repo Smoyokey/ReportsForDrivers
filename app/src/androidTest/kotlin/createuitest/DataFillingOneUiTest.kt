@@ -2,6 +2,7 @@ package createuitest
 
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -41,7 +42,7 @@ class DataFillingOneUiTest {
     fun init() {
         hiltRule.inject()
         composeRule.activity.setContent {
-            CreateReportsDataFillingOneScreen {}
+            CreateReportsDataFillingOneScreen({})
         }
     }
 
@@ -111,6 +112,21 @@ class DataFillingOneUiTest {
             onNodeWithText(makeTrailer).assertIsDisplayed()
             onNodeWithText(rnTrailer).assertIsDisplayed()
         }
+    }
+
+    @Test
+    fun isNotDisplayedButtonClear_inLastName() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME).assertDoesNotExist()
+    }
+
+    @Test
+    fun isNotDisplayedButtonClear_inFirstName() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME).assertDoesNotExist()
+    }
+
+    @Test
+    fun isNotDisplayedButtonClear_inPatronymic() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC).assertDoesNotExist()
     }
 
     @Test
