@@ -130,6 +130,26 @@ class DataFillingOneUiTest {
     }
 
     @Test
+    fun isNotDisplayedButtonClear_inMakeVehicle() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).assertDoesNotExist()
+    }
+
+    @Test
+    fun isNotDisplayedButtonClear_inRnVehicle() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).assertDoesNotExist()
+    }
+
+    @Test
+    fun isNotDisplayedButtonClear_inMakeTrailer() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).assertDoesNotExist()
+    }
+
+    @Test
+    fun isNotDisplayedButtonClear_inRnTrailer() {
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).assertDoesNotExist()
+    }
+
+    @Test
     fun isDisplayedButtonClear_inLastName() {
         actionWriteLastName(lastName)
         composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME).assertIsDisplayed()
@@ -156,6 +176,64 @@ class DataFillingOneUiTest {
             onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME).assertIsDisplayed()
             onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME).assertIsDisplayed()
             onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun isDisplayedButtonClear_inMakeVehicle() {
+        actionWriteMakeVehicle(makeVehicle)
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).assertIsDisplayed()
+    }
+
+    @Test
+    fun isDisplayedButtonClear_inRnVehicle() {
+        actionWriteRnVehicle(rnVehicle)
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).assertIsDisplayed()
+    }
+
+    @Test
+    fun isDisplayedButtonClear_inMakeTrailer() {
+        actionWriteMakeTrailer(makeTrailer)
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).assertIsDisplayed()
+    }
+
+    @Test
+    fun isDisplayedButtonClear_inRnTrailer() {
+        actionWriteRnTrailer(rnTrailer)
+        composeRule.onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).assertIsDisplayed()
+    }
+
+    @Test
+    fun isDisplayedButtonClear_inMakeRnVehicleMakeRnTrailer() {
+        actionWriteMakeVehicle(makeVehicle)
+        actionWriteRnVehicle(rnVehicle)
+        actionWriteMakeTrailer(makeTrailer)
+        actionWriteRnTrailer(rnTrailer)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun isDisplayedButtonClear_inLastNameFirstNamePatronymicMakeRnVehicleMakeRnTrailer() {
+        actionWriteLastName(lastName)
+        actionWriteFirstName(firstName)
+        actionWritePatronymic(patronymic)
+        actionWriteMakeVehicle(makeVehicle)
+        actionWriteRnVehicle(rnVehicle)
+        actionWriteMakeTrailer(makeTrailer)
+        actionWriteRnTrailer(rnTrailer)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).assertIsDisplayed()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).assertIsDisplayed()
         }
     }
 
@@ -198,6 +276,87 @@ class DataFillingOneUiTest {
             onNodeWithText(lastName).assertDoesNotExist()
             onNodeWithText(firstName).assertDoesNotExist()
             onNodeWithText(patronymic).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun isClickButton_inMakeVehicle() {
+        actionWriteMakeVehicle(makeVehicle)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).performClick()
+            onNodeWithText(makeVehicle).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun isClickButton_inRnVehicle() {
+        actionWriteRnVehicle(rnVehicle)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).performClick()
+            onNodeWithText(rnVehicle).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun isClickButton_inMakeTrailer() {
+        actionWriteMakeTrailer(makeTrailer)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).performClick()
+            onNodeWithText(makeTrailer).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun isClickButton_inRnTrailer() {
+        actionWriteRnTrailer(rnTrailer)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).performClick()
+            onNodeWithText(rnTrailer).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun isClickButton_inMakeRnVehicleMakeRnTrailer() {
+        actionWriteMakeVehicle(makeVehicle)
+        actionWriteRnVehicle(rnVehicle)
+        actionWriteMakeTrailer(makeTrailer)
+        actionWriteRnTrailer(rnTrailer)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).performClick()
+            onNodeWithText(makeVehicle).assertDoesNotExist()
+            onNodeWithText(rnVehicle).assertDoesNotExist()
+            onNodeWithText(makeTrailer).assertDoesNotExist()
+            onNodeWithText(rnTrailer).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun isClickButton_inLastNameFirstNamePatronymicMakeRnVehicleMakeRnTrailer() {
+        actionWriteLastName(lastName)
+        actionWriteFirstName(firstName)
+        actionWritePatronymic(patronymic)
+        actionWriteMakeVehicle(makeVehicle)
+        actionWriteRnVehicle(rnVehicle)
+        actionWriteMakeTrailer(makeTrailer)
+        actionWriteRnTrailer(rnTrailer)
+        composeRule.apply {
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER).performClick()
+            onNodeWithTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER).performClick()
+            onNodeWithText(lastName).assertDoesNotExist()
+            onNodeWithText(firstName).assertDoesNotExist()
+            onNodeWithText(patronymic).assertDoesNotExist()
+            onNodeWithText(makeVehicle).assertDoesNotExist()
+            onNodeWithText(rnVehicle).assertDoesNotExist()
+            onNodeWithText(makeTrailer).assertDoesNotExist()
+            onNodeWithText(rnTrailer).assertDoesNotExist()
         }
     }
 

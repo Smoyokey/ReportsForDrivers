@@ -25,12 +25,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.viewmodel.createreports.ProgressReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 
 @Composable
 fun CreateReportsProgressReportsScreen(
-    onPreview: () -> Unit
+    onPreview: () -> Unit,
+    viewModel: ProgressReportsViewModel = hiltViewModel()
 ) {
     Column {
         Text(
@@ -64,7 +68,10 @@ fun CreateReportsProgressReportsScreen(
             }
         }
 
-        OutlinedTextFieldProgressReport()
+        OutlinedTextFieldProgressReport(
+            viewModel.uiState.value.progressDetails,
+            viewModel::updateParamTextField
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -132,23 +139,26 @@ fun LineProgressReports() {
 }
 
 @Composable
-fun OutlinedTextFieldProgressReport() {
+fun OutlinedTextFieldProgressReport(
+    progressDetails: ProgressDetails,
+    onValueChange: (ProgressDetails) -> Unit = {}
+) {
     Column() {
         Row() {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = progressDetails.country,
+                onValueChange = { onValueChange(progressDetails.copy(country = it)) },
                 label = { Text(text = stringResource(R.string.country)) },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 trailingIcon = {
-                    if(true) {
+                    if(progressDetails.country.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Outlined.Clear,
                             contentDescription = stringResource(R.string.clear),
                             modifier = Modifier
                                 .clickable {
-//                                    onValueChange(itemDetails.copy(tt = ""))
+                                    onValueChange(progressDetails.copy(country = ""))
                                 }
                                 .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY)
                         )
@@ -156,19 +166,19 @@ fun OutlinedTextFieldProgressReport() {
                 }
             )
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = progressDetails.township,
+                onValueChange = { onValueChange(progressDetails.copy(township = it)) },
                 label = { Text(text = stringResource(R.string.township)) },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 trailingIcon = {
-                    if(true) {
+                    if(progressDetails.township.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Outlined.Clear,
                             contentDescription = stringResource(R.string.clear),
                             modifier = Modifier
                                 .clickable {
-//                                    onValueChange(itemDetails.copy(tt = ""))
+                                    onValueChange(progressDetails.copy(township = ""))
                                 }
                                 .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP)
                         )
@@ -178,19 +188,19 @@ fun OutlinedTextFieldProgressReport() {
         }
         Row() {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = progressDetails.distance,
+                onValueChange = { onValueChange(progressDetails.copy(distance = it)) },
                 label = { Text(text = stringResource(R.string.distance)) },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 trailingIcon = {
-                    if(true) {
+                    if(progressDetails.distance.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Outlined.Clear,
                             contentDescription = stringResource(R.string.clear),
                             modifier = Modifier
                                 .clickable {
-//                                    onValueChange(itemDetails.copy(tt = ""))
+                                    onValueChange(progressDetails.copy(distance = ""))
                                 }
                                 .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE)
                         )
@@ -198,19 +208,19 @@ fun OutlinedTextFieldProgressReport() {
                 }
             )
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = progressDetails.cargoWeight,
+                onValueChange = { onValueChange(progressDetails.copy(cargoWeight = it)) },
                 label = { Text(text = stringResource(R.string.cargo_weight)) },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 trailingIcon = {
-                    if(true) {
+                    if(progressDetails.cargoWeight.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Outlined.Clear,
                             contentDescription = stringResource(R.string.clear),
                             modifier = Modifier
                                 .clickable {
-//                                    onValueChange(itemDetails.copy(tt = ""))
+                                    onValueChange(progressDetails.copy(cargoWeight = ""))
                                 }
                                 .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT)
                         )

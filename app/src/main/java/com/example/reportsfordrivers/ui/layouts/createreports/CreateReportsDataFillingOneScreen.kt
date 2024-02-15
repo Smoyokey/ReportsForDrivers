@@ -182,28 +182,80 @@ fun OutlinedTextFieldVehicle(
             onValueChange = { onValueChange(fioItemDetails.copy(makeVehicle = it)) },
             label = { Text(stringResource(R.string.make_vehicle)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            trailingIcon = {
+                if(fioItemDetails.makeVehicle.isNotEmpty()) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+                                onValueChange(fioItemDetails.copy(makeVehicle = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE)
+                    )
+                }
+            }
         )
         OutlinedTextField(
             value = fioItemDetails.rnVehicle,
             onValueChange = { onValueChange(fioItemDetails.copy(rnVehicle = it)) },
             label = { Text(stringResource(R.string.rn_vehicle)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            trailingIcon = {
+                if(fioItemDetails.rnVehicle.isNotEmpty()) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+                                onValueChange(fioItemDetails.copy(rnVehicle = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE)
+                    )
+                }
+            }
         )
         OutlinedTextField(
             value = fioItemDetails.makeTrailer,
             onValueChange = { onValueChange(fioItemDetails.copy(makeTrailer = it))},
             label = { Text(stringResource(R.string.make_trailer)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            trailingIcon = {
+                if(fioItemDetails.makeTrailer.isNotEmpty()) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+                                onValueChange(fioItemDetails.copy(makeTrailer = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER)
+                    )
+                }
+            }
         )
         OutlinedTextField(
             value = fioItemDetails.rnTrailer,
             onValueChange = { onValueChange(fioItemDetails.copy(rnTrailer = it)) },
             label = { Text(stringResource(R.string.rn_trailer)) },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            trailingIcon = {
+                if(fioItemDetails.rnTrailer.isNotEmpty()) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear),
+                        modifier = Modifier
+                            .clickable {
+                                onValueChange(fioItemDetails.copy(rnTrailer = ""))
+                            }
+                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER)
+                    )
+                }
+            }
         )
     }
 }

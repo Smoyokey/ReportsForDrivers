@@ -50,7 +50,7 @@ class ProgressReportsUiTest {
     fun init() {
         hiltRule.inject()
         composeRule.activity.setContent {
-            CreateReportsProgressReportsScreen {}
+            CreateReportsProgressReportsScreen({})
         }
     }
 

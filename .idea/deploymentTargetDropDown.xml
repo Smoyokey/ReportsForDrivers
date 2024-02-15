@@ -50,6 +50,9 @@
           <timeTargetWasSelectedWithDropDown value="2024-02-15T06:29:14.068698574Z" />
         </State>
       </entry>
+      <entry key="ProgressReportsUiTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -67,9 +70,6 @@
         </State>
       </entry>
       <entry key="test()">
-        <State />
-      </entry>
-      <entry key="writeText_inTextFieldRoute()">
         <State />
       </entry>
     </value>

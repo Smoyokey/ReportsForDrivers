@@ -20,6 +20,10 @@ object Tags {
     const val TAG_TEST_DATA_FILLING_ONE_LAST_NAME: String = "tagTestDataFillingOneLastName"
     const val TAG_TEST_DATA_FILLING_ONE_FIRST_NAME: String = "tagTestDataFillingOneFirstName"
     const val TAG_TEST_DATA_FILLING_ONE_PATRONYMIC: String = "tagTestDataFillingOnePatronymic"
+    const val TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE: String = "tagTestDataFillingOneMakeVehicle"
+    const val TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER: String = "tagTestDataFillingOneMakeTrailer"
+    const val TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE: String = "tagTestDataFillingOneRnVehicle"
+    const val TAG_TEST_DATA_FILLING_ONE_RN_TRAILER: String = "tagTestDataFillingOneRnTrailer"
 
     const val TAG_TEST_DATA_FILLING_TWO_ROUTE: String = "tagTestDataFillingTwoRoute"
     const val TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE: String =
