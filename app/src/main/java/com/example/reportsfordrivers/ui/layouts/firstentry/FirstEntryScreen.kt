@@ -16,18 +16,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RichTooltipBox
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -40,19 +35,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.viewmodel.firstentry.FioItemDetails
+import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTrailer
-import com.example.reportsfordrivers.viewmodel.firstentry.MakeRnItemDetails
 import com.example.reportsfordrivers.viewmodel.firstentry.ObjectVehicle
 import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
 
@@ -64,38 +56,40 @@ fun FirstEntryScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    val openDialog = remember { mutableStateOf(false) } //Временно
-
     Column(
         modifier = Modifier
             .padding(10.dp)
             .verticalScroll(state = scrollState)
             .testTag(Tags.TAG_COLUMN_FIRST_ENTRY)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(R.string.enter_information_yourself),
-                fontSize = 20.sp,
-                modifier = Modifier.weight(1f)
-                )
-            OutlinedIconButton(
-                onClick = {
-                       openDialog.value = true
-                }
-            ) {
-                Icon(
-                    Icons.Outlined.Info,
-                    contentDescription = stringResource(R.string.info)
-                )
-            }
-            OpenDialogHelp()
-        }
+        Text(
+            text = stringResource(R.string.enter_information_yourself),
+            fontSize = 20.sp,
+            modifier = Modifier.weight(1f)
+        )
 
-        ItemInputFormFio(
-            itemDetails = viewModel.uiState.value.fioItemDetails,
-            onValueChange = viewModel::updateFio,
+        OutlinedTextFieldCustom(
+            label = R.string.last_name,
+            value = viewModel.uiState.value.fioItemDetails.lastName,
+            onValueChange = viewModel::updateLastName,
+            tag = Tags.TAG_TEST_FIRST_ENTRY_LAST_NAME,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.first_name,
+            value = viewModel.uiState.value.fioItemDetails.firstName,
+            onValueChange = viewModel::updateFirstName,
+            tag = Tags.TAG_TEST_FIRST_ENTRY_FIRST_NAME,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.patronymic,
+            value = viewModel.uiState.value.fioItemDetails.patronymic,
+            onValueChange = viewModel::updatePatronymic,
+            tag = Tags.TAG_TEST_FIRST_ENTRY_PATRONYMIC,
+            modifier = Modifier
         )
 
         Divider(
@@ -130,10 +124,22 @@ fun FirstEntryScreen(
                 })
         }
 
-        ItemInputFromMakeAndRn(
-            makeRnItemDetails = viewModel.vehicleUiState.value.makeRnItemDetails,
-            onValueChange = viewModel::updateMakeRn,
-            isSelected = viewModel.vehicleUiState.value.isSelected
+        OutlinedTextFieldCustom(
+            label = if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup) R.string.make_vehicle
+            else {R.string.make_trailer},
+            value = viewModel.vehicleUiState.value.makeRnItemDetails.make,
+            onValueChange = viewModel::updateMake,
+            tag = Tags.TAG_TEST_FIRST_ENTRY_MAKE,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup) R.string.rn_vehicle
+            else R.string.rn_trailer,
+            value = viewModel.vehicleUiState.value.makeRnItemDetails.make,
+            onValueChange = viewModel::updateRn,
+            tag = Tags.TAG_TEST_FIRST_ENTRY_RN,
+            modifier = Modifier
         )
 
         Row(
@@ -277,163 +283,6 @@ fun RadioButtonDef( //Вроде бы работает
     }
 }
 
-@Composable
-fun ItemInputFromMakeAndRn(
-    makeRnItemDetails: MakeRnItemDetails,
-    modifier: Modifier = Modifier,
-    onValueChange: (MakeRnItemDetails) -> Unit = {},
-    isSelected: IsSelectedVehicleAndTrailer,
-) {
-    Column(
-        modifier = modifier
-    ) {
-        OutlinedTextField(
-            value = makeRnItemDetails.make,
-            onValueChange = { onValueChange(makeRnItemDetails.copy(make = it)) },
-            label = {
-                Text(
-                    text = if (isSelected.stateRadioGroup) stringResource(R.string.make_vehicle)
-                    else stringResource(R.string.make_trailer)
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (makeRnItemDetails.make.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(makeRnItemDetails.copy(make = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_FIRST_ENTRY_MAKE)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = makeRnItemDetails.rn,
-            onValueChange = { onValueChange(makeRnItemDetails.copy(rn = it)) },
-            label = {
-                Text(
-                    text = if (isSelected.stateRadioGroup) stringResource(R.string.rn_vehicle)
-                    else stringResource(R.string.rn_trailer)
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (makeRnItemDetails.rn.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(makeRnItemDetails.copy(rn = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_FIRST_ENTRY_RN)
-                    )
-                }
-            }
-        )
-    }
-}
-
-@SuppressLint("StateFlowValueCalledInComposition")
-@Composable
-fun ItemInputFormFio(
-    //Вроде бы работает
-    itemDetails: FioItemDetails,
-    onValueChange: (FioItemDetails) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier,
-    ) {
-        OutlinedTextField(
-            value = itemDetails.lastName,
-            onValueChange = { onValueChange(itemDetails.copy(lastName = it)) },
-            label = { Text(stringResource(R.string.last_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (itemDetails.lastName.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(itemDetails.copy(lastName = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_FIRST_ENTRY_LAST_NAME)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = itemDetails.firstName,
-            onValueChange = { onValueChange(itemDetails.copy(firstName = it)) },
-            label = { Text(stringResource(R.string.first_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (itemDetails.firstName.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(itemDetails.copy(firstName = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_FIRST_ENTRY_FIRST_NAME)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = itemDetails.patronymic,
-            onValueChange = { onValueChange(itemDetails.copy(patronymic = it)) },
-            label = { Text(stringResource(R.string.patronymic)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (itemDetails.patronymic.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(itemDetails.copy(patronymic = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_FIRST_ENTRY_PATRONYMIC)
-                    )
-                }
-            }
-        )
-    }
-}
-
-@Composable
-fun OpenDialogHelp(openDialog: MutableState<Boolean> = mutableStateOf(true)) {
-    if(openDialog.value) {
-        AlertDialog(
-            onDismissRequest = { openDialog.value = false },
-            title = { Text(text = stringResource(R.string.test))},
-            text = { Text(text = stringResource(R.string.test))},
-            confirmButton = {},
-            dismissButton = {}
-        )
-    }
-}
-
-@Preview
-@Composable
-fun OpenDialogHelpPreview() {
-    OpenDialogHelp()
-}
-
-
 @Preview(showBackground = true)
 @Composable
 fun FirstEntryScreenPreview() {
@@ -450,11 +299,5 @@ fun TableMakeRnPreview() {
             vehicleOrTrailer = VehicleOrTrailer.VEHICLE
         ),
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ItemInputFormFioPreview() {
-    ItemInputFormFio(FioItemDetails(), {})
 }
 

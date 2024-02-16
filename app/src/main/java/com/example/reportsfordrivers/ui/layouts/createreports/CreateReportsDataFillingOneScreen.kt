@@ -9,11 +9,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -27,17 +34,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.viewmodel.createreports.DataFillingOneViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.FioDataFillingOne
+import com.example.reportsfordrivers.ui.DatePickerDialogCustom
+import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFillingOne
+import kotlinx.coroutines.launch
 
 @Composable
 fun CreateReportsDataFillingOneScreen(
     onDataFillingTwo: () -> Unit,
-    viewModel: DataFillingOneViewModel = hiltViewModel()
+    viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     Column() {
-        //Верхнее меню
-
         Text(
             text = stringResource(R.string.data_filling),
             modifier = Modifier.fillMaxWidth(),
@@ -61,26 +69,76 @@ fun CreateReportsDataFillingOneScreen(
                 modifier = Modifier.weight(1f)
             )
             Button(
-                onClick = {}
+                onClick = {
+                    viewModel.openDialogDateFillingOne.value = true
+                }
             ) {
                 Text(
-                    text = stringResource(R.string.date)
+                    text = viewModel.uiState.value.dataFillingOne.date.ifEmpty {
+                        stringResource(R.string.date)
+                    }
                 )
             }
         }
 
-        OutlinedTextFieldFio(
-            viewModel.uiState.value.fioDataFillingOne,
-            onValueChange = viewModel::updateParam
+        OutlinedTextFieldCustom(
+            label = R.string.last_name,
+            value = viewModel.uiState.value.dataFillingOne.lastName,
+            onValueChange = viewModel::updateDataFillingOneLastName,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.first_name,
+            value = viewModel.uiState.value.dataFillingOne.firstName,
+            onValueChange = viewModel::updateDataFillingOneFirstName,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.patronymic,
+            value = viewModel.uiState.value.dataFillingOne.patronymic,
+            onValueChange = viewModel::updateDataFillingOnePatronymic,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC,
+            modifier = Modifier
         )
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextFieldVehicle(
-            fioItemDetails = viewModel.uiState.value.fioDataFillingOne,
-            onValueChange = viewModel::updateParam
+        OutlinedTextFieldCustom(
+            label = R.string.make_vehicle,
+            value = viewModel.uiState.value.dataFillingOne.makeVehicle,
+            onValueChange = viewModel::updateDataFillingOneMakeVehicle,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.rn_vehicle,
+            value = viewModel.uiState.value.dataFillingOne.rnVehicle,
+            onValueChange = viewModel::updateDataFillingOneRnVehicle,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.make_trailer,
+            value = viewModel.uiState.value.dataFillingOne.makeTrailer,
+            onValueChange = viewModel::updateDataFillingOneMakeTrailer,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER,
+            modifier = Modifier
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.rn_trailer,
+            value = viewModel.uiState.value.dataFillingOne.rnTrailer,
+            onValueChange = viewModel::updateDataFillingOneRnTrailer,
+            tag = Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER,
+            modifier = Modifier
         )
 
         Column(
@@ -100,164 +158,10 @@ fun CreateReportsDataFillingOneScreen(
             }
         }
     }
-}
-
-@Composable
-fun OutlinedTextFieldFio(
-    fioItemDetails: FioDataFillingOne,
-    onValueChange: (FioDataFillingOne) -> Unit = {}
-) {
-    Column() {
-        OutlinedTextField(
-            value = fioItemDetails.lastName,
-            onValueChange = { onValueChange(fioItemDetails.copy(lastName = it)) },
-            label = { Text(stringResource(R.string.last_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (fioItemDetails.lastName.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(lastName = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_LAST_NAME)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = fioItemDetails.firstName,
-            onValueChange = { onValueChange(fioItemDetails.copy(firstName = it)) },
-            label = { Text(stringResource(R.string.first_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (fioItemDetails.firstName.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(firstName = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_FIRST_NAME)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = fioItemDetails.patronymic,
-            onValueChange = { onValueChange(fioItemDetails.copy(patronymic = it)) },
-            label = { Text(stringResource(R.string.patronymic)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if (fioItemDetails.patronymic.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(patronymic = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_PATRONYMIC)
-                    )
-                }
-            }
-        )
-    }
-}
-
-@Composable
-fun OutlinedTextFieldVehicle(
-    fioItemDetails: FioDataFillingOne,
-    onValueChange: (FioDataFillingOne) -> Unit
-) {
-    Column() {
-        OutlinedTextField(
-            value = fioItemDetails.makeVehicle,
-            onValueChange = { onValueChange(fioItemDetails.copy(makeVehicle = it)) },
-            label = { Text(stringResource(R.string.make_vehicle)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(fioItemDetails.makeVehicle.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(makeVehicle = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = fioItemDetails.rnVehicle,
-            onValueChange = { onValueChange(fioItemDetails.copy(rnVehicle = it)) },
-            label = { Text(stringResource(R.string.rn_vehicle)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(fioItemDetails.rnVehicle.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(rnVehicle = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = fioItemDetails.makeTrailer,
-            onValueChange = { onValueChange(fioItemDetails.copy(makeTrailer = it))},
-            label = { Text(stringResource(R.string.make_trailer)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(fioItemDetails.makeTrailer.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(makeTrailer = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = fioItemDetails.rnTrailer,
-            onValueChange = { onValueChange(fioItemDetails.copy(rnTrailer = it)) },
-            label = { Text(stringResource(R.string.rn_trailer)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(fioItemDetails.rnTrailer.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-                                onValueChange(fioItemDetails.copy(rnTrailer = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_DATA_FILLING_ONE_RN_TRAILER)
-                    )
-                }
-            }
-        )
-    }
+    DatePickerDialogCustom(
+        openDialog = viewModel.openDialogDateFillingOne,
+        onValueChange = viewModel::updateDataFillingOneDate
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

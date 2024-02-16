@@ -18,11 +18,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 
 @Composable
 fun CreateReportsPreviewScreen(
-    onResult: () -> Unit
+    onResult: () -> Unit,
+    viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     Column() {
         Text(
@@ -73,21 +78,18 @@ fun CreateReportsPreviewScreen(
                 textAlign = TextAlign.Center
             )
         )
-        //TABLE
+        //TABLE 
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(
-                    text = stringResource(R.string.reports_name)
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
+        OutlinedTextFieldCustom(
+            label = R.string.reports_name,
+            value = viewModel.uiState.value.reportName,
+            onValueChange = viewModel::updatePreviewReportName,
+            tag = Tags.TAG_TEST_PREVIEW_REPORT_NAME,
+            modifier = Modifier
         )
 
         Row(

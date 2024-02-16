@@ -31,8 +31,20 @@ class FirstEntryViewModel @Inject constructor (
     /**
      * Метод для обновления значения ФИО в текстовых полях
      */
-    fun updateFio(itemDetails: FioItemDetails) {
+    private fun updateFio(itemDetails: FioItemDetails) {
         uiState.value = uiState.value.copy(fioItemDetails = itemDetails)
+    }
+
+    fun updateLastName(lastName: String) {
+        updateFio(uiState.value.fioItemDetails.copy(lastName = lastName))
+    }
+
+    fun updateFirstName(firstName: String) {
+        updateFio(uiState.value.fioItemDetails.copy(firstName = firstName))
+    }
+
+    fun updatePatronymic(patronymic: String) {
+        updateFio(uiState.value.fioItemDetails.copy(patronymic = patronymic))
     }
 
     /**
@@ -47,6 +59,14 @@ class FirstEntryViewModel @Inject constructor (
      */
     fun updateMakeRn(makeRnItemDetails: MakeRnItemDetails) {
         vehicleUiState.value = vehicleUiState.value.copy(makeRnItemDetails = makeRnItemDetails)
+    }
+
+    fun updateMake(make: String) {
+        updateMakeRn(vehicleUiState.value.makeRnItemDetails.copy(make = make))
+    }
+
+    fun updateRn(rn: String) {
+        updateMakeRn(vehicleUiState.value.makeRnItemDetails.copy(rn = rn))
     }
 
     /**

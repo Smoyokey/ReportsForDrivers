@@ -28,13 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.viewmodel.createreports.ProgressReportsViewModel
+import com.example.reportsfordrivers.ui.DatePickerDialogCustom
+import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 
 @Composable
 fun CreateReportsProgressReportsScreen(
     onPreview: () -> Unit,
-    viewModel: ProgressReportsViewModel = hiltViewModel()
+    viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     Column {
         Text(
@@ -60,18 +62,50 @@ fun CreateReportsProgressReportsScreen(
                 modifier = Modifier.weight(1f)
             )
             Button(
-                onClick = {}
+                onClick = {
+                    viewModel.openDialogProgressReportsDate.value = true
+                }
             ) {
                 Text(
-                    text = stringResource(R.string.date)
+                    text = viewModel.uiStateProgressReports.value.progressDetails.date.ifEmpty
+                    { stringResource(R.string.date) }
                 )
             }
         }
 
-        OutlinedTextFieldProgressReport(
-            viewModel.uiState.value.progressDetails,
-            viewModel::updateParamTextField
-        )
+        Row() {
+            OutlinedTextFieldCustom(
+                label = R.string.country,
+                value = viewModel.uiStateProgressReports.value.progressDetails.country,
+                onValueChange = viewModel::updateProgressReportsCountry,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY,
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextFieldCustom(
+                label = R.string.township,
+                value = viewModel.uiStateProgressReports.value.progressDetails.township,
+                onValueChange = viewModel::updateProgressReportsTownship,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP,
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Row() {
+            OutlinedTextFieldCustom(
+                label = R.string.distance,
+                value = viewModel.uiStateProgressReports.value.progressDetails.distance,
+                onValueChange = viewModel::updateProgressReportsDistance,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE,
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextFieldCustom(
+                label = R.string.cargo_weight,
+                value = viewModel.uiStateProgressReports.value.progressDetails.cargoWeight,
+                onValueChange = viewModel::updateProgressReportsCargoWeight,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT,
+                modifier = Modifier.weight(1f)
+            )
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -85,8 +119,6 @@ fun CreateReportsProgressReportsScreen(
                 )
             }
         }
-
-        //DIVIDER
 
         Column(
             modifier = Modifier.weight(1f)
@@ -109,6 +141,10 @@ fun CreateReportsProgressReportsScreen(
                 )
             }
         }
+        DatePickerDialogCustom(
+            viewModel.openDialogProgressReportsDate,
+            viewModel::updateProgressReportsDate
+        )
     }
 }
 
@@ -133,99 +169,6 @@ fun LineProgressReports() {
             )
             Text(
                 text = "Weight - TEST"
-            )
-        }
-    }
-}
-
-@Composable
-fun OutlinedTextFieldProgressReport(
-    progressDetails: ProgressDetails,
-    onValueChange: (ProgressDetails) -> Unit = {}
-) {
-    Column() {
-        Row() {
-            OutlinedTextField(
-                value = progressDetails.country,
-                onValueChange = { onValueChange(progressDetails.copy(country = it)) },
-                label = { Text(text = stringResource(R.string.country)) },
-                modifier = Modifier.weight(1f),
-                singleLine = true,
-                trailingIcon = {
-                    if(progressDetails.country.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    onValueChange(progressDetails.copy(country = ""))
-                                }
-                                .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY)
-                        )
-                    }
-                }
-            )
-            OutlinedTextField(
-                value = progressDetails.township,
-                onValueChange = { onValueChange(progressDetails.copy(township = it)) },
-                label = { Text(text = stringResource(R.string.township)) },
-                modifier = Modifier.weight(1f),
-                singleLine = true,
-                trailingIcon = {
-                    if(progressDetails.township.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    onValueChange(progressDetails.copy(township = ""))
-                                }
-                                .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP)
-                        )
-                    }
-                }
-            )
-        }
-        Row() {
-            OutlinedTextField(
-                value = progressDetails.distance,
-                onValueChange = { onValueChange(progressDetails.copy(distance = it)) },
-                label = { Text(text = stringResource(R.string.distance)) },
-                modifier = Modifier.weight(1f),
-                singleLine = true,
-                trailingIcon = {
-                    if(progressDetails.distance.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    onValueChange(progressDetails.copy(distance = ""))
-                                }
-                                .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE)
-                        )
-                    }
-                }
-            )
-            OutlinedTextField(
-                value = progressDetails.cargoWeight,
-                onValueChange = { onValueChange(progressDetails.copy(cargoWeight = it)) },
-                label = { Text(text = stringResource(R.string.cargo_weight)) },
-                modifier = Modifier.weight(1f),
-                singleLine = true,
-                trailingIcon = {
-                    if(progressDetails.cargoWeight.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    onValueChange(progressDetails.copy(cargoWeight = ""))
-                                }
-                                .testTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT)
-                        )
-                    }
-                }
             )
         }
     }

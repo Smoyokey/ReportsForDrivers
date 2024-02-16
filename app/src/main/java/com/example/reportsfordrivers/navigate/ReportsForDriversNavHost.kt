@@ -20,27 +20,26 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScreen
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.DataFillingOneViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ReportsForDriversNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModelFirst: FirstEntryViewModel = hiltViewModel<FirstEntryViewModel>(),
-    viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>()
+    viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>(),
+    viewModelCreateReports: CreateReportsViewModel = hiltViewModel<CreateReportsViewModel>()
 ) {
     NavHost(
         navController = navController,
         startDestination = ReportsForDriversSchema.Start.name,
         modifier = modifier
     ) {
+
         composable(route = ReportsForDriversSchema.Start.name) {
-//            viewModelMain = hiltViewModel<MainMenuViewModel>()
 
             if(viewModelMain.isFirstEntry()) {
-//                val viewModelFirstEntry = hiltViewModel<FirstEntryViewModel>()
                 FirstEntryScreen(
                     onMainMenu = {
                         navController.navigate(ReportsForDriversSchema.Start.name)
@@ -90,28 +89,31 @@ fun ReportsForDriversNavHost(
                 onDataFillingTwo = {
                     navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
                 },
-                viewModel = hiltViewModel<DataFillingOneViewModel>()
+                viewModel = viewModelCreateReports
             )
         }
         composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
             CreateReportsDataFillingTwoScreen(
                 onProgressReport = {
                     navController.navigate(ReportsForDriversSchema.ProgressReport.name)
-                }
+                },
+                viewModel = viewModelCreateReports
             )
         }
         composable(route = ReportsForDriversSchema.ProgressReport.name) {
             CreateReportsProgressReportsScreen(
                 onPreview = {
                     navController.navigate(ReportsForDriversSchema.Preview.name)
-                }
+                },
+                viewModel = viewModelCreateReports
             )
         }
         composable(route = ReportsForDriversSchema.Preview.name) {
             CreateReportsPreviewScreen(
                 onResult = {
                     navController.navigate(ReportsForDriversSchema.Result.name)
-                }
+                },
+                viewModel = viewModelCreateReports
             )
         }
         composable(route = ReportsForDriversSchema.Result.name) {
