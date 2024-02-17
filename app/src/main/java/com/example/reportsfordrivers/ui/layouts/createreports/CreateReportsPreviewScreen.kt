@@ -44,26 +44,31 @@ fun CreateReportsPreviewScreen(
             modifier = Modifier.padding(10.dp)
         )
 
-        LinePreviewText(R.string.date)
-        LinePreviewText(R.string.last_name)
-        LinePreviewText(R.string.first_name)
-        LinePreviewText(R.string.make_vehicle)
-        LinePreviewText(R.string.registration_number_vehicle)
-        LinePreviewText(R.string.make_trailer)
-        LinePreviewText(R.string.registration_number_trailer)
+        LinePreviewText(R.string.date, viewModel.uiState.value.dataFillingOne.date)
+        LinePreviewText(R.string.last_name, viewModel.uiState.value.dataFillingOne.lastName)
+        LinePreviewText(R.string.first_name, viewModel.uiState.value.dataFillingOne.firstName)
+        LinePreviewText(R.string.patronymic, viewModel.uiState.value.dataFillingOne.patronymic)
+        LinePreviewText(R.string.make_vehicle, viewModel.uiState.value.dataFillingOne.makeVehicle)
+        LinePreviewText(R.string.registration_number_vehicle,
+            viewModel.uiState.value.dataFillingOne.rnVehicle)
+        LinePreviewText(R.string.make_trailer, viewModel.uiState.value.dataFillingOne.makeTrailer)
+        LinePreviewText(R.string.registration_number_trailer,
+            viewModel.uiState.value.dataFillingOne.rnTrailer)
 
         Divider(
             modifier = Modifier.padding(10.dp)
         )
 
-        LinePreviewText(R.string.route)
-        LinePreviewText(R.string.date_departure)
-        LinePreviewText(R.string.date_return)
-        LinePreviewText(R.string.date_border_crossing_departure)
-        LinePreviewText(R.string.date_border_crossing_return)
-        LinePreviewText(R.string.speedometer_reading_departure)
-        LinePreviewText(R.string.speedometer_reading_return)
-        LinePreviewText(R.string.fuelled)
+        LinePreviewText(R.string.route, viewModel.uiState.value.dataFillingTwo.route)
+        LinePreviewText(R.string.date_departure, viewModel.uiState.value.dataFillingTwo.dateDeparture)
+        LinePreviewText(R.string.date_return, viewModel.uiState.value.dataFillingTwo.dateReturn)
+        LinePreviewText(R.string.date_border_crossing_departure,
+            viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture)
+        LinePreviewText(R.string.date_border_crossing_return,
+            viewModel.uiState.value.dataFillingTwo.dateCrossingReturn)
+        LinePreviewText(R.string.speedometer_reading_departure, viewModel.uiState.value.dataFillingTwo.speedometerDeparture)
+        LinePreviewText(R.string.speedometer_reading_return, viewModel.uiState.value.dataFillingTwo.speedometerReturn)
+        LinePreviewText(R.string.fuelled, viewModel.uiState.value.dataFillingTwo.fuelled)
 
         Divider(
             modifier = Modifier.padding(10.dp)
@@ -109,7 +114,7 @@ fun CreateReportsPreviewScreen(
 }
 
 @Composable
-fun LinePreviewText(textName: Int) {
+fun LinePreviewText(textName: Int, previewText: String) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -129,7 +134,7 @@ fun LinePreviewText(textName: Int) {
             )
         )
         Text(
-            text = stringResource(R.string.test),
+            text = previewText,
             modifier = Modifier.weight(1f),
             style = TextStyle(
                 fontSize = 16.sp,
@@ -170,12 +175,6 @@ fun ProgressReportItem() {
 @Composable
 fun ProgressReportItemPreview() {
     ProgressReportItem()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LinePreviewTextPreview() {
-    LinePreviewText(R.string.date)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
