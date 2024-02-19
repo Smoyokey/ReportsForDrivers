@@ -10,6 +10,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -17,10 +18,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.viewmodel.createreports.ResultViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun CreateReportsResultScreen() {
+fun CreateReportsResultScreen(
+    viewModel: ResultViewModel = hiltViewModel<ResultViewModel>()
+) {
+    val context = LocalContext.current
     Column() {
         Text(
             text = stringResource(R.string.result),
@@ -40,6 +47,20 @@ fun CreateReportsResultScreen() {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
+            Button(
+                onClick = {
+                    viewModel.testClick(context)
+                }
+            ) {
+                Text (text = stringResource(R.string.test))
+            }
+            Button(
+                onClick = {
+                    viewModel.testShare(context)
+                }
+            ) {
+                Text (text = stringResource(R.string.share))
+            }
             ButtonReportsResult(R.string.share)
             ButtonReportsResult(R.string.save_pdf)
             ButtonReportsResult(R.string.create_new_report)
@@ -52,7 +73,8 @@ fun CreateReportsResultScreen() {
 @Composable
 fun ButtonReportsResult(text: Int) {
     Button(
-        onClick = {},
+        onClick = {
+        },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(

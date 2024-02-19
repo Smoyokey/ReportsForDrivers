@@ -51,12 +51,6 @@
         </State>
       </entry>
       <entry key="PreviewTest">
-        <State />
-      </entry>
-      <entry key="ProgressReportsUiTest">
-        <State />
-      </entry>
-      <entry key="app">
         <State>
           <targetSelectedWithDropDown>
             <Target>
@@ -69,7 +63,26 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-12T19:10:03.848118890Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-02-17T08:49:00.723224771Z" />
+        </State>
+      </entry>
+      <entry key="ProgressReportsUiTest">
+        <State />
+      </entry>
+      <entry key="app">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/Pixel_6a_API_33.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-02-17T08:57:00.311817231Z" />
         </State>
       </entry>
     </value>
