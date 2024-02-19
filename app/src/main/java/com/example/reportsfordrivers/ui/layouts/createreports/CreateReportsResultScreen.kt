@@ -49,7 +49,7 @@ fun CreateReportsResultScreen(
         ) {
             Button(
                 onClick = {
-                    viewModel.testClick(context)
+                    viewModel.testClick()
                 }
             ) {
                 Text (text = stringResource(R.string.test))

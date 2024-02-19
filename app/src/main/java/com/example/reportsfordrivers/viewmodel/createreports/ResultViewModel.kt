@@ -3,73 +3,72 @@ package com.example.reportsfordrivers.viewmodel.createreports
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.provider.DocumentsContract
-import android.util.Log
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.android.InternalPlatformTextApi
+import androidx.compose.ui.text.android.animation.SegmentType
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-
-const val CREATE_FILE = 1
+import java.io.FileWriter
 
 class ResultViewModel(
 ): ViewModel() {
+    val testStringHtml = """<table>
+  <tr>
+    <th>Фамилия</th>
+    <th>Имя</th>
+  </tr>
 
+  <tr>
+    <td>Пермикин</td>
+    <td>Олег</td>
+  </tr>
 
-    private fun createFile(context: Context) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-//            addCategory(Intent.CATEGORY_OPENABLE)
-//            addCategory(Intent.ACTION_SEND)
-            type = "file/*"
-//            putExtra(Intent.EXTRA_TEXT, "TEST")
-            putExtra(Intent.EXTRA_TITLE, "test3.pdf")
-//            putExtra(Intent.EXTRA_PROCESS_TEXT, "terteeeeeee")
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri)
-//            }
-//            putExtra(Intent.EXTRA_HTML_TEXT, "fwfff")
+  <tr>
+    <td>Пугач</td>
+    <td>Полина</td>
+  </tr>
+</table>"""
 
-        }
-        context.startActivity(intent)
-    }
-
-//    private fun shareFile(context: Context) {
-//        val filePath = File(context.filesDir, "Test")
-//        val newFile = File(filePath, "Test.doc")
-//        val contentUri: Uri = Uri.
-//
-//    }
-
-//    private fun shareFile(context: Context) {
-//        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-//            addCategory()
-//            type = "application/pdf"
-//            putExtra(Intent.EXTRA_TITLE, "test2.pdf")
-//        }
-//        context.startActivity(intent)
-//    }
-
-//    private fun createFileTwo() {
-//        try (val ab: FileOutputStream = FileOutputStream("Test.doc"){
-//            ab = FileOutputStream("test.pdf")
-//            val text = "Hello, my name test"
-//            ab.write(text.toByteArray())
-//        } catch(e: IOException) {
-//            Log.e("TEST", "ERROR")
-//        } finally {  }
-//    }
-
-    fun testClick(context: Context) {
-//        createFile(context)
-        writeFile("download/", "Hello.doc", "TEST number 1")
+    fun testClick() {
+        writeFile("download/", "Hello.doc", testStringHtml)
     }
 
     fun testShare(context: Context) {
-        createFile(context)
+//        createFile(context)
+        downloadFile(context)
+    }
+
+    fun downloadFile(context: Context) {
+        val filePath: File = File(context.filesDir, "docs")
+        filePath.mkdir()
+        val newFile = File(filePath, "MyNewFile.doc")
+        newFile.delete()
+        newFile.createNewFile()
+        val contentUri = FileProvider.getUriForFile(
+            context,
+            "com.example.reportsfordrivers.fileprovider",
+            newFile
+        )
+        var fileWriter: FileWriter? = null
+        try {
+            fileWriter = FileWriter(newFile)
+            fileWriter.append(testStringHtml)
+        } catch (e: Exception) {}
+        fileWriter!!.close()
+
+        createFile(contentUri, context)
+    }
+
+    fun createFile(pickerInitialUri: Uri, context: Context) {
+        val shareIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, pickerInitialUri)
+            type = "text/plain"
+            setDataAndType(pickerInitialUri, context.contentResolver.getType(pickerInitialUri))
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "My First Doc"))
     }
 
     fun writeFile(filePath: String, fileName: String, text: String) {
@@ -85,10 +84,13 @@ class ResultViewModel(
             // Закрываем поток
             outputStream.close()
             // Просто для удобства визуального контроля исполнения метода в приложении
-//            Toast.makeText(this, "File is write", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
-//            Toast.makeText(this, "File is not write", Toast.LENGTH_SHORT).show()
         }
     }
+
+//    @OptIn(InternalPlatformTextApi::class)
+//    fun table() {
+//        val document = SegmentType.Document
+//    }
 }
