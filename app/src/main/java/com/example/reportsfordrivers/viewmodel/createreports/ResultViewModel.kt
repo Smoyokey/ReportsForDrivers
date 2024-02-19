@@ -37,12 +37,12 @@ class ResultViewModel(
         context.startActivity(intent)
     }
 
-    private fun shareFile(context: Context) {
-        val filePath = File(context.filesDir, "Test")
-        val newFile = File(filePath, "Test.doc")
-        val contentUri: Uri = Uri.
-
-    }
+//    private fun shareFile(context: Context) {
+//        val filePath = File(context.filesDir, "Test")
+//        val newFile = File(filePath, "Test.doc")
+//        val contentUri: Uri = Uri.
+//
+//    }
 
 //    private fun shareFile(context: Context) {
 //        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
