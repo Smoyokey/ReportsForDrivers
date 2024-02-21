@@ -13,6 +13,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,6 +41,18 @@ fun CreateReportsProgressReportsScreen(
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     Column {
+
+        TabRow(selectedTabIndex = 3) {
+            viewModel.tabs.forEachIndexed { index, title ->
+                Tab(
+                    text = { Text(title) },
+                    selected = 3 == index,
+                    onClick = {  },
+                    enabled = false
+                )
+            }
+        }
+
         Text(
             text = stringResource(R.string.progress_report),
             style = TextStyle(

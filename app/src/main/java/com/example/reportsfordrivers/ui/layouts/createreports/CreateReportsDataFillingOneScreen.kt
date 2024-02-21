@@ -15,6 +15,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -46,6 +48,17 @@ fun CreateReportsDataFillingOneScreen(
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     Column() {
+        TabRow(selectedTabIndex = 1) {
+            viewModel.tabs.forEachIndexed { index, title ->
+                Tab(
+                    text = { Text(title) },
+                    selected = 1 == index,
+                    onClick = {  },
+                    enabled = false
+                )
+            }
+        }
+
         Text(
             text = stringResource(R.string.data_filling),
             modifier = Modifier.fillMaxWidth(),

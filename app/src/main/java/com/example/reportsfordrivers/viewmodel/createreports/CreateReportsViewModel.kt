@@ -1,6 +1,9 @@
 package com.example.reportsfordrivers.viewmodel.createreports
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateReports
@@ -32,6 +35,9 @@ class CreateReportsViewModel @Inject constructor (
     var openDialogDataFillingTwoDateCrossingReturn = mutableStateOf(false)
 
     var openDialogProgressReportsDate = mutableStateOf(false)
+
+    var tabIndex = mutableStateOf(0)
+    val tabs = listOf("1", "2", "3", "4", "5", "6")
 
     private fun updateDataFillingOne(itemDetails: DataFillingOne) {
         uiState.value = uiState.value.copy(dataFillingOne = itemDetails)
