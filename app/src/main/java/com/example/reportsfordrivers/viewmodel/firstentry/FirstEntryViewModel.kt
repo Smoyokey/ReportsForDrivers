@@ -24,8 +24,13 @@ class FirstEntryViewModel @Inject constructor (
     var vehicleUiState = mutableStateOf(VehicleObject())
         private set
 
-    fun deletePositionVehicle(listVehicles: MutableList<ObjectVehicle>) {
-        uiState.value = uiState.value.copy(listVehicles = listVehicles)
+    var isOpenDialog = mutableStateOf(false)
+
+    /**
+     * Метод для удаления элемента в списке транспорта (хрен знает как работает, но работает)
+     */
+    fun deletePositionVehicle(item: ObjectVehicle) {
+        uiState.value.listVehicles.remove(item)
     }
 
     /**
@@ -57,7 +62,7 @@ class FirstEntryViewModel @Inject constructor (
     /**
      * Метод для обновления значения данных в текстовых полях MAKE и RN
      */
-    fun updateMakeRn(makeRnItemDetails: MakeRnItemDetails) {
+    private fun updateMakeRn(makeRnItemDetails: MakeRnItemDetails) {
         vehicleUiState.value = vehicleUiState.value.copy(makeRnItemDetails = makeRnItemDetails)
     }
 
@@ -77,19 +82,24 @@ class FirstEntryViewModel @Inject constructor (
     }
 
     /**
+     * Метод для активации кнопки Save при условии если текстовые поля First, Last, Patronymic
+     * заполненные
+     */
+    fun validateSave(): Boolean {
+        return uiState.value.fioItemDetails.firstName != "" &&
+                uiState.value.fioItemDetails.lastName != "" &&
+                uiState.value.fioItemDetails.patronymic != ""
+    }
+
+    /**
      * Добавление элемента в список [uiState] при условии что [validateAddVehicle()] возвращает true
      * Так же после добавления элемента полностью обновляются поля MAKE и RN, а так же RadioButton
      * сбрасывается до значения VEHICLE
      */
     fun addElementVehicle() {
-        if(validateAddVehicle()) {
-            uiState.value.listVehicles.add(createObjectVehicle())
-            resetVehicle()
-
-            Log.i(TAG, "Add Element vehicle")
-        } else {
-
-        }
+        uiState.value.listVehicles.add(createObjectVehicle())
+        resetVehicle()
+        Log.i(TAG, "Add Element vehicle")
     }
 
     /**
@@ -117,6 +127,4 @@ class FirstEntryViewModel @Inject constructor (
     fun onFirstEntry() = runBlocking {
         fioFirstEntryPreferencesRepository.setFirstEntry(false)
     }
-
-
 }

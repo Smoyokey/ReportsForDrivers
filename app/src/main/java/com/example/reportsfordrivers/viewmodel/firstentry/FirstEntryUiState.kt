@@ -1,6 +1,6 @@
 package com.example.reportsfordrivers.viewmodel.firstentry
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
 
 data class VehicleObject(
@@ -9,7 +9,7 @@ data class VehicleObject(
 )
 
 data class FirstEntryUiState(
-    val listVehicles: MutableList<ObjectVehicle> = mutableListOf(),
+    val listVehicles: SnapshotStateList<ObjectVehicle> = SnapshotStateList(),
     val fioItemDetails: FioItemDetails = FioItemDetails()
 )
 

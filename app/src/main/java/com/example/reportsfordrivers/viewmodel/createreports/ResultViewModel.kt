@@ -14,7 +14,7 @@ import java.io.FileWriter
 
 class ResultViewModel(
 ): ViewModel() {
-    val testStringHtml = """<table>
+    val testStringHtml = """<head><meta charset="UTF-8"></head><table>
   <tr>
     <th>Фамилия</th>
     <th>Имя</th>
@@ -88,9 +88,4 @@ class ResultViewModel(
             e.printStackTrace()
         }
     }
-
-//    @OptIn(InternalPlatformTextApi::class)
-//    fun table() {
-//        val document = SegmentType.Document
-//    }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.ui.theme.typography
 import kotlinx.coroutines.launch
 
 @Composable
@@ -34,6 +35,7 @@ fun OutlinedTextFieldCustom(
         label = { Text(stringResource(label)) },
         modifier = modifier,
         singleLine = true,
+        textStyle = typography.bodyLarge,
         trailingIcon = {
             if (value.isNotEmpty()) {
                 Icon(

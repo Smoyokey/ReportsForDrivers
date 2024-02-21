@@ -1,33 +1,24 @@
 package com.example.reportsfordrivers.ui.layouts.firstentry
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedIconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -38,34 +29,33 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTrailer
 import com.example.reportsfordrivers.viewmodel.firstentry.ObjectVehicle
-import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
-
 
 @Composable
 fun FirstEntryScreen(
     viewModel: FirstEntryViewModel = hiltViewModel(),
     onMainMenu: () -> Unit = {}
 ) {
-    val scrollState = rememberScrollState()
+//    val scrollState = rememberScrollState()
+    val modifierDivider = Modifier.padding(start = 16.dp, end = 16.dp)
 
     Column(
         modifier = Modifier
             .padding(10.dp)
-            .verticalScroll(state = scrollState)
-            .testTag(Tags.TAG_COLUMN_FIRST_ENTRY)
+//            .verticalScroll(state = scrollState)
+            .testTag(Tags.TAG_COLUMN_FIRST_ENTRY),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
-            text = stringResource(R.string.enter_information_yourself),
-            fontSize = 20.sp,
-            modifier = Modifier.weight(1f)
+            text = stringResource(R.string.driver),
+            style = typography.titleLarge,
         )
 
         OutlinedTextFieldCustom(
@@ -73,7 +63,7 @@ fun FirstEntryScreen(
             value = viewModel.uiState.value.fioItemDetails.lastName,
             onValueChange = viewModel::updateLastName,
             tag = Tags.TAG_TEST_FIRST_ENTRY_LAST_NAME,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextFieldCustom(
@@ -81,7 +71,7 @@ fun FirstEntryScreen(
             value = viewModel.uiState.value.fioItemDetails.firstName,
             onValueChange = viewModel::updateFirstName,
             tag = Tags.TAG_TEST_FIRST_ENTRY_FIRST_NAME,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextFieldCustom(
@@ -89,16 +79,12 @@ fun FirstEntryScreen(
             value = viewModel.uiState.value.fioItemDetails.patronymic,
             onValueChange = viewModel::updatePatronymic,
             tag = Tags.TAG_TEST_FIRST_ENTRY_PATRONYMIC,
-            modifier = Modifier
-        )
-
-        Divider(
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
         Text(
             text = stringResource(R.string.add_makes_registration_vehicles_trailers),
-            fontSize = 20.sp
+            style = typography.titleLarge,
         )
 
         Row(
@@ -126,141 +112,166 @@ fun FirstEntryScreen(
 
         OutlinedTextFieldCustom(
             label = if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup) R.string.make_vehicle
-            else {R.string.make_trailer},
+            else {
+                R.string.make_trailer
+            },
             value = viewModel.vehicleUiState.value.makeRnItemDetails.make,
             onValueChange = viewModel::updateMake,
             tag = Tags.TAG_TEST_FIRST_ENTRY_MAKE,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextFieldCustom(
             label = if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup) R.string.rn_vehicle
             else R.string.rn_trailer,
-            value = viewModel.vehicleUiState.value.makeRnItemDetails.make,
+            value = viewModel.vehicleUiState.value.makeRnItemDetails.rn,
             onValueChange = viewModel::updateRn,
             tag = Tags.TAG_TEST_FIRST_ENTRY_RN,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Button(
+            OutlinedButton(
                 onClick = { viewModel.addElementVehicle() },
                 enabled = viewModel.validateAddVehicle()
             ) {
                 Text(
-                    text = stringResource(R.string.add)
+                    text = stringResource(R.string.add),
+                    style = typography.titleLarge
                 )
             }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
-            verticalAlignment = Alignment.Top,
+        if(viewModel.uiState.value.listVehicles.size > 0) {
+            Divider(
+                modifier = modifierDivider
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier.weight(1f)
         ) {
-            Text(
-                text = stringResource(R.string.type),
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(R.string.make),
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(R.string.rn),
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
-            )
-        }
-
-        for (i in 0..<viewModel.uiState.value.listVehicles.size) {
-            val a = viewModel.uiState.value.listVehicles[i]
-            TableMakeRn(
-                vehicleObject = a,
-                listObject = viewModel.uiState.value.listVehicles,
-                onClick = viewModel::deletePositionVehicle
-            )
-        }
-
-
-        Divider(
-            modifier = Modifier.padding(10.dp)
-        )
-
-        Row() {
-            Text(
-                text = stringResource(R.string.save_entered_data),
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Divider(
-            modifier = Modifier.padding(10.dp)
-        )
-
-        Row() {
-            Button(
-                onClick = onMainMenu,
-                Modifier.weight(1f)
-            ) {
-                Text(text = stringResource(R.string.skip))
+            items(viewModel.uiState.value.listVehicles) { vehicle ->
+                TableMakeRn(
+                    objectVehicle = vehicle,
+                    onClick = viewModel::deletePositionVehicle,
+                    isOpenDialog = viewModel.isOpenDialog
+                )
             }
-            Button(
+        }
+
+        Divider(
+            modifier = modifierDivider
+        )
+
+        Row(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)
+        ) {
+            OutlinedButton(
                 onClick = onMainMenu,
-                enabled = false, //StateUI
+                modifier = Modifier.weight(1f),
+
+            ) {
+                Text(
+                    text = stringResource(R.string.skip),
+                    style = typography.titleLarge
+                )
+            }
+            OutlinedButton(
+                onClick = onMainMenu,
+                enabled = viewModel.validateSave(),
                 modifier = Modifier.weight(1f)
             ) {
-                Text(text = stringResource(R.string.save))
+                Text(
+                    text = stringResource(R.string.save),
+                    style = typography.titleLarge
+                )
             }
         }
     }
 }
 
 /**
- * Переделать придется метод под UIState
+ * AlertDialog - при удалении строки, возникает диалоговое меню подтверждения
  */
 @Composable
+fun AlertDialogDeleteElement(
+    isOpenDialog: MutableState<Boolean>,
+    onClick: (ObjectVehicle) -> Unit = {},
+    objectVehicle: ObjectVehicle
+) {
+    if(isOpenDialog.value) {
+        AlertDialog(
+            text = {Text(text = stringResource(R.string.are_you_sure))},
+            title = {Text(text = stringResource(R.string.deletion))}   ,
+            onDismissRequest = { isOpenDialog.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onClick(objectVehicle)
+                    }
+                ) {
+                    Text(text = stringResource(R.string.yes))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { isOpenDialog.value = false }
+                ) {
+                    Text(text = stringResource(R.string.no))
+                }
+            }
+        )
+    }
+}
+
+@Composable
 fun TableMakeRn(
-    vehicleObject: ObjectVehicle,
-    listObject: MutableList<ObjectVehicle> = mutableListOf(),
-    onClick: (MutableList<ObjectVehicle>) -> Unit = {},
+    onClick: (ObjectVehicle) -> Unit = {},
+    objectVehicle: ObjectVehicle = ObjectVehicle(),
+    isOpenDialog: MutableState<Boolean> = mutableStateOf(false)
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = vehicleObject.vehicleOrTrailer.name,
+            text = objectVehicle.vehicleOrTrailer.name,
             modifier = Modifier.weight(1f),
+            style = typography.bodyMedium,
             textAlign = TextAlign.Center
         )
         Text(
-            text = vehicleObject.make,
+            text = objectVehicle.make,
             modifier = Modifier.weight(1f),
+            style = typography.bodyMedium,
             textAlign = TextAlign.Center
         )
         Text(
-            text = vehicleObject.rn,
+            text = objectVehicle.rn,
             modifier = Modifier.weight(1f),
+            style = typography.bodyMedium,
             textAlign = TextAlign.Center
         )
         IconButton(
-            onClick = {}
+            onClick = { isOpenDialog.value = true }
         ) {
             Icon(
                 painter = painterResource(R.drawable.close_24px),
                 contentDescription = stringResource(R.string.delete),
-                modifier = Modifier.clickable {
-                    listObject.remove(vehicleObject)
-                    onClick(listObject)
-                }
             )
         }
     }
+
+    AlertDialogDeleteElement(
+        isOpenDialog = isOpenDialog,
+        onClick = onClick,
+        objectVehicle = objectVehicle
+    )
 }
 
 @Composable
@@ -292,12 +303,6 @@ fun FirstEntryScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun TableMakeRnPreview() {
-    TableMakeRn(
-        ObjectVehicle(
-            make = "DAF",
-            rn = "1234II-1",
-            vehicleOrTrailer = VehicleOrTrailer.VEHICLE
-        ),
-    )
+    TableMakeRn()
 }
 

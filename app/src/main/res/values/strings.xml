@@ -12,8 +12,8 @@
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
     <string name="patronymic">Patronymic</string>
-    <string name="add_makes_registration_vehicles_trailers">Add the makes and registration
-        numbers of the vehicles and trailers that you are driving (optional).</string>
+    <string name="add_makes_registration_vehicles_trailers">Makes and license plates
+        of vehicles (trailers):</string>
     <string name="vehicle">Vehicle</string>
     <string name="trailer">Trailer</string>
     <string name="make_vehicle_trailer">Make of the vehicle / trailer</string>
@@ -35,6 +35,7 @@
     <string name="save">Save</string>
     <string name="info">Info</string>
     <string name="clear">Clear</string>
+    <string name="driver">Driver:</string>
 
 
     <string name="create_report">Create report</string>
@@ -88,8 +89,12 @@
 
     <string name="back_button">Back</string>
 
-
     <string name="test">TEST</string>
     <string name="vehicle_test">VEHICLE</string>
     <string name="trailer_test">TRAILER</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="deletion">Deletion</string>
 </resources>
