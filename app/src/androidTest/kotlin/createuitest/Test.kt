@@ -2,7 +2,12 @@ package createuitest
 
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.example.reportsfordrivers.MainActivity
+import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.navigationtest.helpmethods.onNodeWithStringId
+import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
 import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -24,11 +29,12 @@ class test {
     fun init() {
         hiltRule.inject()
         composeRule.activity.setContent {
-            FirstEntryScreen()
+            CreateReportsResultScreen()
         }
     }
     @Test
     fun tests() {
+        composeRule.onNodeWithStringId(R.string.test).performClick()
         assertTrue(true)
     }
 }

@@ -2,22 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="DataFillingOneUiTest">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_3a_API_34_extension_level_7_x86_64.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-14T12:14:04.027708834Z" />
-        </State>
-      </entry>
       <entry key="DataFillingTwoUiTest">
         <State>
           <targetSelectedWithDropDown>
@@ -81,6 +65,9 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-02-17T08:57:00.311817231Z" />
         </State>
+      </entry>
+      <entry key="tests()">
+        <State />
       </entry>
       <entry key="writeText_inTextFieldDocumentNumber()">
         <State />
