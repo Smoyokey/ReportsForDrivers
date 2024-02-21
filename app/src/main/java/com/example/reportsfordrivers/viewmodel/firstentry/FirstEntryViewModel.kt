@@ -3,6 +3,10 @@ package com.example.reportsfordrivers.viewmodel.firstentry
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.reportsfordrivers.data.AppDatabase
+import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
+import com.example.reportsfordrivers.data.repositories.VehicleAndTrailerSaveDataRepository
+import com.example.reportsfordrivers.data.structure.VehicleAndTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
@@ -12,9 +16,11 @@ private const val TAG = "FirstEntryViewModel"
 
 @HiltViewModel
 class FirstEntryViewModel @Inject constructor (
-    private val fioFirstEntryPreferencesRepository: FioFirstEntryRepository
+    private val fioFirstEntryPreferencesRepository: FioFirstEntryRepository,
 ): ViewModel(){
 
+
+    @Inject lateinit var vehicleAndTrailer: VehicleAndTrailerSaveDataDao
     /**
      * [uiState] - хранилище ФИО и списка машин с прицепами типа [FirstEntryUiState()].
      * [vehicleUiState] - Хранилище введенных данных о машине или прицепе типа [VehicleObject()]
@@ -90,6 +96,31 @@ class FirstEntryViewModel @Inject constructor (
                 uiState.value.fioItemDetails.lastName != "" &&
                 uiState.value.fioItemDetails.patronymic != ""
     }
+
+     fun saveButton() = runBlocking{
+        fioFirstEntryPreferencesRepository.setFirstName(uiState.value.fioItemDetails.firstName)
+        fioFirstEntryPreferencesRepository.setLastName(uiState.value.fioItemDetails.lastName)
+        fioFirstEntryPreferencesRepository.setPatronymic(uiState.value.fioItemDetails.patronymic)
+
+         if(uiState.value.listVehicles.size > 0) {
+             for(i in uiState.value.listVehicles) {
+                 val a = VehicleAndTrailer(
+                     vehicleOrTrailer = i.vehicleOrTrailer.name,
+                     make = i.make,
+                     registrationNumber = i.rn
+                 )
+                 vehicleAndTrailer.insert(a)
+             }
+         }
+
+         Log.i(TAG, fioFirstEntryPreferencesRepository.getFirstName().toString())
+         Log.i(TAG, fioFirstEntryPreferencesRepository.getLastName().toString())
+         Log.i(TAG, fioFirstEntryPreferencesRepository.getPatronymic().toString())
+
+         Log.i(TAG, vehicleAndTrailer.getOneItem(0).toString())
+    }
+
+
 
     /**
      * Добавление элемента в список [uiState] при условии что [validateAddVehicle()] возвращает true

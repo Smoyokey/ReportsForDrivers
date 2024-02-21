@@ -34,7 +34,7 @@ data class ObjectVehicle(
     val vehicleOrTrailer: VehicleOrTrailer = VehicleOrTrailer.VEHICLE
 )
 
-enum class VehicleOrTrailer(b: String) {
+enum class VehicleOrTrailer(title: String) {
     VEHICLE("Vehicle"),
     TRAILER("Trailer")
 }

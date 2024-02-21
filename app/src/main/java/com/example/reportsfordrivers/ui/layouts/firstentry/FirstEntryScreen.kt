@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
@@ -182,7 +183,10 @@ fun FirstEntryScreen(
                 )
             }
             OutlinedButton(
-                onClick = onMainMenu,
+                onClick = {
+                    onMainMenu()
+                    viewModel.saveButton()
+                },
                 enabled = viewModel.validateSave(),
                 modifier = Modifier.weight(1f)
             ) {
