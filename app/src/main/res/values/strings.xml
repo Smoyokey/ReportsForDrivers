@@ -70,6 +70,15 @@
     <string name="come_out">Come out</string>
     <string name="delete">Delete</string>
     <string name="ok">Ok</string>
+    <string name="choosing_layout">Choosing a layout</string>
+    <string name="data">Data</string>
+    <string name="stages_movement">Stages of the movement</string>
+    <string name="business_trip_expenses">Business trip expenses</string>
+    <string name="current_date">Current date</string>
+    <string name="document_number">Document number</string>
+    <string name="expense_item">Expense item</string>
+    <string name="sum">Sum</string>
+    <string name="currency">Currency</string>
 
     <string name="empty_create_first_report">Empty? Create your first report</string>
     <string name="create">Create</string>
@@ -97,4 +106,5 @@
     <string name="no">No</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="deletion">Deletion</string>
+
 </resources>

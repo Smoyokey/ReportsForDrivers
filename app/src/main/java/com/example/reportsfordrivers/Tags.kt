@@ -32,6 +32,11 @@ object Tags {
         "tagTestDataFillingTwoSpeedometerReturn"
     const val TAG_TEST_DATA_FILLING_TWO_FUELLED: String = "tagTestDataFillingTwoFuelled"
 
+    const val TAG_TEST_EXPENSES_DOCUMENT_NUMBER: String = "tagTestExpensesDocumentNumber"
+    const val TAG_TEST_EXPENSES_EXPENSE_ITEM: String = "tagTestExpensesExpenseItem"
+    const val TAG_TEST_EXPENSES_SUM: String = "tagTestExpensesSum"
+    const val TAG_TEST_EXPENSES_CURRENCY: String = "tagTestExpensesCurrency"
+
     const val TAG_TEST_PREVIEW_REPORT_NAME: String = "tagTestPreviewReportName"
 
     const val TAG_TEST_SETTING_DATA_VEHICLE_MAKE: String = "tagTestSettingDataVehicleMake"

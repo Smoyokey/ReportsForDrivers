@@ -4,6 +4,7 @@ data class CreateReports(
     val dataFillingOne: DataFillingOne = DataFillingOne(),
     val dataFillingTwo: DataFillingTwo = DataFillingTwo(),
     val listProgress: MutableList<ProgressReports> = mutableListOf(),
+    val listTripExpenses: MutableList<TripExpensesReports> = mutableListOf(),
     val reportName: String = ""
 )
 
@@ -39,4 +40,16 @@ data class ProgressDetails(
     val distance: String = "",
     val cargoWeight: String = "",
     val date: String = ""
+)
+
+data class TripExpensesReports(
+    val tripExpensesDetails: TripExpensesDetails = TripExpensesDetails()
+)
+
+data class TripExpensesDetails(
+    val date: String = "",
+    val documentNumber: String = "",
+    val expenseItem: String = "",
+    val sum: String = "",
+    val currency: String = ""
 )

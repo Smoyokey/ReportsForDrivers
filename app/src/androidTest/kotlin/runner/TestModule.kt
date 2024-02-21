@@ -8,6 +8,7 @@ import com.example.reportsfordrivers.data.dao.ProgressReportDao
 import com.example.reportsfordrivers.data.dao.ReportNameDao
 import com.example.reportsfordrivers.data.dao.RouteDao
 import com.example.reportsfordrivers.data.dao.TrailerDao
+import com.example.reportsfordrivers.data.dao.TripExpensesDao
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.dao.VehicleDao
 import com.example.reportsfordrivers.di.DatabaseModule
@@ -70,6 +71,13 @@ object TestModule {
     @Named("test_db")
     fun provideVehicleAndTrailerDao(database: AppDatabase) : VehicleAndTrailerSaveDataDao {
         return database.vehicleAndTrailerDao()
+    }
+
+    @Provides
+    @Singleton
+    @Named("test_db")
+    fun providerTripExpensesDao(database: AppDatabase) : TripExpensesDao {
+        return database.tripExpensesDao()
     }
 
     @Provides

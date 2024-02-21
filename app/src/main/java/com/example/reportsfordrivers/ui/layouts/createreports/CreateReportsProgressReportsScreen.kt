@@ -37,7 +37,7 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDet
 
 @Composable
 fun CreateReportsProgressReportsScreen(
-    onPreview: () -> Unit,
+    onTripExpenses: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     Column {
@@ -148,7 +148,7 @@ fun CreateReportsProgressReportsScreen(
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = onPreview
+                onClick = onTripExpenses
             ) {
                 Text(
                     text = stringResource(R.string.next)
@@ -197,5 +197,5 @@ fun LineProgressReportsPreview() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateReportsProgressReportsScreenPreview() {
-    CreateReportsProgressReportsScreen(onPreview = {})
+    CreateReportsProgressReportsScreen(onTripExpenses = {})
 }

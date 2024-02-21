@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.reportsfordrivers.ui.layouts.MainMenuScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataFillingOneScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataFillingTwoScreen
+import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsExpensesScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsPreviewScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsProgressReportsScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
@@ -103,6 +104,14 @@ fun ReportsForDriversNavHost(
         }
         composable(route = ReportsForDriversSchema.ProgressReport.name) {
             CreateReportsProgressReportsScreen(
+                onTripExpenses = {
+                    navController.navigate(ReportsForDriversSchema.TripExpenses.name)
+                },
+                viewModel = viewModelCreateReports
+            )
+        }
+        composable(route = ReportsForDriversSchema.TripExpenses.name) {
+            CreateReportsExpensesScreen(
                 onPreview = {
                     navController.navigate(ReportsForDriversSchema.Preview.name)
                 },

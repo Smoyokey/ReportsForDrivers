@@ -11,6 +11,8 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFilling
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFillingTwo
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesDetails
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,6 +27,9 @@ class CreateReportsViewModel @Inject constructor (
         private set
 
     var uiStateProgressReports = mutableStateOf(ProgressReports())
+        private set
+
+    var uiStateTripExpenses = mutableStateOf(TripExpensesReports())
         private set
 
     var openDialogDateFillingOne = mutableStateOf(false)
@@ -141,6 +146,33 @@ class CreateReportsViewModel @Inject constructor (
 
     fun updateProgressReportsDate(date: String) {
         updateProgressReports(uiStateProgressReports.value.progressDetails.copy(date = date))
+    }
+
+    private fun updateTripExpenses(tripExpensesDetails: TripExpensesDetails) {
+        uiStateTripExpenses.value = uiStateTripExpenses.value
+            .copy(tripExpensesDetails = tripExpensesDetails)
+    }
+
+    fun updateTripExpensesDate(date: String) {
+        updateTripExpenses(uiStateTripExpenses.value.tripExpensesDetails.copy(date = date))
+    }
+
+    fun updateTripExpensesDocumentNumber(documentNumber: String) {
+        updateTripExpenses(uiStateTripExpenses.value.tripExpensesDetails
+            .copy(documentNumber = documentNumber))
+    }
+
+    fun updateTripExpensesExpenseItem(expenseItem: String) {
+        updateTripExpenses(uiStateTripExpenses.value.tripExpensesDetails
+            .copy(expenseItem = expenseItem))
+    }
+
+    fun updateTripExpensesSum(sum: String) {
+        updateTripExpenses(uiStateTripExpenses.value.tripExpensesDetails.copy(sum = sum))
+    }
+
+    fun updateTripExpensesCurrency(currency: String) {
+        updateTripExpenses(uiStateTripExpenses.value.tripExpensesDetails.copy(currency = currency))
     }
 
     fun updatePreviewReportName(reportName: String) {

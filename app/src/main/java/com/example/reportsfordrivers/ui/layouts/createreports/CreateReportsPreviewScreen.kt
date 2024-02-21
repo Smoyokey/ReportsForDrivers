@@ -33,7 +33,7 @@ fun CreateReportsPreviewScreen(
 ) {
     Column() {
 
-        TabRow(selectedTabIndex = 4) {
+        TabRow(selectedTabIndex = 5) {
             viewModel.tabs.forEachIndexed { index, title ->
                 Tab(
                     text = { Text(title) },
