@@ -36,7 +36,7 @@ fun HistoryReportsSelectedScreen() {
         HistoryReportsButton(R.string.edit)
         HistoryReportsButton(R.string.delete)
         HistoryReportsButton(R.string.share)
-        HistoryReportsButton(R.string.save_pdf)
+        HistoryReportsButton(R.string.save)
     }
 }
 

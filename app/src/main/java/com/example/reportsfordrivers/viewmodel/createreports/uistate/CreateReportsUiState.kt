@@ -1,9 +1,11 @@
 package com.example.reportsfordrivers.viewmodel.createreports.uistate
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
+
 data class CreateReports(
     val dataFillingOne: DataFillingOne = DataFillingOne(),
     val dataFillingTwo: DataFillingTwo = DataFillingTwo(),
-    val listProgress: MutableList<ProgressReports> = mutableListOf(),
+    val listProgress: SnapshotStateList<ProgressReports> = SnapshotStateList(),
     val listTripExpenses: MutableList<TripExpensesReports> = mutableListOf(),
     val reportName: String = ""
 )

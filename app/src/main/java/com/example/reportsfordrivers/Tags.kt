@@ -56,4 +56,12 @@ object Tags {
     const val TAG_TEST_SETTING_FEEDBACK_YOUR_NAME: String = "tagTestSettingFeedbackYourName"
     const val TAG_TEST_SETTING_FEEDBACK_YOUR_EMAIL: String = "tagTestSettingFeedbackYourEmail"
     const val TAG_TEST_SETTING_FEEDBACK_TEXT: String = "tagTestSettingFeedbackText"
+
+    const val TAG_TEST_DATE_DEPARTURE = "tagTestDateDeparture"
+    const val TAG_TEST_DATE_RETURN = "tagTestDateReturn"
+    const val TAG_TEST_DATE_CROSSING_DEPARTURE = "tagTestDateCrossingDeparture"
+    const val TAG_TEST_DATE_CROSSING_RETURN = "tagTestDateCrossingReturn"
+
+    const val TAG_TEST_PROGRESS_REPORTS_DATE = "tagTestProgressReportsDate"
+    const val TAG_TEST_TRIP_EXPENSES_DATE = "tagTestTripExpensesDate"
 }

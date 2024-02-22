@@ -31,7 +31,9 @@ fun CreateReportsPreviewScreen(
     onResult: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
-    Column() {
+    Column(
+        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+    ) {
 
         TabRow(selectedTabIndex = 5) {
             viewModel.tabs.forEachIndexed { index, title ->
@@ -43,20 +45,6 @@ fun CreateReportsPreviewScreen(
                 )
             }
         }
-
-        Text(
-            text = stringResource(R.string.preview),
-            modifier = Modifier.fillMaxWidth(),
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight(400),
-                textAlign = TextAlign.Center
-            )
-        )
-        
-        Divider(
-            modifier = Modifier.padding(10.dp)
-        )
 
         LinePreviewText(R.string.date, viewModel.uiState.value.dataFillingOne.date)
         LinePreviewText(R.string.last_name, viewModel.uiState.value.dataFillingOne.lastName)

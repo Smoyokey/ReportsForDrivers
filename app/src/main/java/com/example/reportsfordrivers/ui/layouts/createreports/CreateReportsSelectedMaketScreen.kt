@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -29,7 +30,9 @@ fun CreateReportsSelectedMaketScreen(
     onFillingDataOne: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
-    Column() {
+    Column(
+
+    ) {
         TabRow(selectedTabIndex = 0) {
             viewModel.tabs.forEachIndexed { index, title ->
                 Tab(
@@ -40,34 +43,33 @@ fun CreateReportsSelectedMaketScreen(
                 )
             }
         }
-        //Тут верхняя навигация
 
-        Divider(
-            modifier = Modifier.padding(10.dp)
-        )
-
-        CardMaket(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+        Column(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Button(
-                onClick = {
-                    onFillingDataOne()
-                    viewModel.tabIndex.value = 1
-                }
+            CardMaket(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(
-                    text = stringResource(R.string.next)
-                )
+                OutlinedButton(
+                    onClick = {
+                        onFillingDataOne()
+                        viewModel.tabIndex.value = 1
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.next)
+                    )
+                }
             }
         }
     }
-
 }
 
 @Composable

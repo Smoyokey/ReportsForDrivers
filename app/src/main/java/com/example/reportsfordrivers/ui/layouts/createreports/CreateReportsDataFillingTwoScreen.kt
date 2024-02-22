@@ -14,6 +14,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -38,6 +39,7 @@ import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFillingTwo
 import kotlinx.coroutines.launch
@@ -47,60 +49,52 @@ fun CreateReportsDataFillingTwoScreen(
     onProgressReport: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
-    Column() {
+    Column(
+        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+    ) {
 
         TabRow(selectedTabIndex = 2) {
             viewModel.tabs.forEachIndexed { index, title ->
                 Tab(
                     text = { Text(title) },
                     selected = 2 == index,
-                    onClick = {  },
+                    onClick = { },
                     enabled = false
                 )
             }
         }
-
-        Text(
-            text = stringResource(R.string.data_filling),
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight(400)
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-
-        Divider(
-            modifier = Modifier.padding(10.dp)
-        )
 
         OutlinedTextFieldCustom(
             label = R.string.route,
             value = viewModel.uiState.value.dataFillingTwo.route,
             onValueChange = viewModel::updateDataFillingTwoRoute,
             tag = Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         LineDataFilling(
-            text = R.string.date_departure,
+            text = R.string.test,
             openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateDeparture
+            dateDetails = viewModel.uiState.value.dataFillingTwo.dateDeparture,
+            tag = Tags.TAG_TEST_DATE_DEPARTURE
         )
         LineDataFilling(
-            text = R.string.date_return,
+            text = R.string.test,
             openDialog = viewModel.openDialogDataFillingTwoDateReturn,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateReturn
+            dateDetails = viewModel.uiState.value.dataFillingTwo.dateReturn,
+            tag = Tags.TAG_TEST_DATE_RETURN
         )
         LineDataFilling(
-            text = R.string.date_border_crossing_departure,
+            text = R.string.test,
             openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture
+            dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
+            tag = Tags.TAG_TEST_DATE_CROSSING_DEPARTURE
         )
         LineDataFilling(
-            text = R.string.date_border_crossing_return,
+            text = R.string.test,
             openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn
+            dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
+            tag = Tags.TAG_TEST_DATE_CROSSING_RETURN
         )
 
         OutlinedTextFieldCustom(
@@ -108,7 +102,7 @@ fun CreateReportsDataFillingTwoScreen(
             value = viewModel.uiState.value.dataFillingTwo.speedometerDeparture,
             onValueChange = viewModel::updateDataFillingTwoSpeedometerDeparture,
             tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextFieldCustom(
@@ -116,7 +110,7 @@ fun CreateReportsDataFillingTwoScreen(
             value = viewModel.uiState.value.dataFillingTwo.speedometerReturn,
             onValueChange = viewModel::updateDataFillingTwoSpeedometerReturn,
             tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextFieldCustom(
@@ -124,7 +118,7 @@ fun CreateReportsDataFillingTwoScreen(
             value = viewModel.uiState.value.dataFillingTwo.fuelled,
             onValueChange = viewModel::updateDataFillingTwoFuelled,
             tag = Tags.TAG_TEST_DATA_FILLING_TWO_FUELLED,
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         )
 
         Column(
@@ -135,7 +129,7 @@ fun CreateReportsDataFillingTwoScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            Button(
+            OutlinedButton(
                 onClick = onProgressReport
             ) {
                 Text(
@@ -163,22 +157,30 @@ fun CreateReportsDataFillingTwoScreen(
 }
 
 @Composable
-fun LineDataFilling(text: Int, openDialog: MutableState<Boolean>, dateDetails: String) {
+fun LineDataFilling(
+    text: Int,
+    openDialog: MutableState<Boolean>,
+    dateDetails: String,
+    tag: String
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = stringResource(text),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            style = typography.titleLarge
         )
-        Button(
+        TextButton(
             onClick = {
                 openDialog.value = true
-            }
+            },
+            modifier = Modifier.testTag(tag)
         ) {
             Text(
-                text = dateDetails.ifEmpty { stringResource(R.string.date) }
+                text = dateDetails.ifEmpty { stringResource(R.string.current_date) },
+                style = typography.titleLarge
             )
         }
     }

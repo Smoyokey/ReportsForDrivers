@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -12,19 +15,25 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 
 @Composable
 fun CreateReportsExpensesScreen(
     onPreview: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
-    Column() {
+    Column(
+        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+    ) {
         TabRow(selectedTabIndex = 4) {
             viewModel.tabs.forEachIndexed { index, title ->
                 Tab(
@@ -41,14 +50,16 @@ fun CreateReportsExpensesScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.date),
+                text = stringResource(R.string.test),
                 modifier = Modifier.weight(1f)
             )
             TextButton(
-                onClick = { }
+                onClick = { viewModel.openDialogTripExpenseDate.value = true },
+                modifier = Modifier.testTag(Tags.TAG_TEST_TRIP_EXPENSES_DATE)
             ) {
                 Text(
-                    text = stringResource(R.string.current_date)
+                    text = viewModel.uiStateTripExpenses.value.tripExpensesDetails.date.ifEmpty
+                    { stringResource(R.string.current_date) }
                 )
             }
         }
@@ -93,7 +104,8 @@ fun CreateReportsExpensesScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedButton(
-                onClick = {}
+                onClick = { viewModel.updateTripExpense() },
+                enabled = viewModel.validateAddTripExpenses()
             ) {
                 Text(text = stringResource(R.string.add))
             }
@@ -101,7 +113,13 @@ fun CreateReportsExpensesScreen(
 
         Column(
             modifier = Modifier.weight(1f)
-        ) {}
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(viewModel.uiState.value.listTripExpenses) { element ->
+                    LineElement(tripExpenseReport = element)
+                }
+            }
+        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -111,5 +129,21 @@ fun CreateReportsExpensesScreen(
                 Text(text = stringResource(R.string.next))
             }
         }
+
+        DatePickerDialogCustom(
+            viewModel.openDialogTripExpenseDate,
+            viewModel::updateTripExpensesDate
+        )
+    }
+}
+
+@Composable
+fun LineElement(tripExpenseReport: TripExpensesReports) {
+    Column() {
+        Text("Date - ${tripExpenseReport.tripExpensesDetails.date}")
+        Text("Document number - ${tripExpenseReport.tripExpensesDetails.documentNumber}")
+        Text("Expense item - ${tripExpenseReport.tripExpensesDetails.expenseItem}")
+        Text("Sum - ${tripExpenseReport.tripExpensesDetails.sum}")
+        Text("Currency - ${tripExpenseReport.tripExpensesDetails.currency}")
     }
 }

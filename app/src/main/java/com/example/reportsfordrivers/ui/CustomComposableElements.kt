@@ -1,10 +1,12 @@
 package com.example.reportsfordrivers.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -13,10 +15,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
 import kotlinx.coroutines.launch
@@ -57,7 +61,7 @@ fun DatePickerDialogCustom(
     onValueChange: (String) -> Unit
 ) {
     val snackScope = rememberCoroutineScope()
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
     if(openDialog.value) {
         DatePickerDialog(
             onDismissRequest = { openDialog.value = false },
@@ -81,7 +85,18 @@ fun DatePickerDialogCustom(
                 }
             }
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                title = {Text("test")},
+                headline = {Text("test")}
+            )
         }
     }
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview(showBackground = true)
+@Composable
+fun DatePickerDialogCustomPreview() {
+    DatePickerDialogCustom(mutableStateOf(true), {})
 }

@@ -22,7 +22,6 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScreen
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.ResultViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 
 @Composable
@@ -128,7 +127,7 @@ fun ReportsForDriversNavHost(
         }
         composable(route = ReportsForDriversSchema.Result.name) {
             CreateReportsResultScreen(
-                viewModel = hiltViewModel<ResultViewModel>()
+                viewModel = viewModelCreateReports
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInformation.name) {

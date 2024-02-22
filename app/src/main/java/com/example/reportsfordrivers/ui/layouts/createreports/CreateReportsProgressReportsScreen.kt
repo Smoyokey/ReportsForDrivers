@@ -7,15 +7,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,55 +37,45 @@ import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
 
 @Composable
 fun CreateReportsProgressReportsScreen(
     onTripExpenses: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+    ) {
 
         TabRow(selectedTabIndex = 3) {
             viewModel.tabs.forEachIndexed { index, title ->
                 Tab(
                     text = { Text(title) },
                     selected = 3 == index,
-                    onClick = {  },
+                    onClick = { },
                     enabled = false
                 )
             }
         }
-
-        Text(
-            text = stringResource(R.string.progress_report),
-            style = TextStyle(
-                fontSize = 30.sp,
-                fontWeight = FontWeight(400),
-                textAlign = TextAlign.Center
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Divider(
-            modifier = Modifier.padding(10.dp)
-        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.date_departure),
+                text = stringResource(R.string.test),
                 modifier = Modifier.weight(1f)
             )
-            Button(
+            TextButton(
                 onClick = {
                     viewModel.openDialogProgressReportsDate.value = true
-                }
+                },
+                modifier = Modifier.testTag(Tags.TAG_TEST_PROGRESS_REPORTS_DATE)
             ) {
                 Text(
                     text = viewModel.uiStateProgressReports.value.progressDetails.date.ifEmpty
-                    { stringResource(R.string.date) }
+                    { stringResource(R.string.current_date) }
                 )
             }
         }
@@ -125,8 +118,11 @@ fun CreateReportsProgressReportsScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(
-                onClick = {}
+            OutlinedButton(
+                onClick = {
+                    viewModel.updateProgressReports()
+                },
+                enabled = viewModel.validateAddProgressReports()
             ) {
                 Text(
                     text = stringResource(R.string.add)
@@ -138,16 +134,19 @@ fun CreateReportsProgressReportsScreen(
             modifier = Modifier.weight(1f)
         ) {
             LazyColumn(
-                content = {},
                 modifier = Modifier.fillMaxWidth()
-            )
+            ) {
+                items(viewModel.uiState.value.listProgress) { list ->
+                    LineProgressReports(list)
+                }
+            }
         }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            Button(
+            OutlinedButton(
                 onClick = onTripExpenses
             ) {
                 Text(
@@ -163,35 +162,29 @@ fun CreateReportsProgressReportsScreen(
 }
 
 @Composable
-fun LineProgressReports() {
+fun LineProgressReports(progressReports: ProgressReports) {
     Row() {
         Text(
             text = "1."
         )
         Column() {
             Text(
-                text = "Date - TEST"
+                text = "Date - ${progressReports.progressDetails.date}"
             )
             Text(
-                text = "Country - TEST"
+                text = "Country - ${progressReports.progressDetails.country}"
             )
             Text(
-                text = "Township - TEST"
+                text = "Township - ${progressReports.progressDetails.township}"
             )
             Text(
-                text = "Distance - TEST"
+                text = "Distance - ${progressReports.progressDetails.distance}"
             )
             Text(
-                text = "Weight - TEST"
+                text = "Weight - ${progressReports.progressDetails.cargoWeight}"
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LineProgressReportsPreview() {
-    LineProgressReports()
 }
 
 @Preview(showBackground = true, showSystemUi = true)
