@@ -26,12 +26,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_3a_API_34_extension_level_7_x86_64.avd" />
+                  <value value="$USER_HOME$/.android/avd/Pixel_6a_API_33.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-17T08:49:00.723224771Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-02-22T12:14:36.519474209Z" />
         </State>
       </entry>
       <entry key="TripExpensesUiTest">
@@ -58,12 +58,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_6a_API_33.avd" />
+                  <value value="$USER_HOME$/.android/avd/Small_Phone_API_33.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-17T08:57:00.311817231Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-02-23T06:17:06.954283023Z" />
         </State>
       </entry>
       <entry key="tests()">

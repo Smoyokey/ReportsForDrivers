@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
@@ -49,10 +51,9 @@ fun CreateReportsDataFillingTwoScreen(
     onProgressReport: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
-    Column(
-        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-    ) {
+    val scrollState = rememberScrollState()
 
+    Column() {
         TabRow(selectedTabIndex = 2) {
             viewModel.tabs.forEachIndexed { index, title ->
                 Tab(
@@ -64,77 +65,85 @@ fun CreateReportsDataFillingTwoScreen(
             }
         }
 
-        OutlinedTextFieldCustom(
-            label = R.string.route,
-            value = viewModel.uiState.value.dataFillingTwo.route,
-            onValueChange = viewModel::updateDataFillingTwoRoute,
-            tag = Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        LineDataFilling(
-            text = R.string.test,
-            openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateDeparture,
-            tag = Tags.TAG_TEST_DATE_DEPARTURE
-        )
-        LineDataFilling(
-            text = R.string.test,
-            openDialog = viewModel.openDialogDataFillingTwoDateReturn,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateReturn,
-            tag = Tags.TAG_TEST_DATE_RETURN
-        )
-        LineDataFilling(
-            text = R.string.test,
-            openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
-            tag = Tags.TAG_TEST_DATE_CROSSING_DEPARTURE
-        )
-        LineDataFilling(
-            text = R.string.test,
-            openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
-            dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
-            tag = Tags.TAG_TEST_DATE_CROSSING_RETURN
-        )
-
-        OutlinedTextFieldCustom(
-            label = R.string.speedometer_reading_departure,
-            value = viewModel.uiState.value.dataFillingTwo.speedometerDeparture,
-            onValueChange = viewModel::updateDataFillingTwoSpeedometerDeparture,
-            tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextFieldCustom(
-            label = R.string.speedometer_reading_return,
-            value = viewModel.uiState.value.dataFillingTwo.speedometerReturn,
-            onValueChange = viewModel::updateDataFillingTwoSpeedometerReturn,
-            tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        OutlinedTextFieldCustom(
-            label = R.string.fuelled,
-            value = viewModel.uiState.value.dataFillingTwo.fuelled,
-            onValueChange = viewModel::updateDataFillingTwoFuelled,
-            tag = Tags.TAG_TEST_DATA_FILLING_TWO_FUELLED,
-            modifier = Modifier.fillMaxWidth()
-        )
-
         Column(
-            modifier = Modifier.weight(1f)
-        ) {}
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp)
+                .verticalScroll(state = scrollState)
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            OutlinedButton(
-                onClick = onProgressReport
+            OutlinedTextFieldCustom(
+                label = R.string.route,
+                value = viewModel.uiState.value.dataFillingTwo.route,
+                onValueChange = viewModel::updateDataFillingTwoRoute,
+                tag = Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            LineDataFilling(
+                text = R.string.test,
+                openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
+                dateDetails = viewModel.uiState.value.dataFillingTwo.dateDeparture,
+                tag = Tags.TAG_TEST_DATE_DEPARTURE
+            )
+            LineDataFilling(
+                text = R.string.test,
+                openDialog = viewModel.openDialogDataFillingTwoDateReturn,
+                dateDetails = viewModel.uiState.value.dataFillingTwo.dateReturn,
+                tag = Tags.TAG_TEST_DATE_RETURN
+            )
+            LineDataFilling(
+                text = R.string.test,
+                openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
+                dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
+                tag = Tags.TAG_TEST_DATE_CROSSING_DEPARTURE
+            )
+            LineDataFilling(
+                text = R.string.test,
+                openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
+                dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
+                tag = Tags.TAG_TEST_DATE_CROSSING_RETURN
+            )
+
+            OutlinedTextFieldCustom(
+                label = R.string.speedometer_reading_departure,
+                value = viewModel.uiState.value.dataFillingTwo.speedometerDeparture,
+                onValueChange = viewModel::updateDataFillingTwoSpeedometerDeparture,
+                tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextFieldCustom(
+                label = R.string.speedometer_reading_return,
+                value = viewModel.uiState.value.dataFillingTwo.speedometerReturn,
+                onValueChange = viewModel::updateDataFillingTwoSpeedometerReturn,
+                tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextFieldCustom(
+                label = R.string.fuelled,
+                value = viewModel.uiState.value.dataFillingTwo.fuelled,
+                onValueChange = viewModel::updateDataFillingTwoFuelled,
+                tag = Tags.TAG_TEST_DATA_FILLING_TWO_FUELLED,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        Column() {
+            Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(end = 10.dp, bottom = 10.dp, top = 5.dp),
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(
-                    text = stringResource(R.string.next)
-                )
+                Button(
+                    onClick = onProgressReport,
+                ) {
+                    Text(
+                        text = stringResource(R.string.next),
+                        style = typography.titleLarge
+                    )
+                }
             }
         }
     }

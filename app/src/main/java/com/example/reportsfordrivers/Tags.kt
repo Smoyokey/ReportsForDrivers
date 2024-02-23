@@ -24,6 +24,7 @@ object Tags {
     const val TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER: String = "tagTestDataFillingOneMakeTrailer"
     const val TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE: String = "tagTestDataFillingOneRnVehicle"
     const val TAG_TEST_DATA_FILLING_ONE_RN_TRAILER: String = "tagTestDataFillingOneRnTrailer"
+    const val TAG_TEST_DATA_FILLING_ONE_WAYBILL: String = "tagTestDataFillingOneWaybill"
 
     const val TAG_TEST_DATA_FILLING_TWO_ROUTE: String = "tagTestDataFillingTwoRoute"
     const val TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE: String =

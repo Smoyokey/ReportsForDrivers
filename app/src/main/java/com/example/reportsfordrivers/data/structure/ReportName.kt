@@ -10,6 +10,8 @@ data class ReportName(
     val id: Int = 0,
     @ColumnInfo(name = "name_report")
     val nameReport: String,
+    @ColumnInfo(name = "waybill")
+    val waybill: String,
     @ColumnInfo(name = "date_create")
     val dateCreate: String,
     @ColumnInfo(name = "date")

@@ -3,16 +3,24 @@ package com.example.reportsfordrivers.viewmodel.createreports
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Icon
+import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.toAdaptiveIcon
+import androidx.core.graphics.drawable.toIcon
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateReports
@@ -23,9 +31,11 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressRep
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -37,9 +47,9 @@ import javax.inject.Inject
 private const val TAG = "DataFillingOneViewModel"
 
 @HiltViewModel
-class CreateReportsViewModel @Inject constructor (
+class CreateReportsViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository
-): ViewModel() {
+) : ViewModel() {
 
     var uiState = mutableStateOf(CreateReports())
         private set
@@ -64,6 +74,33 @@ class CreateReportsViewModel @Inject constructor (
     var tabIndex = mutableStateOf(0)
     val tabs = listOf("1", "2", "3", "4", "5", "6")
 
+//    fun pdfRender(file: File): Icon {
+//        val fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+//
+//        val pdfRender = PdfRenderer(fileDescriptor)
+//
+//        val pageCount = pdfRender.pageCount
+//
+//        val page = pdfRender.openPage(0)
+//        val rendererPageWidth = page.width
+//        val rendererPageHeight = page.height
+//
+//        val bitmap = Bitmap.createBitmap(
+//            rendererPageWidth,
+//            rendererPageHeight,
+//            Bitmap.Config.ARGB_8888
+//        )
+//        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+//        pdfRender.close()
+//        fileDescriptor.close()
+//        page.close()
+//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            bitmap.toAdaptiveIcon()
+//        } else {
+//            TODO("VERSION.SDK_INT < O")
+//        }
+//    }
+
     private fun updateDataFillingOne(itemDetails: DataFillingOne) {
         uiState.value = uiState.value.copy(dataFillingOne = itemDetails)
     }
@@ -86,6 +123,10 @@ class CreateReportsViewModel @Inject constructor (
         updateDataFillingOne(uiState.value.dataFillingOne.copy(patronymic = patronymic))
     }
 
+    fun updateDataFillingOneWaybill(waybill: String) {
+        updateDataFillingOne(uiState.value.dataFillingOne.copy(waybill = waybill))
+    }
+
     fun updateDataFillingOneMakeVehicle(makeVehicle: String) {
         updateDataFillingOne(uiState.value.dataFillingOne.copy(makeVehicle = makeVehicle))
     }
@@ -100,6 +141,15 @@ class CreateReportsViewModel @Inject constructor (
 
     fun updateDataFillingOneRnTrailer(rnTrailer: String) {
         updateDataFillingOne(uiState.value.dataFillingOne.copy(rnTrailer = rnTrailer))
+    }
+
+    fun isNextDataFillingOneValidate(): Boolean {
+        return uiState.value.dataFillingOne.date != "" &&
+                uiState.value.dataFillingOne.lastName != "" &&
+                uiState.value.dataFillingOne.firstName != "" &&
+                uiState.value.dataFillingOne.patronymic != "" &&
+                uiState.value.dataFillingOne.makeVehicle != "" &&
+                uiState.value.dataFillingOne.rnVehicle != ""
     }
 
     private fun updateDataFillingTwo(itemDetails: DataFillingTwo) {
@@ -122,28 +172,47 @@ class CreateReportsViewModel @Inject constructor (
 
     fun updateDataFillingTwoDateCrossingDeparture(dateCrossingDeparture: String) {
         val parseDate = parseDateDayMonthYear(dateCrossingDeparture)
-        updateDataFillingTwo(uiState.value.dataFillingTwo.copy
-            (dateCrossingDeparture = parseDate))
+        updateDataFillingTwo(
+            uiState.value.dataFillingTwo.copy
+                (dateCrossingDeparture = parseDate)
+        )
     }
 
     fun updateDataFillingTwoDateCrossingReturn(dateCrossingReturn: String) {
         val parseDate = parseDateDayMonthYear(dateCrossingReturn)
-        updateDataFillingTwo(uiState.value.dataFillingTwo.copy
-            (dateCrossingReturn = parseDate))
+        updateDataFillingTwo(
+            uiState.value.dataFillingTwo.copy
+                (dateCrossingReturn = parseDate)
+        )
     }
 
     fun updateDataFillingTwoSpeedometerDeparture(speedometerDeparture: String) {
-        updateDataFillingTwo(uiState.value.dataFillingTwo.copy
-            (speedometerDeparture = speedometerDeparture))
+        updateDataFillingTwo(
+            uiState.value.dataFillingTwo.copy
+                (speedometerDeparture = speedometerDeparture)
+        )
     }
 
     fun updateDataFillingTwoSpeedometerReturn(speedometerReturn: String) {
-        updateDataFillingTwo(uiState.value.dataFillingTwo.copy
-            (speedometerReturn = speedometerReturn))
+        updateDataFillingTwo(
+            uiState.value.dataFillingTwo.copy
+                (speedometerReturn = speedometerReturn)
+        )
     }
 
     fun updateDataFillingTwoFuelled(fuelled: String) {
         updateDataFillingTwo(uiState.value.dataFillingTwo.copy(fuelled = fuelled))
+    }
+
+    fun isNextDataFillingTwoValidate(): Boolean {
+        return uiState.value.dataFillingTwo.route != "" &&
+                uiState.value.dataFillingTwo.dateDeparture != "" &&
+                uiState.value.dataFillingTwo.dateReturn != "" &&
+                uiState.value.dataFillingTwo.dateCrossingDeparture != "" &&
+                uiState.value.dataFillingTwo.dateCrossingDeparture != "" &&
+                uiState.value.dataFillingTwo.speedometerDeparture != "" &&
+                uiState.value.dataFillingTwo.speedometerReturn != "" &&
+                uiState.value.dataFillingTwo.fuelled != ""
     }
 
     private fun updateProgressDetails(progressDetails: ProgressDetails) {
@@ -156,55 +225,29 @@ class CreateReportsViewModel @Inject constructor (
     }
 
     fun updateProgressReportsTownship(township: String) {
-        updateProgressDetails(uiStateProgressReports.value.progressDetails
-            .copy(township = township))
+        updateProgressDetails(
+            uiStateProgressReports.value.progressDetails
+                .copy(township = township)
+        )
     }
 
     fun updateProgressReportsDistance(distance: String) {
-        updateProgressDetails(uiStateProgressReports.value.progressDetails
-            .copy(distance = distance))
+        updateProgressDetails(
+            uiStateProgressReports.value.progressDetails
+                .copy(distance = distance)
+        )
     }
 
     fun updateProgressReportsCargoWeight(cargoWeight: String) {
-        updateProgressDetails(uiStateProgressReports.value.progressDetails
-            .copy(cargoWeight = cargoWeight))
+        updateProgressDetails(
+            uiStateProgressReports.value.progressDetails
+                .copy(cargoWeight = cargoWeight)
+        )
     }
 
     fun updateProgressReportsDate(date: String) {
         val parseDate = parseDateDayMonth(date)
         updateProgressDetails(uiStateProgressReports.value.progressDetails.copy(date = parseDate))
-    }
-
-    private fun updateTripExpensesDetails(tripExpensesDetails: TripExpensesDetails) {
-        uiStateTripExpenses.value = uiStateTripExpenses.value
-            .copy(tripExpensesDetails = tripExpensesDetails)
-    }
-
-    fun updateTripExpensesDate(date: String) {
-        val parseDate = parseDateDayMonth(date)
-        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(date = parseDate))
-    }
-
-    fun updateTripExpensesDocumentNumber(documentNumber: String) {
-        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails
-            .copy(documentNumber = documentNumber))
-    }
-
-    fun updateTripExpensesExpenseItem(expenseItem: String) {
-        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails
-            .copy(expenseItem = expenseItem))
-    }
-
-    fun updateTripExpensesSum(sum: String) {
-        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(sum = sum))
-    }
-
-    fun updateTripExpensesCurrency(currency: String) {
-        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(currency = currency))
-    }
-
-    fun updatePreviewReportName(reportName: String) {
-        uiState.value = uiState.value.copy(reportName = reportName)
     }
 
     fun updateProgressReports() {
@@ -220,6 +263,41 @@ class CreateReportsViewModel @Inject constructor (
                 uiStateProgressReports.value.progressDetails.cargoWeight != ""
     }
 
+    fun isValidateNextProgressReports(): Boolean {
+        return uiState.value.listProgress.size > 0
+    }
+    private fun updateTripExpensesDetails(tripExpensesDetails: TripExpensesDetails) {
+        uiStateTripExpenses.value = uiStateTripExpenses.value
+            .copy(tripExpensesDetails = tripExpensesDetails)
+    }
+
+    fun updateTripExpensesDate(date: String) {
+        val parseDate = parseDateDayMonth(date)
+        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(date = parseDate))
+    }
+
+    fun updateTripExpensesDocumentNumber(documentNumber: String) {
+        updateTripExpensesDetails(
+            uiStateTripExpenses.value.tripExpensesDetails
+                .copy(documentNumber = documentNumber)
+        )
+    }
+
+    fun updateTripExpensesExpenseItem(expenseItem: String) {
+        updateTripExpensesDetails(
+            uiStateTripExpenses.value.tripExpensesDetails
+                .copy(expenseItem = expenseItem)
+        )
+    }
+
+    fun updateTripExpensesSum(sum: String) {
+        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(sum = sum))
+    }
+
+    fun updateTripExpensesCurrency(currency: String) {
+        updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(currency = currency))
+    }
+
     fun updateTripExpense() {
         uiState.value.listTripExpenses.add(uiStateTripExpenses.value)
         uiStateTripExpenses.value = TripExpensesReports()
@@ -231,6 +309,14 @@ class CreateReportsViewModel @Inject constructor (
                 uiStateTripExpenses.value.tripExpensesDetails.expenseItem != "" &&
                 uiStateTripExpenses.value.tripExpensesDetails.sum != "" &&
                 uiStateTripExpenses.value.tripExpensesDetails.currency != ""
+    }
+
+    fun isValidateNextTripExpenses(): Boolean {
+        return uiState.value.listTripExpenses.size > 0
+    }
+
+    fun updatePreviewReportName(reportName: String) {
+        uiState.value = uiState.value.copy(reportName = reportName)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -269,15 +355,16 @@ class CreateReportsViewModel @Inject constructor (
         newFile.createNewFile()
         val contentUri = FileProvider.getUriForFile(
             context,
-            "com.example.ActiveReports.file-provider",
+            "com.example.ActiveReports.fileprovider",
             newFile
         )
         var fileWriter: FileWriter? = null
         try {
             fileWriter = FileWriter(newFile)
             fileWriter.append(onePageHtml())
-            fileWriter.append(twoPageHtml())
-        } catch (e: Exception) {}
+//            fileWriter.append(twoPageHtml())
+        } catch (e: Exception) {
+        }
         fileWriter!!.close()
 
         createFile(contentUri, context)
@@ -296,15 +383,15 @@ class CreateReportsViewModel @Inject constructor (
     private fun writeFile(filePath: String, fileName: String) {
         try {
             //Создается объект файла, при этом путь к файлу находиться методом Environment
-            val myFile = File(Environment.getExternalStorageDirectory().toString() + "/" + filePath + fileName)
+            val myFile = File(
+                Environment.getExternalStorageDirectory().toString() + "/" + filePath + fileName
+            )
             // Создается файл, если он не был создан
             myFile.createNewFile()
             // После чего создаем поток для записи
             val outputStream = FileOutputStream(myFile)
-
-            outputStream.write(onePageHtml().toByteArray())
             // Производим непосредственно запись
-            outputStream.write(twoPageHtml().toByteArray())
+            outputStream.write(onePageHtml().toByteArray())
             // Закрываем поток
             outputStream.close()
             // Просто для удобства визуального контроля исполнения метода в приложении
@@ -316,26 +403,70 @@ class CreateReportsViewModel @Inject constructor (
     private fun onePageHtml(): String {
         return """<head>
     <meta charset="UTF-8">
+    <style>
+        body, h1 {
+            margin: 0;
+        }
+
+        body {
+            padding: 7% 5% 7% 15%;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight:normal;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .report-header {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .report-city {
+            text-align: right;
+        }
+
+        .general-info {
+            font-size: 14px;
+            margin-bottom: 14px;
+            width: 100%;
+        }
+
+        .movement-stages {
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .movement-stages caption {
+            text-align: left;
+        }
+
+        .movement-stages, .movement-stages td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
-<table>
+
+<body>
+<h1>Отчет о командировке</h1>
+<table class="report-header">
     <tr>
-        <td>Отчет о командировке</td>
+        <td class="report-date" style="width: 50%">${uiState.value.dataFillingOne.date} г.</td>
+        <td class="report-city">г. Минск</td>
     </tr>
 </table>
-<table>
+
+<table class="general-info">
     <tr>
-        <td>"${uiState.value.dataFillingOne.date} г.</td>
-        <td>г.Минск</td>
-    </tr>
-</table>
-<table>
-    <tr>
-        <td>ФИО</td>
+        <td style="width: 20%">ФИО</td>
         <td>${uiState.value.dataFillingOne.lastName} ${uiState.value.dataFillingOne.firstName} ${uiState.value.dataFillingOne.patronymic}</td>
     </tr>
     <tr>
         <td>Путевой лист №</td>
-        <td></td>
+        <td>${uiState.value.dataFillingOne.waybill}</td>
     </tr>
     <tr>
         <td>авто/м марка, г/н</td>
@@ -347,9 +478,9 @@ class CreateReportsViewModel @Inject constructor (
     </tr>
 </table>
 
-<table>
+<table class="general-info">
     <tr>
-        <td>Маршрут</td>
+        <td style="width: 40%">Маршрут</td>
         <td>${uiState.value.dataFillingTwo.route}</td>
     </tr>
     <tr>
@@ -382,20 +513,25 @@ class CreateReportsViewModel @Inject constructor (
     </tr>
 </table>
 
-<table>
-    <caption>Отчет о этапах движения по п/л</caption>
+<table class="movement-stages">
+    <caption>Отчет об этапах движения по п/л</caption>
     <tr>
-        <td>Дата</td>
-        <td>Страна</td>
-        <td>Населенные пункты</td>
-        <td>Расстояние, км</td>
-        <td>Вес груза, т</td>
+        <td style="width: 15%">Дата</td>
+        <td style="width: 25%">Страна</td>
+        <td style="width: 30%">Населенные пункты</td>
+        <td style="width: 15%">Расстояние, км</td>
+        <td style="width: 15%">Вес груза, т</td>
     </tr>
     ${tableProgressReport()}
-</table>"""
+</table>
+</body>
+<br>
+<br>
+${if (uiState.value.listTripExpenses.size > 0) expenseTrip() else ""}
+"""
     }
 
-    private fun twoPageHtml(): String {
+    private fun expenseTrip(): String {
         return """<head>
     <meta charset="UTF-8">
     <style>
@@ -471,7 +607,7 @@ class CreateReportsViewModel @Inject constructor (
 
     private fun tableProgressReport(): String {
         var a = ""
-        for(i in uiState.value.listProgress) {
+        for (i in uiState.value.listProgress) {
             a += """<tr>
         <td>${i.progressDetails.date}</td>
         <td>${i.progressDetails.country}</td>
@@ -485,7 +621,7 @@ class CreateReportsViewModel @Inject constructor (
 
     private fun tableTripExpense(): String {
         var b = ""
-        for(i in uiState.value.listTripExpenses) {
+        for (i in uiState.value.listTripExpenses) {
             b += """<tr>
         <td>${i.tripExpensesDetails.date}</td>
         <td>${i.tripExpensesDetails.documentNumber}</td>

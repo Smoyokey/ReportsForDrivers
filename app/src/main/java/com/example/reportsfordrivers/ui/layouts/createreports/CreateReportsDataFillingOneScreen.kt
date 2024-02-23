@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
@@ -38,6 +40,8 @@ fun CreateReportsDataFillingOneScreen(
     onDataFillingTwo: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
+    val scrollState = rememberScrollState()
+
     Column() {
         TabRow(selectedTabIndex = 1) {
             viewModel.tabs.forEachIndexed { index, title ->
@@ -51,7 +55,9 @@ fun CreateReportsDataFillingOneScreen(
         }
 
         Column(
-            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp),
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp)
+                .verticalScroll(state = scrollState)
+                .weight(1f),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Row(
@@ -99,6 +105,14 @@ fun CreateReportsDataFillingOneScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            OutlinedTextFieldCustom(
+                label = R.string.waybill,
+                value = viewModel.uiState.value.dataFillingOne.waybill,
+                onValueChange = viewModel::updateDataFillingOneWaybill,
+                tag = Tags.TAG_TEST_DATA_FILLING_ONE_WAYBILL,
+                modifier = Modifier.fillMaxWidth()
+            )
+
             Divider(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 6.dp)
             )
@@ -139,12 +153,16 @@ fun CreateReportsDataFillingOneScreen(
                 modifier = Modifier.weight(1f)
             ) {
             }
+        }
+        Column {
+            Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(end = 10.dp, bottom = 10.dp, top = 5.dp),
                 horizontalArrangement = Arrangement.End
             ) {
-                OutlinedButton(
-                    onClick = onDataFillingTwo
+                Button(
+                    onClick = onDataFillingTwo,
                 ) {
                     Text(
                         text = stringResource(R.string.next),
@@ -153,6 +171,7 @@ fun CreateReportsDataFillingOneScreen(
                 }
             }
         }
+
     }
     DatePickerDialogCustom(
         openDialog = viewModel.openDialogDateFillingOne,

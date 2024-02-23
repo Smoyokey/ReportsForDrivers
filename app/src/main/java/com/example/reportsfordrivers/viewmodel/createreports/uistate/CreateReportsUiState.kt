@@ -14,6 +14,7 @@ data class DataFillingOne(
     val date: String = "",
     val lastName: String = "",
     val firstName: String = "",
+    val waybill: String = "",
     val patronymic: String = "",
     val makeVehicle: String = "",
     val rnVehicle: String = "",

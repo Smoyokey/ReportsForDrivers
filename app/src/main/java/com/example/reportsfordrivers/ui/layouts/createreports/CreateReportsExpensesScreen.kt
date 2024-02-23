@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -23,6 +25,7 @@ import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 
@@ -116,17 +119,33 @@ fun CreateReportsExpensesScreen(
         ) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(viewModel.uiState.value.listTripExpenses) { element ->
-                    LineElement(tripExpenseReport = element)
+                    LineElementTripExpenses(tripExpenseReport = element)
                 }
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            OutlinedButton(onClick = onPreview) {
-                Text(text = stringResource(R.string.next))
+        Column {
+            Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(end = 10.dp, bottom = 10.dp, top = 5.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Button(onClick = onPreview) {
+                    Text(
+                        text = stringResource(R.string.skip),
+                        style = typography.titleLarge
+                    )
+                }
+                Button(
+                    onClick = onPreview,
+                    enabled = viewModel.isValidateNextTripExpenses()
+                ) {
+                    Text(
+                        text = stringResource(R.string.next),
+                        style = typography.titleLarge
+                    )
+                }
             }
         }
 
@@ -138,7 +157,7 @@ fun CreateReportsExpensesScreen(
 }
 
 @Composable
-fun LineElement(tripExpenseReport: TripExpensesReports) {
+fun LineElementTripExpenses(tripExpenseReport: TripExpensesReports) {
     Column() {
         Text("Date - ${tripExpenseReport.tripExpensesDetails.date}")
         Text("Document number - ${tripExpenseReport.tripExpensesDetails.documentNumber}")

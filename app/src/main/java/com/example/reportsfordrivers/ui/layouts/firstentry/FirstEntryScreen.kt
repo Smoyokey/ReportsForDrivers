@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -44,13 +46,13 @@ fun FirstEntryScreen(
     viewModel: FirstEntryViewModel = hiltViewModel(),
     onMainMenu: () -> Unit = {}
 ) {
-//    val scrollState = rememberScrollState()
+    val scrollState = rememberScrollState()
     val modifierDivider = Modifier.padding(start = 16.dp, end = 16.dp)
 
     Column(
         modifier = Modifier
             .padding(10.dp)
-//            .verticalScroll(state = scrollState)
+            .verticalScroll(state = scrollState)
             .testTag(Tags.TAG_COLUMN_FIRST_ENTRY),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -152,12 +154,10 @@ fun FirstEntryScreen(
             )
         }
 
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            items(viewModel.uiState.value.listVehicles) { vehicle ->
+        Column {
+            for(i in viewModel.uiState.value.listVehicles) {
                 TableMakeRn(
-                    objectVehicle = vehicle,
+                    objectVehicle = i,
                     onClick = viewModel::deletePositionVehicle,
                     isOpenDialog = viewModel.isOpenDialog
                 )
@@ -217,6 +217,7 @@ fun AlertDialogDeleteElement(
                 TextButton(
                     onClick = {
                         onClick(objectVehicle)
+                        isOpenDialog.value = false
                     }
                 ) {
                     Text(text = stringResource(R.string.yes))

@@ -1,20 +1,64 @@
 <head>
     <meta charset="UTF-8">
+    <style>
+        body, h1 {
+            margin: 0;
+        }
+
+        body {
+            padding: 7% 5% 7% 15%;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight:normal;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .report-header {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .report-city {
+            text-align: right;
+        }
+
+        .general-info {
+            font-size: 14px;
+            margin-bottom: 14px;
+            width: 100%;
+        }
+
+        .movement-stages {
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .movement-stages caption {
+            text-align: left;
+        }
+
+        .movement-stages, .movement-stages td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
-<table>
+
+<body>
+<h1>Отчет о командировке</h1>
+<table class="report-header">
     <tr>
-        <td>Отчет о командировке</td>
+        <td class="report-date" style="width: 50%">"$day" $month $year г.</td>
+        <td class="report-city">г. Минск</td>
     </tr>
 </table>
-<table>
+
+<table class="general-info">
     <tr>
-        <td>"$day" $month $year г.</td>
-        <td>г.Минск</td>
-    </tr>
-</table>
-<table>
-    <tr>
-        <td>ФИО</td>
+        <td style="width: 20%">ФИО</td>
         <td>$lastName $firstName $patronymic</td>
     </tr>
     <tr>
@@ -31,9 +75,9 @@
     </tr>
 </table>
 
-<table>
+<table class="general-info">
     <tr>
-        <td>Маршрут</td>
+        <td style="width: 40%">Маршрут</td>
         <td>$route</td>
     </tr>
     <tr>
@@ -66,14 +110,14 @@
     </tr>
 </table>
 
-<table>
-    <caption>Отчет о этапах движения по п/л</caption>
+<table class="movement-stages">
+    <caption>Отчет об этапах движения по п/л</caption>
     <tr>
-        <td>Дата</td>
-        <td>Страна</td>
-        <td>Населенные пункты</td>
-        <td>Расстояние, км</td>
-        <td>Вес груза, т</td>
+        <td style="width: 15%">Дата</td>
+        <td style="width: 25%">Страна</td>
+        <td style="width: 30%">Населенные пункты</td>
+        <td style="width: 15%">Расстояние, км</td>
+        <td style="width: 15%">Вес груза, т</td>
     </tr>
     <tr>
         <td></td>
@@ -83,3 +127,4 @@
         <td></td>
     </tr>
 </table>
+</body>

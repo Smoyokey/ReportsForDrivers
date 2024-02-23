@@ -59,8 +59,8 @@
     <string name="progress_report">Progress report</string>
     <string name="country">Country</string>
     <string name="township">Township</string>
-    <string name="distance">Distance, kilometres</string>
-    <string name="cargo_weight">Cargo weight, tonnes</string>
+    <string name="distance">Distance, km</string>
+    <string name="cargo_weight">Weight, t</string>
     <string name="preview">Preview</string>
     <string name="reports_name">Reports name</string>
     <string name="result">Result</string>
@@ -78,6 +78,7 @@
     <string name="expense_item">Expense item</string>
     <string name="sum">Sum</string>
     <string name="currency">Currency</string>
+    <string name="waybill">Waybill</string>
 
     <string name="empty_create_first_report">Empty? Create your first report</string>
     <string name="create">Create</string>

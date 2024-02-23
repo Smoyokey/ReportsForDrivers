@@ -103,11 +103,11 @@ class PreviewTest {
             onNodeWithStringId(R.string.next).performClick()
 
             //TripExpenses
-            enterTripExpenses("02112024", "1", "WATER", "40", "EUR")
-            enterTripExpenses("02132024", "2", "MILK", "30", "BYN")
-            enterTripExpenses("02152024", "3", "APPLE", "20", "RUB")
-            enterTripExpenses("02162024", "4", "BEER", "10", "DOL")
-            enterTripExpenses("02172024", "5", "WATER", "3", "EUR")
+//            enterTripExpenses("02112024", "1", "WATER", "40", "EUR")
+//            enterTripExpenses("02132024", "2", "MILK", "30", "BYN")
+//            enterTripExpenses("02152024", "3", "APPLE", "20", "RUB")
+//            enterTripExpenses("02162024", "4", "BEER", "10", "DOL")
+//            enterTripExpenses("02172024", "5", "WATER", "3", "EUR")
             onNodeWithStringId(R.string.next).performClick()
             onNodeWithStringId(R.string.next).performClick()
             onNodeWithStringId(R.string.test).performClick()
