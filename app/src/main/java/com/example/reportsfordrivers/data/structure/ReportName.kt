@@ -12,6 +12,8 @@ data class ReportName(
     val nameReport: String,
     @ColumnInfo(name = "waybill")
     val waybill: String,
+    @ColumnInfo(name = "main_city")
+    val mainCity: String,
     @ColumnInfo(name = "date_create")
     val dateCreate: String,
     @ColumnInfo(name = "date")

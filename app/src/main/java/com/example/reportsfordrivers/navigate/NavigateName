@@ -2,13 +2,15 @@
 2. Start
 
 3. CreateReport
-3.1. SelectLayout
-3.2. FillingDataOne
-3.3. FillingDataTwo
-3.4. ProgressReport
-3.5. TripExpenses
-3.6. Preview
-3.7. Result
+3.1. SelectLayout - IGNORE
+3.2. DataReport
+3.3. DataPersonalInfo
+3.4. DataVehicleInfo
+3.5. FillingDataTwo
+3.6. ProgressReport
+3.7. TripExpenses
+3.8. Preview
+3.9. Result
 
 4. HistoryReport
 4.1. ListHistory

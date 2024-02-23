@@ -7,13 +7,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.reportsfordrivers.ui.layouts.MainMenuScreen
-import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataFillingOneScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataFillingTwoScreen
+import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataPersonalInfoScreen
+import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataReportInfoScreen
+import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsDataVehicleInfoScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsExpensesScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsPreviewScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsProgressReportsScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
-import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsSelectedMaketScreen
 import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
 import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrailersScreen
@@ -50,7 +51,7 @@ fun ReportsForDriversNavHost(
                 )
             } else {
                 MainMenuScreen(onCreateReport = {
-                    navController.navigate(ReportsForDriversSchema.SelectLayout.name)
+                    navController.navigate(ReportsForDriversSchema.ReportInfo.name)
                 },
                     onHistoryReports = {
                         navController.navigate(ReportsForDriversSchema.ListHistory.name)
@@ -62,31 +63,25 @@ fun ReportsForDriversNavHost(
                 )
             }
         }
-        composable(route = ReportsForDriversSchema.SelectLayout.name) {
-            CreateReportsSelectedMaketScreen(
-                onFillingDataOne = {
-                    navController.navigate(ReportsForDriversSchema.FillingDataOne.name)
-                }
+
+        composable(route = ReportsForDriversSchema.ReportInfo.name) {
+            CreateReportsDataReportInfoScreen(
+                onPersonalInfo = {
+                    navController.navigate(ReportsForDriversSchema.PersonalInfo.name)
+                },
+                viewModel = viewModelCreateReports
             )
         }
-        composable(route = ReportsForDriversSchema.ListHistory.name) {
-            HistoryReportsScreen()
-        }
-        composable(route = ReportsForDriversSchema.SettingStart.name) {
-            SettingMainScreen(
-                onPersonalData = {
-                    navController.navigate(ReportsForDriversSchema.PersonalInformation.name)
+        composable(route = ReportsForDriversSchema.PersonalInfo.name) {
+            CreateReportsDataPersonalInfoScreen(
+                onVehicleInfo = {
+                    navController.navigate(ReportsForDriversSchema.VehicleInfo.name)
                 },
-                onVehicleAndTrailerDate = {
-                    navController.navigate(ReportsForDriversSchema.VehicleAndTrailerData.name)
-                },
-                onFeedback = {
-                    navController.navigate(ReportsForDriversSchema.Feedback.name)
-                }
+                viewModel = viewModelCreateReports
             )
         }
-        composable(route = ReportsForDriversSchema.FillingDataOne.name) {
-            CreateReportsDataFillingOneScreen(
+        composable(route = ReportsForDriversSchema.VehicleInfo.name) {
+            CreateReportsDataVehicleInfoScreen(
                 onDataFillingTwo = {
                     navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
                 },
@@ -128,6 +123,24 @@ fun ReportsForDriversNavHost(
         composable(route = ReportsForDriversSchema.Result.name) {
             CreateReportsResultScreen(
                 viewModel = viewModelCreateReports
+            )
+        }
+
+        composable(route = ReportsForDriversSchema.ListHistory.name) {
+            HistoryReportsScreen()
+        }
+
+        composable(route = ReportsForDriversSchema.SettingStart.name) {
+            SettingMainScreen(
+                onPersonalData = {
+                    navController.navigate(ReportsForDriversSchema.PersonalInformation.name)
+                },
+                onVehicleAndTrailerDate = {
+                    navController.navigate(ReportsForDriversSchema.VehicleAndTrailerData.name)
+                },
+                onFeedback = {
+                    navController.navigate(ReportsForDriversSchema.Feedback.name)
+                }
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInformation.name) {

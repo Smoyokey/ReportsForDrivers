@@ -107,4 +107,8 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="deletion">Deletion</string>
 
+    <string name="report_information">Report information</string>
+    <string name="personal_information">Personal information</string>
+    <string name="vehicle_trailer_information">Vehicle and trailer info</string>
+
 </resources>
