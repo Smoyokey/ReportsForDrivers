@@ -65,7 +65,7 @@ fun CreateReportsDataFillingOneScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.test),
+                    text = stringResource(R.string.date),
                     modifier = Modifier.weight(1f)
                 )
                 TextButton(

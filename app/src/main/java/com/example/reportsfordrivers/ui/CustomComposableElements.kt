@@ -61,7 +61,7 @@ fun DatePickerDialogCustom(
     onValueChange: (String) -> Unit
 ) {
     val snackScope = rememberCoroutineScope()
-    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
+    val datePickerState = rememberDatePickerState()
     if(openDialog.value) {
         DatePickerDialog(
             onDismissRequest = { openDialog.value = false },
@@ -87,8 +87,6 @@ fun DatePickerDialogCustom(
         ) {
             DatePicker(
                 state = datePickerState,
-                title = {Text("test")},
-                headline = {Text("test")}
             )
         }
     }

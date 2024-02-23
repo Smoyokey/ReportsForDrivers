@@ -32,23 +32,37 @@ fun CreateReportsResultScreen(
         ) {
             Button(
                 onClick = {
-                    viewModel.saveFile()
-                }
-            ) {
-                Text (text = stringResource(R.string.test))
-            }
-            Button(
-                onClick = {
                     viewModel.testShare(context)
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text (text = stringResource(R.string.share))
             }
-            ButtonReportsResult(R.string.share)
-            ButtonReportsResult(R.string.save)
-            ButtonReportsResult(R.string.create_new_report)
-            ButtonReportsResult(R.string.cancel)
-            ButtonReportsResult(R.string.delete)
+
+            Button(
+                onClick = {
+                    viewModel.saveFile()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text (text = stringResource(R.string.save))
+            }
+
+            Button(
+                onClick = {},
+                modifier = Modifier.fillMaxWidth(),
+                enabled = false
+            ) {
+                Text (text = stringResource(R.string.create_new_report))
+            }
+
+            Button(
+                onClick = {},
+                modifier = Modifier.fillMaxWidth(),
+                enabled = false
+            ) {
+                Text (text = stringResource(R.string.delete))
+            }
         }
     }
 }

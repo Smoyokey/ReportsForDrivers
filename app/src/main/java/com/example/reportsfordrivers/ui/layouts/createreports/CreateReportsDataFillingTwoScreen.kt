@@ -80,25 +80,25 @@ fun CreateReportsDataFillingTwoScreen(
             )
 
             LineDataFilling(
-                text = R.string.test,
+                text = R.string.date_departure,
                 openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
                 dateDetails = viewModel.uiState.value.dataFillingTwo.dateDeparture,
                 tag = Tags.TAG_TEST_DATE_DEPARTURE
             )
             LineDataFilling(
-                text = R.string.test,
+                text = R.string.date_return,
                 openDialog = viewModel.openDialogDataFillingTwoDateReturn,
                 dateDetails = viewModel.uiState.value.dataFillingTwo.dateReturn,
                 tag = Tags.TAG_TEST_DATE_RETURN
             )
             LineDataFilling(
-                text = R.string.test,
+                text = R.string.date_border_crossing_departure,
                 openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
                 dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
                 tag = Tags.TAG_TEST_DATE_CROSSING_DEPARTURE
             )
             LineDataFilling(
-                text = R.string.test,
+                text = R.string.date_border_crossing_return,
                 openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
                 dateDetails = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
                 tag = Tags.TAG_TEST_DATE_CROSSING_RETURN
