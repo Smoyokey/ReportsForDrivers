@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
@@ -35,7 +36,8 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpense
 
 @Composable
 fun CreateReportsPreviewScreen(
-    onResult: () -> Unit,
+    onNext: () -> Unit,
+    onBack: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
@@ -71,17 +73,17 @@ fun CreateReportsPreviewScreen(
 
             Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp))
 
-            LinePreviewText(R.string.date, viewModel.uiState.value.dataFillingOne.date)
-            LinePreviewText(R.string.last_name, viewModel.uiState.value.dataFillingOne.lastName)
-            LinePreviewText(R.string.first_name, viewModel.uiState.value.dataFillingOne.firstName)
-            LinePreviewText(R.string.patronymic, viewModel.uiState.value.dataFillingOne.patronymic)
-            LinePreviewText(R.string.waybill, viewModel.uiState.value.dataFillingOne.waybill)
-            LinePreviewText(R.string.make_vehicle, viewModel.uiState.value.dataFillingOne.makeVehicle)
+            LinePreviewText(R.string.date, viewModel.uiState.value.dataReportInfo.date)
+            LinePreviewText(R.string.last_name, viewModel.uiState.value.dataPersonalInfo.lastName)
+            LinePreviewText(R.string.first_name, viewModel.uiState.value.dataPersonalInfo.firstName)
+            LinePreviewText(R.string.patronymic, viewModel.uiState.value.dataPersonalInfo.patronymic)
+            LinePreviewText(R.string.waybill, viewModel.uiState.value.dataReportInfo.waybill)
+            LinePreviewText(R.string.make_vehicle, viewModel.uiState.value.dataVehicleInfo.makeVehicle)
             LinePreviewText(R.string.registration_number_vehicle,
-                viewModel.uiState.value.dataFillingOne.rnVehicle)
-            LinePreviewText(R.string.make_trailer, viewModel.uiState.value.dataFillingOne.makeTrailer)
+                viewModel.uiState.value.dataVehicleInfo.rnVehicle)
+            LinePreviewText(R.string.make_trailer, viewModel.uiState.value.dataVehicleInfo.makeTrailer)
             LinePreviewText(R.string.registration_number_trailer,
-                viewModel.uiState.value.dataFillingOne.rnTrailer)
+                viewModel.uiState.value.dataVehicleInfo.rnTrailer)
 
             Divider(
                 modifier = Modifier.padding(10.dp)
@@ -141,24 +143,9 @@ fun CreateReportsPreviewScreen(
 
         }
 
-        Column {
-            Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 10.dp, bottom = 10.dp, top = 5.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    onClick = onResult
-                ) {
-                    Text(
-                        text = stringResource(R.string.next),
-                        style = typography.titleLarge
-                    )
-                }
-            }
-        }
+        BottomBarCustom(
+            onNext = onNext, onBack = onBack
+        )
     }
 }
 
@@ -241,10 +228,4 @@ fun ProgressReportItemPreview() {
         size = 1,
         current = 1
     )
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun CreateReportsPreviewScreenPreview() {
-    CreateReportsPreviewScreen(onResult = {})
 }

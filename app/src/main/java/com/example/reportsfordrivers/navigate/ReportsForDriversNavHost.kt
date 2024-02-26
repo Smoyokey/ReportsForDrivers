@@ -41,7 +41,7 @@ fun ReportsForDriversNavHost(
 
         composable(route = ReportsForDriversSchema.Start.name) {
 
-            if(viewModelMain.isFirstEntry()) {
+            if (viewModelMain.isFirstEntry()) {
                 FirstEntryScreen(
                     onMainMenu = {
                         navController.navigate(ReportsForDriversSchema.Start.name)
@@ -50,9 +50,10 @@ fun ReportsForDriversNavHost(
                     viewModel = viewModelFirst
                 )
             } else {
-                MainMenuScreen(onCreateReport = {
-                    navController.navigate(ReportsForDriversSchema.ReportInfo.name)
-                },
+                MainMenuScreen(
+                    onCreateReport = {
+                        navController.navigate(ReportsForDriversSchema.ReportInfo.name)
+                    },
                     onHistoryReports = {
                         navController.navigate(ReportsForDriversSchema.ListHistory.name)
                     },
@@ -66,56 +67,77 @@ fun ReportsForDriversNavHost(
 
         composable(route = ReportsForDriversSchema.ReportInfo.name) {
             CreateReportsDataReportInfoScreen(
-                onPersonalInfo = {
+                onNext = {
                     navController.navigate(ReportsForDriversSchema.PersonalInfo.name)
                 },
-                viewModel = viewModelCreateReports
+                onBack = {
+                    navController.navigateUp()
+                },
+                viewModel = viewModelCreateReports,
+                navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInfo.name) {
             CreateReportsDataPersonalInfoScreen(
-                onVehicleInfo = {
+                onNext = {
                     navController.navigate(ReportsForDriversSchema.VehicleInfo.name)
                 },
-                viewModel = viewModelCreateReports
+                onBack = {
+                    navController.navigateUp()
+                },
+                viewModel = viewModelCreateReports,
+                navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.VehicleInfo.name) {
             CreateReportsDataVehicleInfoScreen(
-                onDataFillingTwo = {
+                onNext = {
                     navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
                 },
-                viewModel = viewModelCreateReports
+                onBack = {
+                    navController.navigateUp()
+                },
+                viewModel = viewModelCreateReports,
+                navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
             CreateReportsDataFillingTwoScreen(
-                onProgressReport = {
+                onNext = {
                     navController.navigate(ReportsForDriversSchema.ProgressReport.name)
                 },
-                viewModel = viewModelCreateReports
+                onBack = {
+                    navController.navigateUp()
+                },
+                viewModel = viewModelCreateReports,
+                navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.ProgressReport.name) {
             CreateReportsProgressReportsScreen(
-                onTripExpenses = {
+                onNext = {
                     navController.navigate(ReportsForDriversSchema.TripExpenses.name)
                 },
-                viewModel = viewModelCreateReports
+                onBack = {
+                    navController.navigateUp()
+                },
+                viewModel = viewModelCreateReports,
+                navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.TripExpenses.name) {
             CreateReportsExpensesScreen(
-                onPreview = {
-                    navController.navigate(ReportsForDriversSchema.Preview.name)
-                },
-                viewModel = viewModelCreateReports
+                viewModel = viewModelCreateReports,
+                navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.Preview.name) {
             CreateReportsPreviewScreen(
-                onResult = {
+                onNext = {
                     navController.navigate(ReportsForDriversSchema.Result.name)
+                },
+                onBack = {
+                    navController.navigateUp()
                 },
                 viewModel = viewModelCreateReports
             )

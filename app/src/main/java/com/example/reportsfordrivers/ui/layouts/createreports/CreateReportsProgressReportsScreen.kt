@@ -1,19 +1,17 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,43 +19,75 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
+import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.theme.typography
+import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
 
 @Composable
 fun CreateReportsProgressReportsScreen(
-    onTripExpenses: () -> Unit,
-    viewModel: CreateReportsViewModel = hiltViewModel()
+    onNext: () -> Unit,
+    onBack: () -> Unit,
+    viewModel: CreateReportsViewModel = hiltViewModel(),
+    navController: NavHostController = rememberNavController()
 ) {
     val scrollState = rememberScrollState()
 
+    val source = remember { MutableInteractionSource() }
+    if(source.collectIsPressedAsState().value) viewModel.openDialogProgressReportsDate.value = true
+
     Column {
 
-        TabRow(selectedTabIndex = 3) {
-            viewModel.tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = 3 == index,
-                    onClick = { },
-                    enabled = false
-                )
-            }
+        TabRow(selectedTabIndex = 4) {
+            Tab(
+                text = { Text("1") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
+            )
+            Tab(
+                text = { Text("2") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
+            )
+            Tab(
+                text = { Text("3") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
+            )
+            Tab(
+                text = { Text("4") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) }
+            )
+            Tab(
+                text = { Text("5") },
+                selected = false,
+                onClick = { },
+                enabled = false
+            )
+            Tab(
+                text = { Text("6") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
+                enabled = viewModel.isValidateNextProgressReports()
+            )
         }
 
         Column(
@@ -67,26 +97,14 @@ fun CreateReportsProgressReportsScreen(
                 .verticalScroll(state = scrollState),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.date),
-                    modifier = Modifier.weight(1f)
-                )
-                TextButton(
-                    onClick = {
-                        viewModel.openDialogProgressReportsDate.value = true
-                    },
-                    modifier = Modifier.testTag(Tags.TAG_TEST_PROGRESS_REPORTS_DATE)
-                ) {
-                    Text(
-                        text = viewModel.uiStateProgressReports.value.progressDetails.date.ifEmpty
-                        { stringResource(R.string.current_date) }
-                    )
-                }
-            }
+            OutlinedTextFieldDatePicker(
+                label = R.string.date,
+                value = viewModel.uiStateProgressReports.value.progressDetails.date,
+                interactionSource = source,
+                onValueChange = viewModel::updateProgressReportsDate,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_DATE,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             OutlinedTextFieldCustom(
                 label = R.string.country,
@@ -151,23 +169,9 @@ fun CreateReportsProgressReportsScreen(
             )
         }
 
-        Column {
-            Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(end = 10.dp, bottom = 10.dp, top = 5.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(
-                    onClick = onTripExpenses
-                ) {
-                    Text(
-                        text = stringResource(R.string.next),
-                        style = typography.titleLarge
-                    )
-                }
-            }
-        }
+        BottomBarCustom(
+            onNext = onNext, onBack = onBack
+        )
     }
 }
 
@@ -238,10 +242,4 @@ fun ColumnProgressReportsPreview() {
         cargoWeight = "15",
         date = "02.11"
     )))
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun CreateReportsProgressReportsScreenPreview() {
-    CreateReportsProgressReportsScreen(onTripExpenses = {})
 }

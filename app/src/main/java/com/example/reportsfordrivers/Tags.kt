@@ -17,16 +17,26 @@ object Tags {
     const val TAG_TEST_PROGRESS_REPORTS_DISTANCE: String = "tagTestProgressReportsDistance"
     const val TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT: String = "tagTestProgressReportsCargoWeight"
 
-    const val TAG_TEST_DATA_FILLING_ONE_LAST_NAME: String = "tagTestDataFillingOneLastName"
-    const val TAG_TEST_DATA_FILLING_ONE_FIRST_NAME: String = "tagTestDataFillingOneFirstName"
-    const val TAG_TEST_DATA_FILLING_ONE_PATRONYMIC: String = "tagTestDataFillingOnePatronymic"
-    const val TAG_TEST_DATA_FILLING_ONE_MAKE_VEHICLE: String = "tagTestDataFillingOneMakeVehicle"
-    const val TAG_TEST_DATA_FILLING_ONE_MAKE_TRAILER: String = "tagTestDataFillingOneMakeTrailer"
-    const val TAG_TEST_DATA_FILLING_ONE_RN_VEHICLE: String = "tagTestDataFillingOneRnVehicle"
-    const val TAG_TEST_DATA_FILLING_ONE_RN_TRAILER: String = "tagTestDataFillingOneRnTrailer"
-    const val TAG_TEST_DATA_FILLING_ONE_WAYBILL: String = "tagTestDataFillingOneWaybill"
+    const val TAG_TEST_DATA_REPORT_INFO_MAIN_CITY: String = "tagTestDataReportInfoMainCity"
+    const val TAG_TEST_DATA_REPORT_INFO_WAYBILL: String = "tagTestDataReportInfoWaybill"
+    const val TAG_TEST_DATA_REPORT_INFO_DATE: String = "tagTestDataReportInfoDate"
+
+    const val TAG_TEST_DATA_PERSONAL_INFO_LAST_NAME: String = "tagTestDataPersonalInfoLastName"
+    const val TAG_TEST_DATA_PERSONAL_INFO_FIRST_NAME: String = "tagTestDataPersonalInfoFirstName"
+    const val TAG_TEST_DATA_PERSONAL_INFO_PATRONYMIC: String = "tagTestDataPersonalInfoPatronymic"
+
+    const val TAG_TEST_DATA_VEHICLE_INFO_MAKE_VEHICLE: String = "tagTestDataVehicleInfoMakeVehicle"
+    const val TAG_TEST_DATA_VEHICLE_INFO_RN_VEHICLE: String = "tagTestDataVehicleInfoRnVehicle"
+    const val TAG_TEST_DATA_VEHICLE_INFO_MAKE_TRAILER: String = "tagTestDataVehicleInfoMakeTrailer"
+    const val TAG_TEST_DATA_VEHICLE_INFO_RN_TRAILER: String = "tagTestDataVehicleInfoRnTrailer"
 
     const val TAG_TEST_DATA_FILLING_TWO_ROUTE: String = "tagTestDataFillingTwoRoute"
+    const val TAG_TEST_DATA_FILLING_TWO_DATE_DEPARTURE = "tagTestDataFillingTwoDateDeparture"
+    const val TAG_TEST_DATA_FILLING_TWO_DATE_RETURN = "tagTestDataFillingTwoDateReturn"
+    const val TAG_TEST_DATA_FILLING_TWO_DATE_CROSSING_DEPARTURE =
+        "tagTestDataFillingTwoDateCrossingDeparture"
+    const val TAG_TEST_DATA_FILLING_TWO_DATE_CROSSING_RETURN =
+        "tagTestDataFillingTwoDateCrossingReturn"
     const val TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE: String =
         "tagTestDataFillingTwoSpeedometerDeparture"
     const val TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN: String =

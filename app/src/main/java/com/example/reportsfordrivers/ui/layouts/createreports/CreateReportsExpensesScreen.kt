@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import android.app.appsearch.ReportSystemUsageRequest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,8 +22,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
+import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.theme.typography
@@ -31,21 +37,44 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpense
 
 @Composable
 fun CreateReportsExpensesScreen(
-    onPreview: () -> Unit,
-    viewModel: CreateReportsViewModel = hiltViewModel()
+    viewModel: CreateReportsViewModel = hiltViewModel(),
+    navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier.padding(start = 10.dp, end = 10.dp)
     ) {
-        TabRow(selectedTabIndex = 4) {
-            viewModel.tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = 4 == index,
-                    onClick = {  },
-                    enabled = false
-                )
-            }
+        TabRow(selectedTabIndex = 5) {
+            Tab(
+                text = { Text("1") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name, ) }
+            )
+            Tab(
+                text = { Text("2") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
+            )
+            Tab(
+                text = { Text("3") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
+            )
+            Tab(
+                text = { Text("4") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) }
+            )
+            Tab(
+                text = { Text("5") },
+                selected = false,
+                onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) }
+            )
+            Tab(
+                text = { Text("6") },
+                selected = false,
+                onClick = { },
+                enabled = false
+            )
         }
 
         Row(
@@ -124,30 +153,10 @@ fun CreateReportsExpensesScreen(
             }
         }
 
-        Column {
-            Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(end = 10.dp, bottom = 10.dp, top = 5.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Button(onClick = onPreview) {
-                    Text(
-                        text = stringResource(R.string.skip),
-                        style = typography.titleLarge
-                    )
-                }
-                Button(
-                    onClick = onPreview,
-                    enabled = viewModel.isValidateNextTripExpenses()
-                ) {
-                    Text(
-                        text = stringResource(R.string.next),
-                        style = typography.titleLarge
-                    )
-                }
-            }
-        }
+        BottomBarCustom(
+            onNext = { navController.navigate(ReportsForDriversSchema.Preview.name) },
+            onBack = { navController.popBackStack() }
+        )
 
         DatePickerDialogCustom(
             viewModel.openDialogTripExpenseDate,

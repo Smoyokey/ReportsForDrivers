@@ -3,44 +3,26 @@ package com.example.reportsfordrivers.viewmodel.createreports
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Icon
-import android.graphics.pdf.PdfDocument
-import android.graphics.pdf.PdfRenderer
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.os.ParcelFileDescriptor
-import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.toAdaptiveIcon
-import androidx.core.graphics.drawable.toIcon
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateReports
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFillingOne
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFillingTwo
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataPersonalInfo
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataReportInfo
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataVehicleInfo
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
-import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
@@ -60,7 +42,7 @@ class CreateReportsViewModel @Inject constructor(
     var uiStateTripExpenses = mutableStateOf(TripExpensesReports())
         private set
 
-    var openDialogDateFillingOne = mutableStateOf(false)
+    var openDialogDataReportInfoDate = mutableStateOf(false)
 
     var openDialogDataFillingTwoDateDeparture = mutableStateOf(false)
     var openDialogDataFillingTwoDateReturn = mutableStateOf(false)
@@ -74,82 +56,76 @@ class CreateReportsViewModel @Inject constructor(
     var tabIndex = mutableStateOf(0)
     val tabs = listOf("1", "2", "3", "4", "5", "6")
 
-//    fun pdfRender(file: File): Icon {
-//        val fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-//
-//        val pdfRender = PdfRenderer(fileDescriptor)
-//
-//        val pageCount = pdfRender.pageCount
-//
-//        val page = pdfRender.openPage(0)
-//        val rendererPageWidth = page.width
-//        val rendererPageHeight = page.height
-//
-//        val bitmap = Bitmap.createBitmap(
-//            rendererPageWidth,
-//            rendererPageHeight,
-//            Bitmap.Config.ARGB_8888
-//        )
-//        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-//        pdfRender.close()
-//        fileDescriptor.close()
-//        page.close()
-//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            bitmap.toAdaptiveIcon()
-//        } else {
-//            TODO("VERSION.SDK_INT < O")
-//        }
-//    }
-
-    private fun updateDataFillingOne(itemDetails: DataFillingOne) {
-        uiState.value = uiState.value.copy(dataFillingOne = itemDetails)
+    private fun updateDataReportInfo(dataReportInfo: DataReportInfo) {
+        uiState.value = uiState.value.copy(dataReportInfo = dataReportInfo)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun updateDataFillingOneDate(date: String) {
-        val localDate = parseDateMain(date)
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(date = localDate))
+    fun updateDataReportInfoDate(date: String) {
+        val parseDate = if (date.isNotEmpty()) parseDateMain(date) else date
+        updateDataReportInfo(uiState.value.dataReportInfo.copy(date = parseDate))
     }
 
-    fun updateDataFillingOneLastName(lastName: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(lastName = lastName))
+    fun updateDataReportInfoMainCity(mainCity: String) {
+        updateDataReportInfo(uiState.value.dataReportInfo.copy(mainCity = mainCity))
     }
 
-    fun updateDataFillingOneFirstName(firstName: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(firstName = firstName))
+    fun updateDataReportInfoWaybill(waybill: String) {
+        updateDataReportInfo(uiState.value.dataReportInfo.copy(waybill = waybill))
     }
 
-    fun updateDataFillingOnePatronymic(patronymic: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(patronymic = patronymic))
+    fun isValidateDataReportInfo(): Boolean {
+        return uiState.value.dataReportInfo.date != "" &&
+                uiState.value.dataReportInfo.mainCity != "" &&
+                uiState.value.dataReportInfo.waybill != ""
     }
 
-    fun updateDataFillingOneWaybill(waybill: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(waybill = waybill))
+    private fun updateDataPersonalInfo(dataPersonalInfo: DataPersonalInfo) {
+        uiState.value = uiState.value.copy(dataPersonalInfo = dataPersonalInfo)
     }
 
-    fun updateDataFillingOneMakeVehicle(makeVehicle: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(makeVehicle = makeVehicle))
+    fun updateDataPersonalInfoLastName(lastName: String) {
+        updateDataPersonalInfo(uiState.value.dataPersonalInfo.copy(lastName = lastName))
     }
 
-    fun updateDataFillingOneRnVehicle(rnVehicle: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(rnVehicle = rnVehicle))
+    fun updateDataPersonalInfoFirstName(firstName: String) {
+        updateDataPersonalInfo(uiState.value.dataPersonalInfo.copy(firstName = firstName))
     }
 
-    fun updateDataFillingOneMakeTrailer(makeTrailer: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(makeTrailer = makeTrailer))
+    fun updateDataPersonalInfoPatronymic(patronymic: String) {
+        updateDataPersonalInfo(uiState.value.dataPersonalInfo.copy(patronymic = patronymic))
     }
 
-    fun updateDataFillingOneRnTrailer(rnTrailer: String) {
-        updateDataFillingOne(uiState.value.dataFillingOne.copy(rnTrailer = rnTrailer))
+    fun isValidateDataPersonalInfo(): Boolean {
+        return uiState.value.dataPersonalInfo.lastName != "" &&
+                uiState.value.dataPersonalInfo.firstName != "" &&
+                uiState.value.dataPersonalInfo.patronymic != ""
     }
 
-    fun isNextDataFillingOneValidate(): Boolean {
-        return uiState.value.dataFillingOne.date != "" &&
-                uiState.value.dataFillingOne.lastName != "" &&
-                uiState.value.dataFillingOne.firstName != "" &&
-                uiState.value.dataFillingOne.patronymic != "" &&
-                uiState.value.dataFillingOne.makeVehicle != "" &&
-                uiState.value.dataFillingOne.rnVehicle != ""
+    private fun updateDataVehicleInfo(dataVehicleInfo: DataVehicleInfo) {
+        uiState.value = uiState.value.copy(dataVehicleInfo = dataVehicleInfo)
+    }
+
+    fun updateDataVehicleInfoMakeVehicle(makeVehicle: String) {
+        updateDataVehicleInfo(uiState.value.dataVehicleInfo.copy(makeVehicle = makeVehicle))
+    }
+
+    fun updateDataVehicleInfoRnVehicle(rnVehicle: String) {
+        updateDataVehicleInfo(uiState.value.dataVehicleInfo.copy(rnVehicle = rnVehicle))
+    }
+
+    fun updateDataVehicleInfoMakeTrailer(makeTrailer: String) {
+        updateDataVehicleInfo(uiState.value.dataVehicleInfo.copy(makeTrailer = makeTrailer))
+    }
+
+    fun updateDataVehicleInfoRnTrailer(rnTrailer: String) {
+        updateDataVehicleInfo(uiState.value.dataVehicleInfo.copy(rnTrailer = rnTrailer))
+    }
+
+    fun isValidateDataVehicleInfo(): Boolean {
+        return uiState.value.dataVehicleInfo.makeVehicle != "" &&
+                uiState.value.dataVehicleInfo.rnVehicle != "" &&
+                uiState.value.dataVehicleInfo.makeTrailer != "" &&
+                uiState.value.dataVehicleInfo.rnTrailer != ""
     }
 
     private fun updateDataFillingTwo(itemDetails: DataFillingTwo) {
@@ -161,17 +137,26 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun updateDataFillingTwoDateReturn(dateReturn: String) {
-        val parseDate = parseDateDayMonthYear(dateReturn)
+        val parseDate = if (dateReturn.isNotEmpty())
+            parseDateDayMonthYear(dateReturn)
+        else
+            dateReturn
         updateDataFillingTwo(uiState.value.dataFillingTwo.copy(dateReturn = parseDate))
     }
 
     fun updateDataFillingTwoDateDeparture(dateDeparture: String) {
-        val parseDate = parseDateDayMonthYear(dateDeparture)
+        val parseDate = if (dateDeparture.isNotEmpty())
+            parseDateDayMonthYear(dateDeparture)
+        else
+            dateDeparture
         updateDataFillingTwo(uiState.value.dataFillingTwo.copy(dateDeparture = parseDate))
     }
 
     fun updateDataFillingTwoDateCrossingDeparture(dateCrossingDeparture: String) {
-        val parseDate = parseDateDayMonthYear(dateCrossingDeparture)
+        val parseDate = if (dateCrossingDeparture.isNotEmpty())
+            parseDateDayMonthYear(dateCrossingDeparture)
+        else
+            dateCrossingDeparture
         updateDataFillingTwo(
             uiState.value.dataFillingTwo.copy
                 (dateCrossingDeparture = parseDate)
@@ -179,7 +164,10 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun updateDataFillingTwoDateCrossingReturn(dateCrossingReturn: String) {
-        val parseDate = parseDateDayMonthYear(dateCrossingReturn)
+        val parseDate = if (dateCrossingReturn.isNotEmpty())
+            parseDateDayMonthYear(dateCrossingReturn)
+        else
+            dateCrossingReturn
         updateDataFillingTwo(
             uiState.value.dataFillingTwo.copy
                 (dateCrossingReturn = parseDate)
@@ -246,7 +234,7 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun updateProgressReportsDate(date: String) {
-        val parseDate = parseDateDayMonth(date)
+        val parseDate = if (date.isNotEmpty()) parseDateDayMonth(date) else date
         updateProgressDetails(uiStateProgressReports.value.progressDetails.copy(date = parseDate))
     }
 
@@ -266,13 +254,14 @@ class CreateReportsViewModel @Inject constructor(
     fun isValidateNextProgressReports(): Boolean {
         return uiState.value.listProgress.size > 0
     }
+
     private fun updateTripExpensesDetails(tripExpensesDetails: TripExpensesDetails) {
         uiStateTripExpenses.value = uiStateTripExpenses.value
             .copy(tripExpensesDetails = tripExpensesDetails)
     }
 
     fun updateTripExpensesDate(date: String) {
-        val parseDate = parseDateDayMonth(date)
+        val parseDate = if(date.isNotEmpty()) parseDateDayMonth(date) else date
         updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(date = parseDate))
     }
 
@@ -338,7 +327,6 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun saveFile() {
-        Log.i(TAG, uiState.value.dataFillingOne.lastName)
         writeFile("download/", "Print.doc")
     }
 
@@ -454,27 +442,27 @@ class CreateReportsViewModel @Inject constructor(
 <h1>Отчет о командировке</h1>
 <table class="report-header">
     <tr>
-        <td class="report-date" style="width: 50%">${uiState.value.dataFillingOne.date} г.</td>
-        <td class="report-city">г. Минск</td>
+        <td class="report-date" style="width: 50%">${uiState.value.dataReportInfo.date} г.</td>
+        <td class="report-city">г. ${uiState.value.dataReportInfo.mainCity}</td>
     </tr>
 </table>
 
 <table class="general-info">
     <tr>
         <td style="width: 20%">ФИО</td>
-        <td>${uiState.value.dataFillingOne.lastName} ${uiState.value.dataFillingOne.firstName} ${uiState.value.dataFillingOne.patronymic}</td>
+        <td>${uiState.value.dataPersonalInfo.lastName} ${uiState.value.dataPersonalInfo.firstName} ${uiState.value.dataPersonalInfo.patronymic}</td>
     </tr>
     <tr>
         <td>Путевой лист №</td>
-        <td>${uiState.value.dataFillingOne.waybill}</td>
+        <td>${uiState.value.dataReportInfo.waybill}</td>
     </tr>
     <tr>
         <td>авто/м марка, г/н</td>
-        <td>${uiState.value.dataFillingOne.makeVehicle}, ${uiState.value.dataFillingOne.rnVehicle}</td>
+        <td>${uiState.value.dataVehicleInfo.makeVehicle}, ${uiState.value.dataVehicleInfo.rnVehicle}</td>
     </tr>
     <tr>
         <td>прицеп марка, г/н</td>
-        <td>${uiState.value.dataFillingOne.makeTrailer}, ${uiState.value.dataFillingOne.rnTrailer}</td>
+        <td>${uiState.value.dataVehicleInfo.makeTrailer}, ${uiState.value.dataVehicleInfo.rnTrailer}</td>
     </tr>
 </table>
 
