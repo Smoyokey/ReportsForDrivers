@@ -5,6 +5,8 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -50,6 +52,31 @@ class PreviewTest {
     private lateinit var navController: TestNavHostController
 
     @Test
+    fun a() {
+        hiltRule.inject()
+        composeRule.activity.setContent {
+            navController = TestNavHostController(LocalContext.current).apply {
+                navigatorProvider.addNavigator(ComposeNavigator())
+            }
+            ReportsForDriversApp(navController = navController)
+        }
+
+        start()
+
+        composeRule.apply {
+            onNodeWithStringId(R.string.create_report).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.next).performClick()
+            onNodeWithStringId(R.string.save).performClick()
+        }
+    }
+
+    @Test
     //Тест без дат (добавить выбор даты)
     fun writeText_inPreviewWithoutFirstEntry() {
         hiltRule.inject()
@@ -67,16 +94,20 @@ class PreviewTest {
             //MainMenu
             onNodeWithStringId(R.string.create_report).performClick()
 
-            //Select maket
+            //ReportInfo
+            stringIdClickInput(R.string.waybill, "1")
+            stringIdClickInput(R.string.township, "Minsk")
+            onNodeWithStringId(R.string.date).performClick()
+            onNodeWithStringId(R.string.ok).performClick()
             onNodeWithStringId(R.string.next).performClick()
 
-            //DataFillingOne
-            onNodeWithStringId(R.string.current_date).performClick()
-            onNodeWithText("Date").performClick().performTextInput("02282024")
-            onNodeWithText("Ok").performClick()
+            //PersonalInfo
             stringIdClickInput(R.string.last_name, lastName)
             stringIdClickInput(R.string.first_name, firstName)
             stringIdClickInput(R.string.patronymic, patronymic)
+            onNodeWithStringId(R.string.next).performClick()
+
+            //VehicleInfo
             stringIdClickInput(R.string.make_vehicle, makeVehicle)
             stringIdClickInput(R.string.rn_vehicle, rnVehicle)
             stringIdClickInput(R.string.make_trailer, makeTrailer)
@@ -84,10 +115,10 @@ class PreviewTest {
             onNodeWithStringId(R.string.next).performClick()
 
             //DataFillingTwo
-            clickDate(Tags.TAG_TEST_DATE_DEPARTURE, "02102024")
-            clickDate(Tags.TAG_TEST_DATE_RETURN, "02282024")
-            clickDate(Tags.TAG_TEST_DATE_CROSSING_DEPARTURE, "02102024")
-            clickDate(Tags.TAG_TEST_DATE_CROSSING_RETURN, "02282024")
+            clickDate(R.string.date_departure)
+            clickDate(R.string.date_return)
+            clickDate(R.string.date_border_crossing_departure)
+            clickDate(R.string.date_border_crossing_return)
             stringIdClickInput(R.string.route, route)
             stringIdClickInput(R.string.speedometer_reading_departure, speedometerDeparture)
             stringIdClickInput(R.string.speedometer_reading_return, speedometerReturn)
@@ -95,11 +126,11 @@ class PreviewTest {
             onNodeWithStringId(R.string.next).performClick()
 
             //ProgressReports
-            enterProgressReport("02112024", "BY", "MINSK", "360", "18")
-            enterProgressReport("02132024", "RU", "KAZAN", "450", "18")
-            enterProgressReport("02152024", "RU", "MOSKVA", "1000", "4")
-            enterProgressReport("02172024", "RU", "Smolensk", "400", "3")
-            enterProgressReport("02192024", "BY", "MINSK", "350", "15")
+//            enterProgressReport("BY", "MINSK", "360", "18")
+//            enterProgressReport("RU", "KAZAN", "450", "18")
+//            enterProgressReport("RU", "MOSKVA", "1000", "4")
+//            enterProgressReport("RU", "Smolensk", "400", "3")
+            enterProgressReport("BY", "MINSK", "350", "15")
             onNodeWithStringId(R.string.next).performClick()
 
             //TripExpenses
@@ -109,8 +140,12 @@ class PreviewTest {
 //            enterTripExpenses("02162024", "4", "BEER", "10", "DOL")
 //            enterTripExpenses("02172024", "5", "WATER", "3", "EUR")
             onNodeWithStringId(R.string.next).performClick()
+
+            //Preview
             onNodeWithStringId(R.string.next).performClick()
-            onNodeWithStringId(R.string.test).performClick()
+
+            //Result
+            onNodeWithStringId(R.string.save).performClick()
             assertTrue(true)
 
             //Preview
@@ -166,17 +201,16 @@ class PreviewTest {
         composeRule.onNodeWithStringId(id).performClick().performTextInput(textInput)
     }
 
-    private fun clickDate(tag: String, number: String) {
+    private fun clickDate(@StringRes label: Int) {
         composeRule.apply {
-            onNodeWithTag(tag).performClick()
-            onNodeWithText("Date").performClick().performTextInput(number)
-            onNodeWithText("Ok").performClick()
+            onNodeWithStringId(label).performClick()
+            onNodeWithStringId(R.string.ok).performClick()
         }
     }
 
     private fun enterTripExpenses(date: String, documentNumber: String, expenseItem: String, sum: String, currency: String) {
         composeRule.apply {
-            clickDate(Tags.TAG_TEST_TRIP_EXPENSES_DATE, date)
+            clickDate(R.string.date)
             stringIdClickInput(R.string.document_number, documentNumber)
             stringIdClickInput(R.string.expense_item, expenseItem)
             stringIdClickInput(R.string.sum, sum)
@@ -185,9 +219,11 @@ class PreviewTest {
         }
     }
 
-    private fun enterProgressReport(date: String, country: String, township: String, distance: String, cargoWeight: String) {
+    private fun enterProgressReport(country: String, township: String, distance: String, cargoWeight: String) {
         composeRule.apply {
-            clickDate(Tags.TAG_TEST_PROGRESS_REPORTS_DATE, date)
+            clickDate(R.string.date)
+//            onAllNodesWithText("Date").onFirst().performClick()
+//            onNodeWithStringId(R.string.ok).performClick()
             stringIdClickInput(R.string.country, country)
             stringIdClickInput(R.string.township, township)
             stringIdClickInput(R.string.distance, distance)

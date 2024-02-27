@@ -33,8 +33,6 @@ import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewMo
 
 @Composable
 fun CreateReportsDataReportInfoScreen(
-    onNext: () -> Unit,
-    onBack: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -81,7 +79,8 @@ fun CreateReportsDataReportInfoScreen(
         }
 
         BottomBarCustom(
-            onNext = onNext, onBack = onBack
+            onNext = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
+            onBack = { navController.navigateUp() }
         )
     }
 

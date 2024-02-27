@@ -47,7 +47,7 @@ class TripExpensesUiTest {
     fun init() {
         hiltRule.inject()
         composeRule.activity.setContent {
-            CreateReportsExpensesScreen( {} )
+            CreateReportsExpensesScreen()
         }
     }
 

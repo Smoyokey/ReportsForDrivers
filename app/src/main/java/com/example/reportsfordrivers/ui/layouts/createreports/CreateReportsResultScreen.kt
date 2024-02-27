@@ -41,7 +41,7 @@ fun CreateReportsResultScreen(
 
             Button(
                 onClick = {
-                    viewModel.saveFile()
+                    viewModel.saveFile(context)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

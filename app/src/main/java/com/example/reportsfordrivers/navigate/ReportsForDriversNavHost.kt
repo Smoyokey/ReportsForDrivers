@@ -67,60 +67,30 @@ fun ReportsForDriversNavHost(
 
         composable(route = ReportsForDriversSchema.ReportInfo.name) {
             CreateReportsDataReportInfoScreen(
-                onNext = {
-                    navController.navigate(ReportsForDriversSchema.PersonalInfo.name)
-                },
-                onBack = {
-                    navController.navigateUp()
-                },
                 viewModel = viewModelCreateReports,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInfo.name) {
             CreateReportsDataPersonalInfoScreen(
-                onNext = {
-                    navController.navigate(ReportsForDriversSchema.VehicleInfo.name)
-                },
-                onBack = {
-                    navController.navigateUp()
-                },
                 viewModel = viewModelCreateReports,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.VehicleInfo.name) {
             CreateReportsDataVehicleInfoScreen(
-                onNext = {
-                    navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
-                },
-                onBack = {
-                    navController.navigateUp()
-                },
                 viewModel = viewModelCreateReports,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
             CreateReportsDataFillingTwoScreen(
-                onNext = {
-                    navController.navigate(ReportsForDriversSchema.ProgressReport.name)
-                },
-                onBack = {
-                    navController.navigateUp()
-                },
                 viewModel = viewModelCreateReports,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.ProgressReport.name) {
             CreateReportsProgressReportsScreen(
-                onNext = {
-                    navController.navigate(ReportsForDriversSchema.TripExpenses.name)
-                },
-                onBack = {
-                    navController.navigateUp()
-                },
                 viewModel = viewModelCreateReports,
                 navController = navController
             )

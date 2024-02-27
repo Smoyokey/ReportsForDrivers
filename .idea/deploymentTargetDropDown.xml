@@ -2,22 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="DataFillingTwoUiTest">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_3a_API_34_extension_level_7_x86_64.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-15T06:29:14.068698574Z" />
-        </State>
-      </entry>
       <entry key="PreviewTest">
         <State>
           <targetSelectedWithDropDown>
@@ -26,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_6a_API_33.avd" />
+                  <value value="$USER_HOME$/.android/avd/Medium_Phone_API_33.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-22T12:14:36.519474209Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-02-27T08:24:43.969936288Z" />
         </State>
       </entry>
       <entry key="TripExpensesUiTest">
@@ -50,6 +34,22 @@
           <timeTargetWasSelectedWithDropDown value="2024-02-21T18:04:13.797820485Z" />
         </State>
       </entry>
+      <entry key="a()">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="$USER_HOME$/.android/avd/Medium_Phone_API_33.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-02-27T09:04:29.526489995Z" />
+        </State>
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -58,18 +58,18 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="$USER_HOME$/.android/avd/Pixel_6a_API_33.avd" />
+                  <value value="$USER_HOME$/.android/avd/Medium_Phone_API_34.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-26T14:48:23.621984289Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-02-27T08:14:03.219600283Z" />
         </State>
       </entry>
       <entry key="tests()">
         <State />
       </entry>
-      <entry key="writeText_inTextFieldDocumentNumber()">
+      <entry key="writeText_inPreviewWithoutFirstEntry()">
         <State />
       </entry>
     </value>

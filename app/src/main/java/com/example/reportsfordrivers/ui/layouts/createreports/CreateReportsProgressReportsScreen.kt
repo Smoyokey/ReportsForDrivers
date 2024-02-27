@@ -46,8 +46,6 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressRep
 
 @Composable
 fun CreateReportsProgressReportsScreen(
-    onNext: () -> Unit,
-    onBack: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -143,7 +141,8 @@ fun CreateReportsProgressReportsScreen(
         }
 
         BottomBarCustom(
-            onNext = onNext, onBack = onBack
+            onNext = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
+            onBack = { navController.navigateUp() }
         )
     }
 }

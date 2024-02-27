@@ -39,7 +39,7 @@ class DataFillingTwoUiTest {
     fun init() {
         hiltRule.inject()
         composeRule.activity.setContent {
-            CreateReportsDataFillingTwoScreen ({})
+            CreateReportsDataFillingTwoScreen ()
         }
     }
 

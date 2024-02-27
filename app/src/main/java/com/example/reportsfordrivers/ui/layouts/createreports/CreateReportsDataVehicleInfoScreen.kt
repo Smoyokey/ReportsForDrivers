@@ -23,8 +23,6 @@ import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewMo
 
 @Composable
 fun CreateReportsDataVehicleInfoScreen(
-    onNext: () -> Unit,
-    onBack: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -32,7 +30,8 @@ fun CreateReportsDataVehicleInfoScreen(
         TabRowDataVehicleInfo(navController = navController, viewModel = viewModel)
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .padding(top = 16.dp, bottom = 16.dp, start = 10.dp, end = 10.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
@@ -72,7 +71,8 @@ fun CreateReportsDataVehicleInfoScreen(
         }
 
         BottomBarCustom(
-            onNext = onNext, onBack = onBack
+            onNext = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
+            onBack = { navController.navigateUp() }
         )
     }
 }

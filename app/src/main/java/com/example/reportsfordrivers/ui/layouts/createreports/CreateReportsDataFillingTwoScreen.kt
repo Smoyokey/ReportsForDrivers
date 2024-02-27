@@ -32,8 +32,6 @@ import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewMo
 
 @Composable
 fun CreateReportsDataFillingTwoScreen(
-    onNext: () -> Unit,
-    onBack: () -> Unit,
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -136,7 +134,8 @@ fun CreateReportsDataFillingTwoScreen(
         }
 
         BottomBarCustom(
-            onNext = onNext, onBack = onBack
+            onNext = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
+            onBack = { navController.navigateUp() }
         )
     }
     DatePickerDialogCustom(

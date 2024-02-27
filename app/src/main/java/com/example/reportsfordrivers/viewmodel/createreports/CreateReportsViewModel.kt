@@ -326,8 +326,8 @@ class CreateReportsViewModel @Inject constructor(
         return format.format(Date(date.toLong()))
     }
 
-    fun saveFile() {
-        writeFile("download/", "Print.doc")
+    fun saveFile(context: Context) {
+        writeFile("download/", "Print.doc", context)
     }
 
     fun testShare(context: Context) {
@@ -368,11 +368,11 @@ class CreateReportsViewModel @Inject constructor(
         context.startActivity(Intent.createChooser(shareIntent, "My First Doc"))
     }
 
-    private fun writeFile(filePath: String, fileName: String) {
+    private fun writeFile(filePath: String, fileName: String, context: Context) {
         try {
             //Создается объект файла, при этом путь к файлу находиться методом Environment
             val myFile = File(
-                Environment.getExternalStorageDirectory().toString() + "/" + filePath + fileName
+                context.getExternalFilesDir(filePath), fileName
             )
             // Создается файл, если он не был создан
             myFile.createNewFile()
