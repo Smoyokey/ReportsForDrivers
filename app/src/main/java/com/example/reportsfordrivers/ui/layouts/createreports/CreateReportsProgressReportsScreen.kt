@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -24,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,44 +54,10 @@ fun CreateReportsProgressReportsScreen(
     val scrollState = rememberScrollState()
 
     val source = remember { MutableInteractionSource() }
-    if(source.collectIsPressedAsState().value) viewModel.openDialogProgressReportsDate.value = true
+    if (source.collectIsPressedAsState().value) viewModel.openDialogProgressReportsDate.value = true
 
     Column {
-
-        TabRow(selectedTabIndex = 4) {
-            Tab(
-                text = { Text("1") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
-            )
-            Tab(
-                text = { Text("2") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
-            )
-            Tab(
-                text = { Text("3") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
-            )
-            Tab(
-                text = { Text("4") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) }
-            )
-            Tab(
-                text = { Text("5") },
-                selected = false,
-                onClick = { },
-                enabled = false
-            )
-            Tab(
-                text = { Text("6") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-                enabled = viewModel.isValidateNextProgressReports()
-            )
-        }
+        TabRowProgressReports(navController = navController, viewModel = viewModel)
 
         Column(
             modifier = Modifier
@@ -111,7 +80,8 @@ fun CreateReportsProgressReportsScreen(
                 value = viewModel.uiStateProgressReports.value.progressDetails.country,
                 onValueChange = viewModel::updateProgressReportsCountry,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
             )
 
             OutlinedTextFieldCustom(
@@ -119,7 +89,8 @@ fun CreateReportsProgressReportsScreen(
                 value = viewModel.uiStateProgressReports.value.progressDetails.township,
                 onValueChange = viewModel::updateProgressReportsTownship,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
             )
 
             Row(
@@ -130,14 +101,16 @@ fun CreateReportsProgressReportsScreen(
                     value = viewModel.uiStateProgressReports.value.progressDetails.distance,
                     onValueChange = viewModel::updateProgressReportsDistance,
                     tag = Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
                 OutlinedTextFieldCustom(
                     label = R.string.cargo_weight,
                     value = viewModel.uiStateProgressReports.value.progressDetails.cargoWeight,
                     onValueChange = viewModel::updateProgressReportsCargoWeight,
                     tag = Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
             }
 
@@ -145,7 +118,7 @@ fun CreateReportsProgressReportsScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                OutlinedButton(
+                Button(
                     onClick = {
                         viewModel.updateProgressReports()
                     },
@@ -157,7 +130,7 @@ fun CreateReportsProgressReportsScreen(
                 }
             }
 
-            Column() {
+            Column {
                 for (i in viewModel.uiState.value.listProgress) {
                     ColumnProgressReports(i)
                 }
@@ -232,14 +205,75 @@ fun RowProgressReports(@StringRes title: Int, text: String) {
     }
 }
 
+@Composable
+fun TabRowProgressReports(
+    navController: NavHostController,
+    viewModel: CreateReportsViewModel
+) {
+    TabRow(selectedTabIndex = 4) {
+        Tab(
+            text = { Text("1") },
+            selected = false,
+            onClick = {
+                navController.navigate(ReportsForDriversSchema.ReportInfo.name) {
+                    popUpTo(ReportsForDriversSchema.Start.name)
+                }
+            }
+        )
+        Tab(
+            text = { Text("2") },
+            selected = false,
+            onClick = {
+                navController.navigate(ReportsForDriversSchema.PersonalInfo.name) {
+                    popUpTo(ReportsForDriversSchema.ReportInfo.name)
+                }
+            }
+        )
+        Tab(
+            text = { Text("3") },
+            selected = false,
+            onClick = {
+                navController.navigate(ReportsForDriversSchema.VehicleInfo.name) {
+                    popUpTo(ReportsForDriversSchema.PersonalInfo.name)
+                }
+            }
+        )
+        Tab(
+            text = { Text("4") },
+            selected = false,
+            onClick = {
+                navController.navigate(ReportsForDriversSchema.ProgressReport.name) {
+                    popUpTo(ReportsForDriversSchema.VehicleInfo.name)
+                }
+            }
+        )
+        Tab(
+            text = { Text("5") },
+            selected = false,
+            onClick = { },
+            enabled = false
+        )
+        Tab(
+            text = { Text("6") },
+            selected = false,
+            onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
+            enabled = viewModel.isValidateNextProgressReports()
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun ColumnProgressReportsPreview() {
-    ColumnProgressReports(ProgressReports(ProgressDetails(
-        country = "BY",
-        township = "Minsk-Kazan",
-        distance = "1500",
-        cargoWeight = "15",
-        date = "02.11"
-    )))
+    ColumnProgressReports(
+        ProgressReports(
+            ProgressDetails(
+                country = "BY",
+                township = "Minsk-Kazan",
+                distance = "1500",
+                cargoWeight = "15",
+                date = "02.11"
+            )
+        )
+    )
 }

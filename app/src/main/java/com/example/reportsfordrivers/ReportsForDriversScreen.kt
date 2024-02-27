@@ -25,14 +25,14 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 fun ReportsForDriversTopBar(
     currentScreen: ReportsForDriversSchema,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit
+    navigate: NavHostController
 ) {
     TopAppBar(
         title = { Text(text = stringResource(currentScreen.title)) },
 
         navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
+            if (navigate.currentBackStackEntry != null) {
+                IconButton(onClick = { navigate.navigate(ReportsForDriversSchema.Start.name) }) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button)
@@ -58,8 +58,9 @@ fun ReportsForDriversApp(
         topBar = {
             ReportsForDriversTopBar(
                 currentScreen = currentScreen,
-                canNavigateBack = navController.currentBackStackEntry != null
-            ) { navController.navigateUp() }
+                canNavigateBack = navController.currentBackStackEntry != null,
+                navigate = navController
+            )
         }
     ) { innerPadding ->
         ReportsForDriversNavHost(

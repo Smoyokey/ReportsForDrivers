@@ -1,13 +1,16 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -26,47 +29,13 @@ fun CreateReportsDataVehicleInfoScreen(
     navController: NavHostController = rememberNavController()
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
+        TabRowDataVehicleInfo(navController = navController, viewModel = viewModel)
 
-        TabRow(selectedTabIndex = 2) {
-            Tab(
-                text = { Text("1") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) },
-            )
-            Tab(
-                text = { Text("2") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
-            )
-            Tab(
-                text = { Text("3") },
-                selected = false,
-                onClick = { }
-            )
-            Tab(
-                text = { Text("4") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
-                enabled = viewModel.isValidateDataVehicleInfo()
-            )
-            Tab(
-                text = { Text("5") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-                enabled = viewModel.isValidateDataVehicleInfo() &&
-                        viewModel.isNextDataFillingTwoValidate()
-            )
-            Tab(
-                text = { Text("6") },
-                selected = false,
-                onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-                enabled = viewModel.isValidateDataVehicleInfo() &&
-                        viewModel.isNextDataFillingTwoValidate() &&
-                        viewModel.isValidateNextProgressReports()
-            )
-        }
-
-        Column(modifier = Modifier.weight(1f)) {
+        Column(
+            modifier = Modifier.weight(1f)
+                .padding(top = 16.dp, bottom = 16.dp, start = 10.dp, end = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
 
 
             OutlinedTextFieldCustom(
@@ -106,4 +75,58 @@ fun CreateReportsDataVehicleInfoScreen(
             onNext = onNext, onBack = onBack
         )
     }
+}
+
+@Composable
+private fun TabRowDataVehicleInfo(
+    navController: NavHostController,
+    viewModel: CreateReportsViewModel
+) {
+    TabRow(selectedTabIndex = 2) {
+        Tab(
+            text = { Text("1") },
+            selected = false,
+            onClick = {
+                navController.navigate(ReportsForDriversSchema.ReportInfo.name) {
+                    popUpTo(ReportsForDriversSchema.Start.name)
+                }
+            }
+        )
+        Tab(
+            text = { Text("2") },
+            selected = false,
+            onClick = {
+                navController.navigate(ReportsForDriversSchema.PersonalInfo.name) {
+                    popUpTo(ReportsForDriversSchema.ReportInfo.name)
+                }
+            }
+        )
+        Tab(
+            text = { Text("3") },
+            selected = false,
+            onClick = { }
+        )
+        Tab(
+            text = { Text("4") },
+            selected = false,
+            onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
+            enabled = viewModel.isValidateDataVehicleInfo()
+        )
+        Tab(
+            text = { Text("5") },
+            selected = false,
+            onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
+            enabled = viewModel.isValidateDataVehicleInfo() &&
+                    viewModel.isNextDataFillingTwoValidate()
+        )
+        Tab(
+            text = { Text("6") },
+            selected = false,
+            onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
+            enabled = viewModel.isValidateDataVehicleInfo() &&
+                    viewModel.isNextDataFillingTwoValidate() &&
+                    viewModel.isValidateNextProgressReports()
+        )
+    }
+
 }

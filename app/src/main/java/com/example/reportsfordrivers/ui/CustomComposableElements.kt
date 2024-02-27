@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
@@ -27,6 +28,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
@@ -40,6 +43,7 @@ fun OutlinedTextFieldCustom(
     onValueChange: (String) -> Unit,
     tag: String,
     modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions()
 ) {
     OutlinedTextField(
         value = value,
@@ -48,6 +52,7 @@ fun OutlinedTextFieldCustom(
         modifier = modifier,
         singleLine = true,
         textStyle = typography.bodyLarge,
+        keyboardOptions = keyboardOptions,
         trailingIcon = {
             if (value.isNotEmpty()) {
                 Icon(
@@ -109,8 +114,10 @@ fun DatePickerDialogCustom(
                 TextButton(
                     onClick = {
                         openDialog.value = false
-                        snackScope.launch {
-                            onValueChange(datePickerState.selectedDateMillis.toString())
+                        if(datePickerState.selectedDateMillis != null) {
+                            snackScope.launch {
+                                onValueChange(datePickerState.selectedDateMillis.toString())
+                            }
                         }
                     }
                 ) {

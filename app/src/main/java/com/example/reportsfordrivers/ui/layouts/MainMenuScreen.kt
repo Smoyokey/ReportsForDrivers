@@ -38,7 +38,7 @@ fun MainMenuScreen(
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize()
-            .padding(15.dp)
+            .padding(30.dp)
     ) {
         OutlinedButton(
             onClick = onCreateReport,
@@ -46,7 +46,7 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.create_report),
-                style = typography.headlineLarge,
+                style = typography.headlineSmall,
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp)
             )
         }
@@ -57,7 +57,7 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.be_continued),
-                style = typography.headlineLarge
+                style = typography.headlineSmall
             )
         }
         OutlinedButton(
@@ -67,7 +67,7 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.history_report),
-                style = typography.headlineLarge,
+                style = typography.headlineSmall,
 
             )
         }
@@ -78,7 +78,7 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.settings),
-                style = typography.headlineLarge
+                style = typography.headlineSmall
             )
         }
     }
