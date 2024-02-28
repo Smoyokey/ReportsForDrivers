@@ -1,11 +1,19 @@
 package com.example.reportsfordrivers.viewmodel.createreports
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
@@ -55,6 +63,8 @@ class   CreateReportsViewModel @Inject constructor(
 
     var tabIndex = mutableStateOf(0)
     val tabs = listOf("1", "2", "3", "4", "5", "6")
+
+
 
     private fun updateDataReportInfo(dataReportInfo: DataReportInfo) {
         uiState.value = uiState.value.copy(dataReportInfo = dataReportInfo)
@@ -328,6 +338,7 @@ class   CreateReportsViewModel @Inject constructor(
 
     fun saveFile(context: Context) {
         writeFile("download/", "Print.doc", context)
+        Log.i(TAG, "File create")
     }
 
     fun testShare(context: Context) {
@@ -367,24 +378,39 @@ class   CreateReportsViewModel @Inject constructor(
     }
 
     private fun writeFile(filePath: String, fileName: String, context: Context) {
-        try {
-            //Создается объект файла, при этом путь к файлу находиться методом Environment
-            val myFile = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName
-            )
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            val resolver = context.contentResolver
+            val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+
+            if(uri != null) {
+                val fileOutputStream = resolver.openOutputStream(uri)
+                fileOutputStream?.write(onePageHtml().toByteArray())
+                fileOutputStream?.close()
+            }
+        } else {
+            try {
+                //Создается объект файла, при этом путь к файлу находиться методом Environment
+                val myFile = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName
+                )
 //            val myFile = File(context.filesDir, fileName)
-            // Создается файл, если он не был создан
-            myFile.delete()
-            myFile.createNewFile()
-            // После чего создаем поток для записи
-            val outputStream = FileOutputStream(myFile)
-            // Производим непосредственно запись
-            outputStream.write(onePageHtml().toByteArray())
-            // Закрываем поток
-            outputStream.close()
-            // Просто для удобства визуального контроля исполнения метода в приложении
-        } catch (e: Exception) {
-            e.printStackTrace()
+                // Создается файл, если он не был создан
+                myFile.delete()
+                myFile.createNewFile()
+                // После чего создаем поток для записи
+                val outputStream = FileOutputStream(myFile)
+                // Производим непосредственно запись
+                outputStream.write(onePageHtml().toByteArray())
+                // Закрываем поток
+                outputStream.close()
+                // Просто для удобства визуального контроля исполнения метода в приложении
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
