@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -20,7 +21,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
@@ -30,12 +33,22 @@ import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun CreateReportsDataReportInfoScreen(
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    BackHandler {
+        navController.navigate(
+            ReportsForDriversSchema.Start.name,
+            navOptions = NavOptions.Builder()
+                .setPopUpTo(ReportsForDriversSchema.Start.name, true)
+                .build()
+        )
+    }
 
     val source = remember { MutableInteractionSource() }
     if (source.collectIsPressedAsState().value) viewModel.openDialogDataReportInfoDate.value = true
@@ -88,8 +101,6 @@ fun CreateReportsDataReportInfoScreen(
         openDialog = viewModel.openDialogDataReportInfoDate,
         onValueChange = viewModel::updateDataReportInfoDate
     )
-
-
 }
 
 @Composable
@@ -101,7 +112,7 @@ private fun TabRowReportInfoScreen(
         Tab(
             text = { Text("1") },
             selected = false,
-            onClick = {},
+            onClick = { },
             enabled = false
         )
         Tab(
@@ -115,27 +126,20 @@ private fun TabRowReportInfoScreen(
             onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
             enabled = viewModel.isValidateDataReportInfo(),
             modifier = Modifier.background(
-                if(viewModel.isValidateDataReportInfo()) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onPrimaryContainer)
+                if (viewModel.isValidateDataReportInfo()) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onPrimaryContainer
+            )
         )
         Tab(
             text = { Text("3") },
             selected = false,
-            onClick = {
-                navController.navigate(ReportsForDriversSchema.VehicleInfo.name) {
-                    popUpTo(ReportsForDriversSchema.PersonalInfo.name)
-                }
-            },
+            onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) },
             enabled = viewModel.isValidateDataReportInfo() &&
                     viewModel.isValidateDataPersonalInfo()
         )
         Tab(
             text = { Text("4") },
             selected = false,
-            onClick = {
-                navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) {
-                    popUpTo(ReportsForDriversSchema.VehicleInfo.name)
-                }
-            },
+            onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
             enabled = viewModel.isValidateDataReportInfo() &&
                     viewModel.isValidateDataPersonalInfo() &&
                     viewModel.isValidateDataVehicleInfo()

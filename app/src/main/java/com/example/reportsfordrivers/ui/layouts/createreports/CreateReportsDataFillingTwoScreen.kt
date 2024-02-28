@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
@@ -35,6 +37,15 @@ fun CreateReportsDataFillingTwoScreen(
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+    BackHandler {
+        navController.navigate(
+            ReportsForDriversSchema.VehicleInfo.name,
+            navOptions = NavOptions.Builder()
+                .setPopUpTo(ReportsForDriversSchema.VehicleInfo.name, true)
+                .build()
+        )
+    }
+
     val scrollState = rememberScrollState()
 
     val sourceDateDeparture = remember { MutableInteractionSource() }
@@ -165,29 +176,17 @@ private fun TabRowDataFillingTwo(
         Tab(
             text = { Text("1") },
             selected = false,
-            onClick = {
-                navController.navigate(ReportsForDriversSchema.ReportInfo.name) {
-                    popUpTo(ReportsForDriversSchema.Start.name)
-                }
-            }
+            onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
         )
         Tab(
             text = { Text("2") },
             selected = false,
-            onClick = {
-                navController.navigate(ReportsForDriversSchema.PersonalInfo.name) {
-                    popUpTo(ReportsForDriversSchema.ReportInfo.name)
-                }
-            }
+            onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
         )
         Tab(
             text = { Text("3") },
             selected = false,
-            onClick = {
-                navController.navigate(ReportsForDriversSchema.VehicleInfo.name) {
-                    popUpTo(ReportsForDriversSchema.PersonalInfo.name)
-                }
-            }
+            onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
         )
         Tab(
             text = { Text("4") },

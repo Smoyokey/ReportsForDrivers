@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
@@ -28,6 +30,15 @@ fun CreateReportsDataPersonalInfoScreen(
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+    BackHandler {
+        navController.navigate(
+            ReportsForDriversSchema.ReportInfo.name,
+            navOptions = NavOptions.Builder()
+                .setPopUpTo(ReportsForDriversSchema.ReportInfo.name, true)
+                .build()
+        )
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         TabRowDataPersonalInfo(navController = navController, viewModel = viewModel)
 
@@ -82,11 +93,7 @@ private fun TabRowDataPersonalInfo(
         Tab(
             text = { Text("1") },
             selected = false,
-            onClick = {
-                navController.navigate(ReportsForDriversSchema.ReportInfo.name) {
-                    popUpTo(ReportsForDriversSchema.Start.name)
-                }
-            }
+            onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
         )
         Tab(
             text = { Text("2") },
