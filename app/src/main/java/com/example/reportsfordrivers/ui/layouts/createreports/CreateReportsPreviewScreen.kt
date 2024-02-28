@@ -35,24 +35,11 @@ fun CreateReportsPreviewScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-    ) {
-
-        TabRow(selectedTabIndex = 5) {
-            viewModel.tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = 5 == index,
-                    onClick = {  },
-                    enabled = false
-                )
-            }
-        }
+    Column {
 
         Column(
             modifier = Modifier
-                .padding(start = 10.dp, end = 10.dp, top = 8.dp, bottom = 8.dp)
+                .padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp)
                 .verticalScroll(state = scrollState)
                 .weight(1f)
         ) {

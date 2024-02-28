@@ -29,7 +29,7 @@ import javax.inject.Inject
 private const val TAG = "DataFillingOneViewModel"
 
 @HiltViewModel
-class CreateReportsViewModel @Inject constructor(
+class   CreateReportsViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository
 ) : ViewModel() {
 
@@ -331,7 +331,6 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun testShare(context: Context) {
-//        createFile(context)
         downloadFile(context)
     }
 
@@ -343,14 +342,13 @@ class CreateReportsViewModel @Inject constructor(
         newFile.createNewFile()
         val contentUri = FileProvider.getUriForFile(
             context,
-            "com.example.ActiveReports.fileprovider",
+            "com.example.reportsfordrivers.fileprovider",
             newFile
         )
         var fileWriter: FileWriter? = null
         try {
             fileWriter = FileWriter(newFile)
             fileWriter.append(onePageHtml())
-//            fileWriter.append(twoPageHtml())
         } catch (e: Exception) {
         }
         fileWriter!!.close()
@@ -372,9 +370,11 @@ class CreateReportsViewModel @Inject constructor(
         try {
             //Создается объект файла, при этом путь к файлу находиться методом Environment
             val myFile = File(
-                context.getExternalFilesDir(filePath), fileName
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName
             )
+//            val myFile = File(context.filesDir, fileName)
             // Создается файл, если он не был создан
+            myFile.delete()
             myFile.createNewFile()
             // После чего создаем поток для записи
             val outputStream = FileOutputStream(myFile)
