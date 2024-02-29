@@ -11,12 +11,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -29,10 +36,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
+import com.example.reportsfordrivers.ui.AlertDialogDeleteElement
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
+import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 
@@ -53,7 +62,7 @@ fun CreateReportsExpensesScreen(
     val scrollState = rememberScrollState()
 
     val source = remember { MutableInteractionSource() }
-    if(source.collectIsPressedAsState().value) viewModel.openDialogTripExpenseDate.value = true
+    if (source.collectIsPressedAsState().value) viewModel.openDialogTripExpenseDate.value = true
 
     Column {
         TabRowExpenses(navController = navController)
@@ -131,8 +140,14 @@ fun CreateReportsExpensesScreen(
             }
 
             Column {
-                for(i in viewModel.uiState.value.listTripExpenses) {
-                    LineElementTripExpenses(tripExpenseReport = i)
+                for (i in 0..<viewModel.uiState.value.listTripExpenses.size) {
+                    ColumnTripExpense(
+                        tripExpenses = viewModel.uiState.value.listTripExpenses[i],
+                        delete = viewModel::deletePositionTripExpense,
+                        isOpen = viewModel.openDialogTripExpensesDelete,
+                        position = i,
+                        size = viewModel.uiState.value.listTripExpenses.size
+                    )
                 }
             }
         }
@@ -150,14 +165,57 @@ fun CreateReportsExpensesScreen(
 }
 
 @Composable
-fun LineElementTripExpenses(tripExpenseReport: TripExpensesReports) {
-    Column {
-        Text("Date - ${tripExpenseReport.tripExpensesDetails.date}")
-        Text("Document number - ${tripExpenseReport.tripExpensesDetails.documentNumber}")
-        Text("Expense item - ${tripExpenseReport.tripExpensesDetails.expenseItem}")
-        Text("Sum - ${tripExpenseReport.tripExpensesDetails.sum}")
-        Text("Currency - ${tripExpenseReport.tripExpensesDetails.currency}")
+fun ColumnTripExpense(
+    tripExpenses: TripExpensesReports,
+    delete: (Int) -> Unit,
+    isOpen: MutableState<Boolean>,
+    position: Int,
+    size: Int
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(modifier = Modifier.weight(1f)) {
+            RowProgressAndExpenses(
+                title = R.string.date,
+                text = tripExpenses.tripExpensesDetails.date
+            )
+            RowProgressAndExpenses(
+                title = R.string.document_number,
+                text = tripExpenses.tripExpensesDetails.documentNumber
+            )
+            RowProgressAndExpenses(
+                title = R.string.expense_item,
+                text = tripExpenses.tripExpensesDetails.expenseItem,
+            )
+            RowProgressAndExpenses(
+                title = R.string.sum,
+                text = tripExpenses.tripExpensesDetails.sum
+            )
+            RowProgressAndExpenses(
+                title = R.string.currency,
+                text = tripExpenses.tripExpensesDetails.currency
+            )
+            if(size - 1 != position) {
+                Divider(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 10.dp)
+                )
+            }
+        }
+        IconButton(
+            onClick = {
+                isOpen.value = true
+            }
+        ) {
+            Icon(
+                Icons.Outlined.Clear,
+                contentDescription = stringResource(R.string.delete)
+            )
+        }
     }
+    AlertDialogDeleteElement(
+        isOpen = isOpen,
+        delete = delete,
+        position = position
+    )
 }
 
 @Composable

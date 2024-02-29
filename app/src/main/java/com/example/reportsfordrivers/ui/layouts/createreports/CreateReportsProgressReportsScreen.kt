@@ -1,7 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
 import androidx.activity.compose.BackHandler
-import androidx.annotation.StringRes
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -22,14 +21,13 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -38,12 +36,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
+import com.example.reportsfordrivers.ui.AlertDialogDeleteElement
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
+import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
 
 @Composable
@@ -140,8 +139,15 @@ fun CreateReportsProgressReportsScreen(
             }
 
             Column {
-                for (i in viewModel.uiState.value.listProgress) {
-                    ColumnProgressReports(i)
+                for (i in 0..<viewModel.uiState.value.listProgress.size) {
+                    ColumnProgressReports(
+                        viewModel.uiState.value.listProgress[i],
+                        viewModel::deletePositionProgressReports,
+                        viewModel.openDialogProgressReportsDelete,
+                        i,
+                        viewModel.uiState.value.listProgress.size
+                    )
+
                 }
             }
 
@@ -153,43 +159,54 @@ fun CreateReportsProgressReportsScreen(
 
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            onBack = { navController.navigateUp() }
+            onBack = { navController.navigateUp() },
+            enabled = viewModel.isValidateNextProgressReports()
         )
     }
 }
 
 @Composable
-fun ColumnProgressReports(progressReports: ProgressReports) {
+fun ColumnProgressReports(
+    progressReports: ProgressReports,
+    delete: (Int) -> Unit,
+    isOpen: MutableState<Boolean>,
+    position: Int,
+    size: Int
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            RowProgressReports(
+            RowProgressAndExpenses(
                 title = R.string.date,
                 text = progressReports.progressDetails.date
             )
-            RowProgressReports(
+            RowProgressAndExpenses(
                 title = R.string.country,
                 text = progressReports.progressDetails.country
             )
-            RowProgressReports(
+            RowProgressAndExpenses(
                 title = R.string.township,
                 text = progressReports.progressDetails.township
             )
-            RowProgressReports(
+            RowProgressAndExpenses(
                 title = R.string.distance,
                 text = progressReports.progressDetails.distance
             )
-            RowProgressReports(
+            RowProgressAndExpenses(
                 title = R.string.cargo_weight,
                 text = progressReports.progressDetails.cargoWeight
             )
-            Divider(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 10.dp)
-            )
+            if(size - 1 != position) {
+                Divider(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 10.dp)
+                )
+            }
         }
         IconButton(
-            onClick = {}
+            onClick = {
+                isOpen.value = true
+            }
         ) {
             Icon(
                 Icons.Outlined.Clear,
@@ -197,22 +214,11 @@ fun ColumnProgressReports(progressReports: ProgressReports) {
             )
         }
     }
-}
-
-@Composable
-fun RowProgressReports(@StringRes title: Int, text: String) {
-    Row(modifier = Modifier.fillMaxWidth(1f)) {
-        Text(
-            text = stringResource(title),
-            modifier = Modifier.weight(1f)
-        )
-        Text(text = "-")
-        Text(
-            text = text,
-            modifier = Modifier.weight(2f),
-            textAlign = TextAlign.End
-        )
-    }
+    AlertDialogDeleteElement(
+        isOpen = isOpen,
+        delete = delete,
+        position = position
+    )
 }
 
 @Composable
@@ -256,18 +262,19 @@ fun TabRowProgressReports(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ColumnProgressReportsPreview() {
-    ColumnProgressReports(
-        ProgressReports(
-            ProgressDetails(
-                country = "BY",
-                township = "Minsk-Kazan",
-                distance = "1500",
-                cargoWeight = "15",
-                date = "02.11"
-            )
-        )
-    )
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun ColumnProgressReportsPreview() {
+//    ColumnProgressReports(
+//        ProgressReports(
+//            ProgressDetails(
+//                country = "BY",
+//                township = "Minsk-Kazan",
+//                distance = "1500",
+//                cargoWeight = "15",
+//                date = "02.11"
+//            )
+//        )
+//    ) {}
+//}

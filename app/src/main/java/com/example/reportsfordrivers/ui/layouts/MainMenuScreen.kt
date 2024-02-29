@@ -38,7 +38,7 @@ fun MainMenuScreen(
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize()
-            .padding(30.dp)
+            .padding(38.dp)
     ) {
         OutlinedButton(
             onClick = onCreateReport,

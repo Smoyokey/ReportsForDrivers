@@ -4,16 +4,12 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
@@ -34,10 +30,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
 
-private const val TAG = "DataFillingOneViewModel"
+private const val TAG = "CreateReportsViewModel"
 
 @HiltViewModel
-class   CreateReportsViewModel @Inject constructor(
+class CreateReportsViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository
 ) : ViewModel() {
 
@@ -58,12 +54,10 @@ class   CreateReportsViewModel @Inject constructor(
     var openDialogDataFillingTwoDateCrossingReturn = mutableStateOf(false)
 
     var openDialogProgressReportsDate = mutableStateOf(false)
+    var openDialogProgressReportsDelete = mutableStateOf(false)
 
     var openDialogTripExpenseDate = mutableStateOf(false)
-
-    var tabIndex = mutableStateOf(0)
-    val tabs = listOf("1", "2", "3", "4", "5", "6")
-
+    var openDialogTripExpensesDelete = mutableStateOf(false)
 
 
     private fun updateDataReportInfo(dataReportInfo: DataReportInfo) {
@@ -265,6 +259,10 @@ class   CreateReportsViewModel @Inject constructor(
         return uiState.value.listProgress.size > 0
     }
 
+    fun deletePositionProgressReports(position: Int) {
+        uiState.value.listProgress.removeAt(position)
+    }
+
     private fun updateTripExpensesDetails(tripExpensesDetails: TripExpensesDetails) {
         uiStateTripExpenses.value = uiStateTripExpenses.value
             .copy(tripExpensesDetails = tripExpensesDetails)
@@ -310,9 +308,13 @@ class   CreateReportsViewModel @Inject constructor(
                 uiStateTripExpenses.value.tripExpensesDetails.currency != ""
     }
 
-    fun isValidateNextTripExpenses(): Boolean {
-        return uiState.value.listTripExpenses.size > 0
+    fun deletePositionTripExpense(position: Int) {
+        uiState.value.listTripExpenses.removeAt(position)
     }
+
+//    fun isValidateNextTripExpenses(): Boolean {
+//        return uiState.value.listTripExpenses.size > 0
+//    }
 
     fun updatePreviewReportName(reportName: String) {
         uiState.value = uiState.value.copy(reportName = reportName)
@@ -337,8 +339,7 @@ class   CreateReportsViewModel @Inject constructor(
     }
 
     fun saveFile(context: Context) {
-        writeFile("download/", "Print.doc", context)
-        Log.i(TAG, "File create")
+        writeFile(context)
     }
 
     fun testShare(context: Context) {
@@ -346,9 +347,9 @@ class   CreateReportsViewModel @Inject constructor(
     }
 
     private fun downloadFile(context: Context) {
-        val filePath: File = File(context.filesDir, "docs")
+        val filePath = File(context.filesDir, "docs")
         filePath.mkdir()
-        val newFile = File(filePath, "MyNewFile.doc")
+        val newFile = File(filePath, "${uiState.value.reportName}.docx")
         newFile.delete()
         newFile.createNewFile()
         val contentUri = FileProvider.getUriForFile(
@@ -361,6 +362,7 @@ class   CreateReportsViewModel @Inject constructor(
             fileWriter = FileWriter(newFile)
             fileWriter.append(onePageHtml())
         } catch (e: Exception) {
+            Log.e(TAG, e.printStackTrace().toString())
         }
         fileWriter!!.close()
 
@@ -377,10 +379,10 @@ class   CreateReportsViewModel @Inject constructor(
         context.startActivity(Intent.createChooser(shareIntent, "My First Doc"))
     }
 
-    private fun writeFile(filePath: String, fileName: String, context: Context) {
+    private fun writeFile(context: Context) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
-                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.Downloads.DISPLAY_NAME, "${uiState.value.reportName}.docx")
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
             }
             val resolver = context.contentResolver
@@ -395,7 +397,8 @@ class   CreateReportsViewModel @Inject constructor(
             try {
                 //Создается объект файла, при этом путь к файлу находиться методом Environment
                 val myFile = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "${uiState.value.reportName}.docx"
                 )
 //            val myFile = File(context.filesDir, fileName)
                 // Создается файл, если он не был создан
@@ -547,7 +550,7 @@ ${if (uiState.value.listTripExpenses.size > 0) expenseTrip() else ""}
 
     private fun expenseTrip(): String {
         return """<head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">r
     <style>
         * {
             font-size: 14px;

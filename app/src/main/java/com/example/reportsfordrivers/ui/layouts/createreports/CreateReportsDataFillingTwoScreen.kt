@@ -146,7 +146,8 @@ fun CreateReportsDataFillingTwoScreen(
 
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-            onBack = { navController.navigateUp() }
+            onBack = { navController.navigateUp() },
+            enabled = viewModel.isNextDataFillingTwoValidate()
         )
     }
     DatePickerDialogCustom(

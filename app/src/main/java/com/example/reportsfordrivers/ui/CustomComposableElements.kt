@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -27,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
@@ -142,7 +146,8 @@ fun DatePickerDialogCustom(
 fun BottomBarCustom(
     modifier: Modifier = Modifier,
     onNext: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    enabled: Boolean = true
 ) {
     NavigationBar {
         NavigationBarItem(
@@ -161,17 +166,68 @@ fun BottomBarCustom(
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
-            }
+            },
+            modifier = modifier
         )
         NavigationBarItem(
             selected = false,
             onClick = { },
             icon = { },
             label = {
-                Button(onClick = onNext) {
+                Button(
+                    onClick = onNext,
+                    enabled = enabled
+                ) {
                     Text(text = stringResource(R.string.next))
                 }
+            },
+        )
+    }
+}
+
+@Composable
+fun AlertDialogDeleteElement(
+    isOpen: MutableState<Boolean>,
+    delete: (Int) -> Unit,
+    position: Int
+) {
+    if(isOpen.value) {
+        AlertDialog(
+            onDismissRequest = { isOpen.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        delete(position)
+                        isOpen.value = false
+                    }
+                ) {
+                    Text(text = stringResource(R.string.ok))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { isOpen.value = false }
+                ) {
+                    Text(text = stringResource(R.string.cancel))
+                }
             }
+        )
+    }
+}
+
+@Composable
+fun RowProgressAndExpenses(@StringRes title: Int, text: String) {
+    Row(modifier = Modifier.fillMaxWidth(1f)) {
+        Text(
+            text = stringResource(title),
+            modifier = Modifier.weight(1f),
+            style = typography.bodyMedium
+        )
+        Text(
+            text = text,
+            modifier = Modifier.weight(2f),
+            textAlign = TextAlign.End,
+            style = typography.bodyMedium
         )
     }
 }
@@ -180,5 +236,5 @@ fun BottomBarCustom(
 @Preview(showBackground = true)
 @Composable
 fun DatePickerDialogCustomPreview() {
-    DatePickerDialogCustom(mutableStateOf(true), {})
+    DatePickerDialogCustom(mutableStateOf(true)) {}
 }

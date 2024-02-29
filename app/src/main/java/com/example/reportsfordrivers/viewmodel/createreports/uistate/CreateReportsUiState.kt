@@ -3,27 +3,15 @@ package com.example.reportsfordrivers.viewmodel.createreports.uistate
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class CreateReports(
-//    val dataFillingOne: DataFillingOne = DataFillingOne(),
     val dataReportInfo: DataReportInfo = DataReportInfo(),
     val dataPersonalInfo: DataPersonalInfo = DataPersonalInfo(),
     val dataVehicleInfo: DataVehicleInfo = DataVehicleInfo(),
     val dataFillingTwo: DataFillingTwo = DataFillingTwo(),
     val listProgress: SnapshotStateList<ProgressReports> = SnapshotStateList(),
-    val listTripExpenses: MutableList<TripExpensesReports> = mutableListOf(),
+    val listTripExpenses: SnapshotStateList<TripExpensesReports> = SnapshotStateList(),
     val reportName: String = ""
 )
 
-//data class DataFillingOne(
-//    val date: String = "",
-//    val lastName: String = "",
-//    val firstName: String = "",
-//    val waybill: String = "",
-//    val patronymic: String = "",
-//    val makeVehicle: String = "",
-//    val rnVehicle: String = "",
-//    val makeTrailer: String = "",
-//    val rnTrailer: String = ""
-//)
 data class DataReportInfo (
     val date: String = "",
     val waybill: String = "",

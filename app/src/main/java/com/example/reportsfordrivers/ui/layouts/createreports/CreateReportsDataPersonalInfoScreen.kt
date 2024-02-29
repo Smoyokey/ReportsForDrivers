@@ -79,7 +79,8 @@ fun CreateReportsDataPersonalInfoScreen(
 
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) },
-            onBack = { navController.navigateUp() }
+            onBack = { navController.navigateUp() },
+            enabled = viewModel.isValidateDataPersonalInfo()
         )
     }
 }

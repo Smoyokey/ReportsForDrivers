@@ -22,6 +22,7 @@ import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
@@ -124,7 +125,7 @@ fun CreateReportsPreviewScreen(
         }
 
         BottomBarCustom(
-            onNext = onNext, onBack = onBack
+            onNext = onNext, onBack = onBack, enabled = viewModel.uiState.value.reportName != ""
         )
     }
 }
@@ -152,17 +153,14 @@ fun LinePreviewText(@StringRes textName: Int, previewText: String) {
     }
 }
 
-
-
-
 @Composable
 fun ProgressReportItem(item: ProgressDetails, size: Int, current: Int) {
     Column {
-        RowItem(title = R.string.date, text = item.date)
-        RowItem(title = R.string.country, text = item.country)
-        RowItem(title = R.string.township, text = item.township)
-        RowItem(title = R.string.distance, text = item.distance)
-        RowItem(title = R.string.cargo_weight, text = item.cargoWeight)
+        RowProgressAndExpenses(title = R.string.date, text = item.date)
+        RowProgressAndExpenses(title = R.string.country, text = item.country)
+        RowProgressAndExpenses(title = R.string.township, text = item.township)
+        RowProgressAndExpenses(title = R.string.distance, text = item.distance)
+        RowProgressAndExpenses(title = R.string.cargo_weight, text = item.cargoWeight)
         if(size - 1 != current) Divider()
     }
 }
@@ -170,35 +168,35 @@ fun ProgressReportItem(item: ProgressDetails, size: Int, current: Int) {
 @Composable
 fun TripExpensesItem(item: TripExpensesDetails, size: Int, current: Int) {
     Column {
-        RowItem(title = R.string.date, text = item.date)
-        RowItem(title = R.string.document_number, text = item.documentNumber)
-        RowItem(title = R.string.expense_item, text = item.expenseItem)
-        RowItem(title = R.string.sum, text = item.sum)
-        RowItem(title = R.string.currency, text = item.currency)
+        RowProgressAndExpenses(title = R.string.date, text = item.date)
+        RowProgressAndExpenses(title = R.string.document_number, text = item.documentNumber)
+        RowProgressAndExpenses(title = R.string.expense_item, text = item.expenseItem)
+        RowProgressAndExpenses(title = R.string.sum, text = item.sum)
+        RowProgressAndExpenses(title = R.string.currency, text = item.currency)
         if(size - 1 != current) Divider()
     }
 }
 
-@Composable
-fun RowItem(@StringRes title: Int, text: String) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = stringResource(title),
-            modifier = Modifier.weight(1f),
-            style = typography.bodyMedium
-        )
-        Text(
-            text = "-",
-            style = typography.bodyMedium
-        )
-        Text(
-            text = text,
-            modifier = Modifier.weight(2f),
-            style = typography.bodyMedium,
-            textAlign = TextAlign.End
-        )
-    }
-}
+//@Composable
+//fun RowItem(@StringRes title: Int, text: String) {
+//    Row(modifier = Modifier.fillMaxWidth()) {
+//        Text(
+//            text = stringResource(title),
+//            modifier = Modifier.weight(1f),
+//            style = typography.bodyMedium
+//        )
+//        Text(
+//            text = "-",
+//            style = typography.bodyMedium
+//        )
+//        Text(
+//            text = text,
+//            modifier = Modifier.weight(2f),
+//            style = typography.bodyMedium,
+//            textAlign = TextAlign.End
+//        )
+//    }
+//}
 
 @Preview(showBackground = true)
 @Composable

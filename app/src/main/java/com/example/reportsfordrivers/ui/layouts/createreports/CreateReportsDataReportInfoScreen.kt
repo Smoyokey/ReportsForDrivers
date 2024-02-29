@@ -1,7 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -21,7 +19,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
@@ -33,7 +30,6 @@ import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun CreateReportsDataReportInfoScreen(
@@ -93,7 +89,8 @@ fun CreateReportsDataReportInfoScreen(
 
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
-            onBack = { navController.navigateUp() }
+            onBack = { navController.navigateUp() },
+            enabled = viewModel.isValidateDataReportInfo()
         )
     }
 
@@ -119,15 +116,16 @@ private fun TabRowReportInfoScreen(
             text = {
                 Text(
                     text = "2",
-                    color = MaterialTheme.colorScheme.error
+//                    color = MaterialTheme.colorScheme.error
                 )
             },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
             enabled = viewModel.isValidateDataReportInfo(),
-            modifier = Modifier.background(
-                if (viewModel.isValidateDataReportInfo()) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onPrimaryContainer
-            )
+//            modifier = Modifier.background(
+//                if (viewModel.isValidateDataReportInfo()) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onPrimaryContainer
+//            )
+            modifier = Modifier
         )
         Tab(
             text = { Text("3") },

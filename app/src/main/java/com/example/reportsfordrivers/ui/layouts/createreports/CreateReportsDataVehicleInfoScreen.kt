@@ -28,8 +28,6 @@ fun CreateReportsDataVehicleInfoScreen(
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-//    navController.popBackStack(ReportsForDriversSchema.PersonalInfo.name, false)
-
     BackHandler{
         navController.navigate(
             ReportsForDriversSchema.PersonalInfo.name,
@@ -85,7 +83,8 @@ fun CreateReportsDataVehicleInfoScreen(
 
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
-            onBack = { navController.navigateUp() }
+            onBack = { navController.navigateUp() },
+            enabled = viewModel.isValidateDataVehicleInfo()
         )
     }
 }
