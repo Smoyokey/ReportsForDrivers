@@ -177,27 +177,6 @@ fun TripExpensesItem(item: TripExpensesDetails, size: Int, current: Int) {
     }
 }
 
-//@Composable
-//fun RowItem(@StringRes title: Int, text: String) {
-//    Row(modifier = Modifier.fillMaxWidth()) {
-//        Text(
-//            text = stringResource(title),
-//            modifier = Modifier.weight(1f),
-//            style = typography.bodyMedium
-//        )
-//        Text(
-//            text = "-",
-//            style = typography.bodyMedium
-//        )
-//        Text(
-//            text = text,
-//            modifier = Modifier.weight(2f),
-//            style = typography.bodyMedium,
-//            textAlign = TextAlign.End
-//        )
-//    }
-//}
-
 @Preview(showBackground = true)
 @Composable
 fun ProgressReportItemPreview() {

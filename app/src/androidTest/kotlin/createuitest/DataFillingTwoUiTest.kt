@@ -41,6 +41,7 @@ class DataFillingTwoUiTest {
         composeRule.activity.setContent {
             CreateReportsDataFillingTwoScreen ()
         }
+
     }
 
     @Test
