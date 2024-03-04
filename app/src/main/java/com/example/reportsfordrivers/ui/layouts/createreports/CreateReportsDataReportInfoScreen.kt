@@ -60,7 +60,7 @@ fun CreateReportsDataReportInfoScreen(
         ) {
 
             OutlinedTextFieldDatePicker(
-                label = R.string.date,
+                label = R.string.date_create_report,
                 value = viewModel.uiState.value.dataReportInfo.date,
                 interactionSource = source,
                 onValueChange = viewModel::updateDataReportInfoDate,

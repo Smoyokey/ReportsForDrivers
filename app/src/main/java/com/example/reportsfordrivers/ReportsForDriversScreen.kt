@@ -110,10 +110,10 @@ fun AlertDialogToMainMenu(isOpen: MutableState<Boolean>, navigate: NavHostContro
                 }
             },
             title = {
-                Text(text = stringResource(R.string.test))
+                Text(text = stringResource(R.string.exit))
             },
             text = {
-                Text(text = stringResource(R.string.test))
+                Text(text = stringResource(R.string.are_you_sure))
             }
         )
     }

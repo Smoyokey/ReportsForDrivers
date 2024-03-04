@@ -54,7 +54,7 @@ fun CreateReportsPreviewScreen(
 
             Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp))
 
-            LinePreviewText(R.string.date, viewModel.uiState.value.dataReportInfo.date)
+            LinePreviewText(R.string.date_create_report, viewModel.uiState.value.dataReportInfo.date)
             LinePreviewText(R.string.last_name, viewModel.uiState.value.dataPersonalInfo.lastName)
             LinePreviewText(R.string.first_name, viewModel.uiState.value.dataPersonalInfo.firstName)
             LinePreviewText(R.string.patronymic, viewModel.uiState.value.dataPersonalInfo.patronymic)

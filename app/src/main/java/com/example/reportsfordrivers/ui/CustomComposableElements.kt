@@ -176,7 +176,7 @@ fun BottomBarCustom(
             label = {
                 Button(
                     onClick = onNext,
-                    enabled = enabled
+                    enabled = true
                 ) {
                     Text(text = stringResource(R.string.next))
                 }

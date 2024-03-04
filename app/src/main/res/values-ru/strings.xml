@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Легкие отчёты</string>
+
+    <string name="driver_report">Отчет о командировке</string>
+    <string name="history_report">История отчетов</string>
+
+    <string name="last_name">Фамилия</string>
+    <string name="first_name">Имя</string>
+    <string name="patronymic">Отчество</string>
+    <string name="vehicle">Авто/м</string>
+    <string name="trailer">Прицеп</string>
+    <string name="make_vehicle_trailer">Марка авто/м / прицепа</string>
+    <string name="make_vehicle">Марка авто/м</string>
+    <string name="make_trailer">Марка прицепа</string>
+    <string name="registration_number_vehicle_trailer">Registration number of the vehicle /
+        trailer</string>
+    <string name="registration_number_vehicle">Государственный номер авто/м</string>
+    <string name="registration_number_trailer">Государственный номер прицепа</string>
+    <string name="rn_vehicle_trailer">Г/н авто/м / прицепа</string>
+    <string name="rn_vehicle">Г/н авто/м</string>
+    <string name="rn_trailer">Г/н прицепа</string>
+    <string name="add">Добавить</string>
+    <string name="type">Тип</string>
+    <string name="make">Марка</string>
+    <string name="rn">г/н</string>
+    <string name="save_entered_data">Сохранить введенные данные?</string>
+    <string name="skip">Пропустить</string>
+    <string name="save">Сохранить</string>
+    <string name="info">Информация</string>
+    <string name="clear">Очистить</string>
+    <string name="driver">Водитель:</string>
+
+
+    <string name="create_report">Создать отчёт</string>
+    <string name="be_continued">Продолжить</string>
+    <string name="report_history">История отчетов</string>
+    <string name="settings">Настройки</string>
+
+
+<!--    <string name="selecting_layout">Selecting a </string>-->
+    <string name="next">Дальше</string>
+    <string name="date">Дата</string>
+    <string name="data_filling">Data filling</string>
+    <string name="route">Маршрут</string>
+    <string name="date_departure">Дата выезда</string>
+    <string name="date_return">Дата возврата</string>
+    <string name="date_border_crossing_departure">Дата пересечения границы при выезде</string>
+    <string name="date_border_crossing_return">Дата пересечения границы при возврате</string>
+    <string name="speedometer_reading_departure">Показания спидометра при выезде</string>
+    <string name="speedometer_reading_return">Показания спидометра при возврате</string>
+    <string name="fuelled">Заправлено, л</string>
+    <string name="progress_report">Отчет о этапах</string>
+    <string name="country">Страна</string>
+    <string name="township">Город</string>
+    <string name="townships">Населенные пункты</string>
+    <string name="distance">Расстояние, км</string>
+    <string name="cargo_weight">Вес груза, т</string>
+    <string name="preview">Предпросмотр</string>
+    <string name="reports_name">Reports name</string>
+    <string name="result">Результат</string>
+    <string name="share">Поделиться</string>
+    <string name="create_new_report">Создать новый отчет</string>
+    <string name="come_out">Come out</string>
+    <string name="delete">Удалить</string>
+    <string name="ok">Ок</string>
+<!--    <string name="choosing_layout">Choosing a layout</string>-->
+    <string name="data">Дата</string>
+    <string name="stages_movement">Этапы движения</string>
+    <string name="business_trip_expenses">Расходы по командировке</string>
+    <string name="current_date">Текущая дата</string>
+    <string name="document_number">Номер документа</string>
+    <string name="expense_item">Статья расходов</string>
+    <string name="sum">Сумма</string>
+    <string name="currency">Валюта</string>
+    <string name="waybill">Путевой лист</string>
+    <string name="date_create_report">Дата создания отчета</string>
+
+    <string name="empty_create_first_report">Empty? Create your first report</string>
+    <string name="create">Создать</string>
+    <string name="edit">Edit</string>
+
+
+    <string name="personal_data">Личные данные</string>
+    <string name="data_vehicles_trailers">Данные о авто/м и прицепах</string>
+    <string name="feedback">Обратная свяль (предложения и пожелания)</string>
+    <string name="cancel">Отмена</string>
+    <string name="your_name">Ваше имя</string>
+    <string name="your_contact_email">Your contact email</string>
+    <string name="text_appeal">Text of the appeal</string>
+    <string name="attach_file">Attach file</string>
+    <string name="attached_files">Attached files:</string>
+    <string name="send">Отправить</string>
+    <string name="exit">Выход</string>
+
+    <string name="back_button">Назад</string>
+
+    <string name="test">TEST</string>
+    <string name="vehicle_test">VEHICLE</string>
+    <string name="trailer_test">TRAILER</string>
+
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="are_you_sure">Вы уверенны?</string>
+    <string name="deletion">Удаление</string>
+
+    <string name="report_information">Информация об отчете</string>
+    <string name="personal_information">Персональная информация</string>
+    <string name="vehicle_trailer_information">Информация о авто/м и прицепе</string>
+
+</resources>

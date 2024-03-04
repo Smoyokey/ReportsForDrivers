@@ -7,8 +7,6 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
     FirstEntry(title = R.string.driver_report),
     Start(title = R.string.driver_report),
 
-//    SelectLayout(title = R.string.choosing_layout),
-//    FillingDataOne(title = R.string.data),
     ReportInfo(title = R.string.report_information),
     PersonalInfo(title = R.string.personal_information),
     VehicleInfo(title = R.string.vehicle_trailer_information),
@@ -21,8 +19,8 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
     ListHistory(title = R.string.history_report),
     SelectElementHistory(title = R.string.history_report),
 
-    SettingStart(title = R.string.setting),
-    PersonalInformation(title = R.string.setting),
-    VehicleAndTrailerData(title = R.string.setting),
-    Feedback(title = R.string.setting)
+    SettingStart(title = R.string.settings),
+    PersonalInformation(title = R.string.settings),
+    VehicleAndTrailerData(title = R.string.settings),
+    Feedback(title = R.string.settings)
 }
