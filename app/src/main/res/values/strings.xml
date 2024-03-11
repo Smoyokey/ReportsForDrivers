@@ -111,6 +111,7 @@
     <string name="personal_information">Personal information</string>
     <string name="vehicle_trailer_information">Vehicle and trailer info</string>
 
-
+    <string name="load_date">Load date</string>
+    <string name="select_date">Select date</string>
 
 </resources>

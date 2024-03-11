@@ -1,23 +1,19 @@
 package com.example.reportsfordrivers.ui.layouts.setting
 
-import androidx.compose.foundation.clickable
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,12 +21,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.RowVehicleAndTrailerElement
+import com.example.reportsfordrivers.viewmodel.setting.DataVehiclesTrailersViewModel
 
 @Composable
-fun SettingDataVehiclesTrailersScreen() {
-    Column() {
+fun SettingDataVehiclesTrailersScreen(
+    viewModel: DataVehiclesTrailersViewModel = hiltViewModel()
+) {
+    Column(
+        modifier = Modifier.fillMaxHeight()
+    ) {
         Text(
             text = stringResource(R.string.data_vehicles_trailers),
             style = TextStyle(
@@ -51,14 +55,30 @@ fun SettingDataVehiclesTrailersScreen() {
             RadioButtonSettingDataVehiclesTrailers(text = R.string.trailer, modifier = Modifier.weight(1f))
         }
 
-        OutlinedTextFieldSettingDataVehiclesTrailers()
+        OutlinedTextFieldCustom(
+            label = R.string.make_vehicle,
+            value = viewModel.objectVehicleUiState.value.make,
+            onValueChange = viewModel::updateMake,
+            tag = Tags.TAG_TEST_SETTING_DATA_VEHICLE_MAKE,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.rn_trailer,
+            value = viewModel.objectVehicleUiState.value.make,
+            onValueChange = viewModel::updateRn,
+            tag = Tags.TAG_TEST_SETTING_DATA_VEHICLE_RN,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                          Log.i("TAGs", viewModel.uiState.value.listVehicles.size.toString())
+                },
             ) {
                 Text(
                     text = stringResource(R.string.add)
@@ -70,8 +90,13 @@ fun SettingDataVehiclesTrailersScreen() {
             modifier = Modifier.padding(10.dp)
         )
 
-        //Дальше идет таблица
-        //Надо подумать как красиво реализовать
+        for(i in viewModel.uiState.value.listVehicles) {
+            RowVehicleAndTrailerElement(
+                objectVehicle = i,
+                isOpenDialog = viewModel.isOpenDialogSaveElement,
+                onDelete = viewModel::deletePositionVehicle
+            )
+        }
     }
 }
 
@@ -93,52 +118,6 @@ fun RadioButtonSettingDataVehiclesTrailers(text: Int, modifier: Modifier = Modif
                 fontWeight = FontWeight(400),
                 textAlign = TextAlign.Justify
             )
-        )
-    }
-}
-
-@Composable
-fun OutlinedTextFieldSettingDataVehiclesTrailers() {
-    Column() {
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.make_vehicle)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(true) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_SETTING_DATA_VEHICLE_MAKE)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.rn_vehicle)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(true) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_SETTING_DATA_VEHICLE_RN)
-                    )
-                }
-            }
         )
     }
 }

@@ -25,8 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.viewmodel.setting.PersonalDataViewModel
 
 /**
  * Класс отображения экрана, возможность изменения персональных данных
@@ -35,7 +38,9 @@ import com.example.reportsfordrivers.Tags
  */
 
 @Composable
-fun SettingPersonalDataScreen() {
+fun SettingPersonalDataScreen(
+    viewModel: PersonalDataViewModel = hiltViewModel()
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,20 +48,30 @@ fun SettingPersonalDataScreen() {
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        Text(
-            text = stringResource(R.string.personal_data),
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight(400),
-                textAlign = TextAlign.Center
-            ),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Divider(
-            modifier = Modifier.padding(10.dp)
+
+        OutlinedTextFieldCustom(
+            label = R.string.last_name,
+            value = viewModel.uiState.value.lastName,
+            onValueChange = viewModel::updateLastName,
+            tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_LAST_NAME,
+            modifier = Modifier.fillMaxWidth()
         )
 
-        SettingPersonalDataOutlinedTextFieldScreen()
+        OutlinedTextFieldCustom(
+            label = R.string.first_name,
+            value = viewModel.uiState.value.firstName,
+            onValueChange = viewModel::updateFirstName,
+            tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_FIRST_NAME,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextFieldCustom(
+            label = R.string.patronymic,
+            value = viewModel.uiState.value.patronymic,
+            onValueChange = viewModel::updatePatronymic,
+            tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_PATRONYMIC,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Divider(
             modifier = Modifier.padding(10.dp)
@@ -74,7 +89,9 @@ fun SettingPersonalDataScreen() {
                 )
             }
             Button(
-                onClick = {},
+                onClick = {
+                    viewModel.saveButton()
+                },
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
@@ -82,72 +99,6 @@ fun SettingPersonalDataScreen() {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun SettingPersonalDataOutlinedTextFieldScreen() {
-    Column() {
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.last_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(true) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_SETTING_PERSONAL_DATA_LAST_NAME)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.first_name)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(true) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_SETTING_PERSONAL_DATA_FIRST_NAME)
-                    )
-                }
-            }
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(R.string.patronymic)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            trailingIcon = {
-                if(true) {
-                    Icon(
-                        imageVector = Icons.Outlined.Clear,
-                        contentDescription = stringResource(R.string.clear),
-                        modifier = Modifier
-                            .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
-                            }
-                            .testTag(Tags.TAG_TEST_SETTING_PERSONAL_DATA_PATRONYMIC)
-                    )
-                }
-            }
-        )
     }
 }
 

@@ -21,4 +21,6 @@ class MainMenuViewModel @Inject constructor(
     fun isFirstEntry(): Boolean = runBlocking {
         return@runBlocking firstEntryPreferencesRepository.getFirstEntry().getOrNull() ?: false
     }
+
+
 }

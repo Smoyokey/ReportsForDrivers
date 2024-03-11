@@ -10,19 +10,27 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
+import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
+import com.example.reportsfordrivers.data.structure.VehicleAndTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
+import com.example.reportsfordrivers.viewmodel.ObjectVehicle
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateReports
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataFillingTwo
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataPersonalInfo
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataReportInfo
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.DataVehicleInfo
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.ListVehicleAndTrailer
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
+import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
@@ -37,6 +45,9 @@ class CreateReportsViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository
 ) : ViewModel() {
 
+    @Inject
+    lateinit var vehicleAndTrailer: VehicleAndTrailerSaveDataDao
+
     var uiState = mutableStateOf(CreateReports())
         private set
 
@@ -45,6 +56,8 @@ class CreateReportsViewModel @Inject constructor(
 
     var uiStateTripExpenses = mutableStateOf(TripExpensesReports())
         private set
+
+    var uiStateListVehicle = mutableStateOf(ListVehicleAndTrailer())
 
     var openDialogDataReportInfoDate = mutableStateOf(false)
 
@@ -59,6 +72,69 @@ class CreateReportsViewModel @Inject constructor(
     var openDialogTripExpenseDate = mutableStateOf(false)
     var openDialogTripExpensesDelete = mutableStateOf(false)
 
+    var openDialogCreateVehicle = mutableStateOf(false)
+    var openDialogCreateTrailer = mutableStateOf(false)
+
+    private var firstOpenPersonalScreen = mutableStateOf(false)
+
+    var openMenuMakeVehicle = mutableStateOf(false)
+    var openMenuMakeTrailer = mutableStateOf(false)
+
+    fun startFio() = runBlocking {
+        if (!firstOpenPersonalScreen.value) {
+            uiState.value = uiState.value.copy(
+                dataPersonalInfo = uiState.value.dataPersonalInfo.copy(
+                    lastName = fioPreferencesRepository.getLastName().getOrDefault(""),
+                    firstName = fioPreferencesRepository.getFirstName().getOrDefault(""),
+                    patronymic = fioPreferencesRepository.getPatronymic().getOrDefault("")
+                )
+            )
+            firstOpenPersonalScreen.value = true
+        }
+    }
+
+    fun startLoadDB() = runBlocking {
+        val list = vehicleAndTrailer.getAllItem().first()
+        addListVehicleTrailer(list)
+    }
+
+    fun saveObjectInDB(objectVehicle: ObjectVehicle) = runBlocking {
+        vehicleAndTrailer.insert(
+            VehicleAndTrailer(
+                vehicleOrTrailer = objectVehicle.type,
+                make = objectVehicle.make,
+                registrationNumber = objectVehicle.rn
+            )
+        )
+        val list = vehicleAndTrailer.getAllItem().first()
+        addListVehicleTrailer(list)
+    }
+
+    private fun addListVehicleTrailer(list: List<VehicleAndTrailer>) {
+        val listObjectVehicle = mutableListOf<ObjectVehicle>()
+        val listObjectTrailer = mutableListOf<ObjectVehicle>()
+        for (i in list) {
+            if (i.vehicleOrTrailer == VehicleOrTrailer.VEHICLE.name) {
+                listObjectVehicle.add(
+                    ObjectVehicle(
+                        type = i.vehicleOrTrailer,
+                        make = i.make,
+                        rn = i.registrationNumber
+                    )
+                )
+            } else {
+                listObjectTrailer.add(
+                    ObjectVehicle(
+                        type = i.vehicleOrTrailer,
+                        make = i.make,
+                        rn = i.registrationNumber
+                    )
+                )
+            }
+        }
+        uiStateListVehicle.value.listVehicle = listObjectVehicle
+        uiStateListVehicle.value.listTrailer = listObjectTrailer
+    }
 
     private fun updateDataReportInfo(dataReportInfo: DataReportInfo) {
         uiState.value = uiState.value.copy(dataReportInfo = dataReportInfo)
@@ -269,7 +345,7 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun updateTripExpensesDate(date: String) {
-        val parseDate = if(date.isNotEmpty()) parseDateDayMonth(date) else date
+        val parseDate = if (date.isNotEmpty()) parseDateDayMonth(date) else date
         updateTripExpensesDetails(uiStateTripExpenses.value.tripExpensesDetails.copy(date = parseDate))
     }
 
@@ -380,7 +456,7 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     private fun writeFile(context: Context) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
                 put(MediaStore.Downloads.DISPLAY_NAME, "${uiState.value.reportName}.docx")
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
@@ -388,7 +464,7 @@ class CreateReportsViewModel @Inject constructor(
             val resolver = context.contentResolver
             val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
 
-            if(uri != null) {
+            if (uri != null) {
                 val fileOutputStream = resolver.openOutputStream(uri)
                 fileOutputStream?.write(onePageHtml().toByteArray())
                 fileOutputStream?.close()

@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers.viewmodel.createreports.uistate
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.example.reportsfordrivers.viewmodel.ObjectVehicle
 
 data class CreateReports(
     val dataReportInfo: DataReportInfo = DataReportInfo(),
@@ -64,4 +65,9 @@ data class TripExpensesDetails(
     val expenseItem: String = "",
     val sum: String = "",
     val currency: String = ""
+)
+
+data class ListVehicleAndTrailer(
+    var listVehicle: MutableList<ObjectVehicle> = mutableListOf(),
+    var listTrailer: MutableList<ObjectVehicle> = mutableListOf()
 )

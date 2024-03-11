@@ -32,17 +32,30 @@ fun SettingMainScreen(onPersonalData: () -> Unit,
         modifier = Modifier.fillMaxSize()
             .padding(10.dp)
     ) {
-        ButtonSetting(R.string.personal_data, onClick = onPersonalData)
-        ButtonSetting(R.string.data_vehicles_trailers, onClick = onVehicleAndTrailerDate)
-        ButtonSetting(R.string.feedback, onClick = onFeedback)
+        ButtonSetting(
+            R.string.personal_data,
+            onClick = onPersonalData,
+            enabled = true
+        )
+        ButtonSetting(
+            R.string.data_vehicles_trailers,
+            onClick = onVehicleAndTrailerDate,
+            enabled = true
+        )
+        ButtonSetting(
+            R.string.feedback,
+            onClick = onFeedback,
+            enabled = false
+        )
     }
 }
 
 @Composable
-fun ButtonSetting(text: Int, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun ButtonSetting(text: Int, modifier: Modifier = Modifier, onClick: () -> Unit, enabled: Boolean) {
     Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        enabled = enabled
     ) {
         Text(
             text = stringResource(text),

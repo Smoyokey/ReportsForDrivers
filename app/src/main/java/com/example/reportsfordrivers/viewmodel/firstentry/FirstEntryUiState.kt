@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers.viewmodel.firstentry
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.example.reportsfordrivers.viewmodel.ObjectVehicle
 
 
 data class VehicleObject(
@@ -26,12 +27,6 @@ data class IsSelectedVehicleAndTrailer(
 data class MakeRnItemDetails (
     val make: String = "",
     val rn: String = ""
-)
-
-data class ObjectVehicle(
-    val make: String = "",
-    val rn: String = "",
-    val vehicleOrTrailer: VehicleOrTrailer = VehicleOrTrailer.VEHICLE
 )
 
 enum class VehicleOrTrailer(title: String) {

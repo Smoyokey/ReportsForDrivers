@@ -1,8 +1,10 @@
 package com.example.reportsfordrivers.navigate
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,15 +26,17 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScree
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
+import com.example.reportsfordrivers.viewmodel.setting.PersonalDataViewModel
 
 @Composable
 fun ReportsForDriversNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModelFirst: FirstEntryViewModel = hiltViewModel<FirstEntryViewModel>(),
-    viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>(),
-    viewModelCreateReports: CreateReportsViewModel = hiltViewModel<CreateReportsViewModel>()
 ) {
+    val viewModelFirst: FirstEntryViewModel = hiltViewModel<FirstEntryViewModel>()
+    val viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>()
+    val viewModelCreateReports: CreateReportsViewModel = hiltViewModel<CreateReportsViewModel>()
+
     NavHost(
         navController = navController,
         startDestination = ReportsForDriversSchema.Start.name,
@@ -60,7 +64,7 @@ fun ReportsForDriversNavHost(
                     onSetting = {
                         navController.navigate(ReportsForDriversSchema.SettingStart.name)
                     },
-                    viewModel = viewModelMain
+                    viewModel = viewModelMain,
                 )
             }
         }

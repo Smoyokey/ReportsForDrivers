@@ -20,7 +20,7 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
     SelectElementHistory(title = R.string.history_report),
 
     SettingStart(title = R.string.settings),
-    PersonalInformation(title = R.string.settings),
+    PersonalInformation(title = R.string.personal_data),
     VehicleAndTrailerData(title = R.string.settings),
     Feedback(title = R.string.settings)
 }

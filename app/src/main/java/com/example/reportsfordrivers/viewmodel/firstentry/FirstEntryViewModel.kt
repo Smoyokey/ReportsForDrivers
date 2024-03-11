@@ -8,6 +8,7 @@ import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.repositories.VehicleAndTrailerSaveDataRepository
 import com.example.reportsfordrivers.data.structure.VehicleAndTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
+import com.example.reportsfordrivers.viewmodel.ObjectVehicle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -105,17 +106,13 @@ class FirstEntryViewModel @Inject constructor (
          if(uiState.value.listVehicles.size > 0) {
              for(i in uiState.value.listVehicles) {
                  val a = VehicleAndTrailer(
-                     vehicleOrTrailer = i.vehicleOrTrailer.name,
+                     vehicleOrTrailer = i.type,
                      make = i.make,
                      registrationNumber = i.rn
                  )
                  vehicleAndTrailer.insert(a)
              }
          }
-
-         Log.i(TAG, fioFirstEntryPreferencesRepository.getFirstName().toString())
-         Log.i(TAG, fioFirstEntryPreferencesRepository.getLastName().toString())
-         Log.i(TAG, fioFirstEntryPreferencesRepository.getPatronymic().toString())
 
          Log.i(TAG, vehicleAndTrailer.getOneItem(0).toString())
     }
@@ -148,10 +145,10 @@ class FirstEntryViewModel @Inject constructor (
         return ObjectVehicle(
             make = vehicleUiState.value.makeRnItemDetails.make,
             rn = vehicleUiState.value.makeRnItemDetails.rn,
-            vehicleOrTrailer = if(vehicleUiState.value.isSelected.stateRadioGroup)
-                VehicleOrTrailer.VEHICLE
+            type = if(vehicleUiState.value.isSelected.stateRadioGroup)
+                VehicleOrTrailer.VEHICLE.name
             else
-                VehicleOrTrailer.TRAILER
+                VehicleOrTrailer.TRAILER.name
         )
     }
 

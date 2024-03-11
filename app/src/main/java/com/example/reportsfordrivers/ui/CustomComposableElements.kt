@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -16,6 +19,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -25,15 +29,21 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
+import com.example.reportsfordrivers.viewmodel.ObjectVehicle
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -67,6 +77,28 @@ fun OutlinedTextFieldCustom(
         }
     )
 }
+
+//@Composable
+//fun OutlinedTextFieldWithMenu(
+//   @StringRes label: Int,
+//   value: String,
+//   onValueChange: (String) -> Unit,
+//) {
+//    OutlinedTextField(
+//        value = value,
+//        onValueChange = { onValueChange(it) },
+//        label = { Text(stringResource(label)) },
+//        singleLine = true,
+//        trailingIcon = {
+//            Icon(
+//                imageVector = Icons.Outlined.ArrowDropDown,
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .clickable {}
+//            )
+//        }
+//    )
+//}
 
 @Composable
 fun OutlinedTextFieldDatePicker(
@@ -191,7 +223,7 @@ fun AlertDialogDeleteElement(
     delete: (Int) -> Unit,
     position: Int
 ) {
-    if(isOpen.value) {
+    if (isOpen.value) {
         AlertDialog(
             onDismissRequest = { isOpen.value = false },
             confirmButton = {
@@ -230,6 +262,157 @@ fun RowProgressAndExpenses(@StringRes title: Int, text: String) {
             style = typography.bodyMedium
         )
     }
+}
+
+@Composable
+fun RowVehicleAndTrailerElement(
+    objectVehicle: ObjectVehicle = ObjectVehicle(),
+    isOpenDialog: MutableState<Boolean> = mutableStateOf(false),
+    onDelete: (ObjectVehicle) -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.Start),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = objectVehicle.type,
+            modifier = Modifier.weight(1f),
+            style = typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = objectVehicle.make,
+            modifier = Modifier.weight(1f),
+            style = typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = objectVehicle.rn,
+            modifier = Modifier.weight(1f),
+            style = typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+        IconButton(
+            onClick = { isOpenDialog.value = true }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Clear,
+                contentDescription = stringResource(R.string.clear)
+            )
+        }
+    }
+    AlertDialogDeleteElementVehicle(
+        isOpenDialog = isOpenDialog,
+        onDelete = onDelete,
+        objectVehicle = objectVehicle
+    )
+
+}
+
+@Composable
+fun AlertDialogDeleteElementVehicle(
+    isOpenDialog: MutableState<Boolean>,
+    onDelete: (ObjectVehicle) -> Unit = {},
+    objectVehicle: ObjectVehicle
+
+) {
+    if (isOpenDialog.value) {
+        AlertDialog(
+            text = { Text(text = stringResource(R.string.are_you_sure)) },
+            title = { Text(text = stringResource(R.string.deletion)) },
+            onDismissRequest = { isOpenDialog.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onDelete(objectVehicle)
+                        isOpenDialog.value = false
+                    }
+                ) {
+                    Text(text = stringResource(R.string.yes))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { isOpenDialog.value = false }
+                ) {
+                    Text(text = stringResource(R.string.no))
+                }
+            }
+        )
+    }
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Composable
+fun AlertDialogAddVehicle(
+    isOpenDialog: MutableState<Boolean>,
+    @StringRes title: Int,
+    @StringRes headText: Int,
+    @StringRes labelMake: Int,
+    @StringRes labelRn: Int,
+    saveInDB: (ObjectVehicle) -> Unit,
+    type: String
+) {
+    val uiStateVehicleObject = remember { mutableStateOf(ObjectVehicle(type = type)) }
+
+    AlertDialog(
+        onDismissRequest = { isOpenDialog.value = false },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    saveInDB(
+                        ObjectVehicle(
+                            type = uiStateVehicleObject.value.type,
+                            make = uiStateVehicleObject.value.make,
+                            rn = uiStateVehicleObject.value.rn
+                        )
+                    )
+                    isOpenDialog.value = false
+                }
+            ) {
+                Text(text = stringResource(R.string.save))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = { isOpenDialog.value = false }
+            ) {
+                Text(text = stringResource(R.string.cancel))
+            }
+        },
+        title = {
+            Text(text = stringResource(title))
+        },
+        text = {
+            Column {
+                Text(text = stringResource(headText))
+                OutlinedTextFieldCustom(
+                    label = labelMake,
+                    value = uiStateVehicleObject.value.make,
+                    onValueChange = { text ->
+                        uiStateVehicleObject.value = uiStateVehicleObject.value.copy(make = text)
+                    },
+                    tag = ""
+                )
+                OutlinedTextFieldCustom(
+                    label = labelRn,
+                    value = uiStateVehicleObject.value.rn,
+                    onValueChange = { text ->
+                        uiStateVehicleObject.value = uiStateVehicleObject.value.copy(rn = text)
+                    },
+                    tag  =""
+                )
+            }
+        }
+    )
+
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun AlertDialogAddVehiclePreview() {
+
 }
 
 @SuppressLint("UnrememberedMutableState")
