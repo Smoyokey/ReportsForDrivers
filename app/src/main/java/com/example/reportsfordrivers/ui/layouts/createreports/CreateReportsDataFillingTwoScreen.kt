@@ -5,11 +5,19 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -30,7 +38,9 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
+import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.RouteElement
 
 @Composable
 fun CreateReportsDataFillingTwoScreen(
@@ -45,6 +55,8 @@ fun CreateReportsDataFillingTwoScreen(
                 .build()
         )
     }
+
+    
 
     val scrollState = rememberScrollState()
 
@@ -64,6 +76,11 @@ fun CreateReportsDataFillingTwoScreen(
     Column {
         TabRowDataFillingTwo(navController = navController, viewModel = viewModel)
 
+        if(viewModel.uiState.value.dataFillingTwo.route.size == 0) {
+            viewModel.uiState.value.dataFillingTwo.route.add(RouteElement(0, ""))
+            viewModel.uiState.value.dataFillingTwo.route.add(RouteElement(1, ""))
+        }
+
         Column(
             modifier = Modifier
                 .padding(start = 10.dp, end = 10.dp, top = 16.dp, bottom = 16.dp)
@@ -71,49 +88,85 @@ fun CreateReportsDataFillingTwoScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            OutlinedTextFieldCustom(
-                label = R.string.route,
-                value = viewModel.uiState.value.dataFillingTwo.route,
-                onValueChange = viewModel::updateDataFillingTwoRoute,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
-            )
 
-            OutlinedTextFieldDatePicker(
+            /**
+             * Для реализации нужен объект в котором будет его порядковый номер и значение
+             * А еще нужен список этих объектов, что бы хранить полностью информацию
+             */
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+//                OutlinedTextFieldCustom(
+//                    label = R.string.route,
+//                    value = viewModel.uiState.value.dataFillingTwo.route,
+//                    onValueChange = viewModel::updateDataFillingTwoRoute,
+//                    tag = Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE,
+//                    modifier = Modifier.weight(1f),
+//                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+//                )
+            }
+            for(i in 0..<viewModel.uiState.value.dataFillingTwo.route.size)
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextFieldCustom(
+                    label = R.string.route,
+                    value = viewModel.uiState.value.dataFillingTwo.route[i].text,
+                    onValueChange = { viewModel.updateDataFillingTwoRoute(it, i) },
+                    tag = "",
+                    modifier = Modifier.weight(1f)
+                )
+                if(i == viewModel.uiState.value.dataFillingTwo.route.size - 1) {
+                    IconButton(
+                        onClick = {
+                            viewModel.uiState.value.dataFillingTwo.route.add(
+                                RouteElement(i + 1, "")
+                            )
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Add,
+                            contentDescription = null
+                        )
+                    }
+                } else if(i != 0){
+                    IconButton(
+                        onClick = {
+                            viewModel.uiState.value.dataFillingTwo.route.removeAt(i)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Clear,
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+
+            Divider()
+
+            RowDate(
                 label = R.string.date_departure,
-                value = viewModel.uiState.value.dataFillingTwo.dateDeparture,
-                interactionSource = sourceDateDeparture,
-                onValueChange = viewModel::updateDataFillingTwoDateDeparture,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_DATE_DEPARTURE,
-                modifier = Modifier.fillMaxWidth()
+                openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
+                date = viewModel.uiState.value.dataFillingTwo.dateDeparture
             )
 
-            OutlinedTextFieldDatePicker(
+            RowDate(
                 label = R.string.date_return,
-                value = viewModel.uiState.value.dataFillingTwo.dateReturn,
-                interactionSource = sourceDateReturn,
-                onValueChange = viewModel::updateDataFillingTwoDateReturn,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_DATE_RETURN,
-                modifier = Modifier.fillMaxWidth()
+                openDialog = viewModel.openDialogDataFillingTwoDateReturn,
+                date = viewModel.uiState.value.dataFillingTwo.dateReturn
             )
 
-            OutlinedTextFieldDatePicker(
+            RowDate(
                 label = R.string.date_border_crossing_departure,
-                value = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
-                interactionSource = sourceDateCrossingDeparture,
-                onValueChange = viewModel::updateDataFillingTwoDateCrossingDeparture,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_DATE_CROSSING_DEPARTURE,
-                modifier = Modifier.fillMaxWidth()
+                openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
+                date = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture
             )
 
-            OutlinedTextFieldDatePicker(
+            RowDate(
                 label = R.string.date_border_crossing_return,
-                value = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
-                interactionSource = sourceDateCrossingReturn,
-                onValueChange = viewModel::updateDataFillingTwoDateCrossingReturn,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_DATE_CROSSING_RETURN,
-                modifier = Modifier.fillMaxWidth()
+                openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
+                date = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn
             )
 
             OutlinedTextFieldCustom(

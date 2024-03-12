@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.core.content.FileProvider
@@ -80,6 +81,7 @@ class CreateReportsViewModel @Inject constructor(
     var openMenuMakeVehicle = mutableStateOf(false)
     var openMenuMakeTrailer = mutableStateOf(false)
 
+    var routeSize = mutableIntStateOf(0)
     fun startFio() = runBlocking {
         if (!firstOpenPersonalScreen.value) {
             uiState.value = uiState.value.copy(
@@ -212,8 +214,10 @@ class CreateReportsViewModel @Inject constructor(
         uiState.value = uiState.value.copy(dataFillingTwo = itemDetails)
     }
 
-    fun updateDataFillingTwoRoute(route: String) {
-        updateDataFillingTwo(uiState.value.dataFillingTwo.copy(route = route))
+    fun updateDataFillingTwoRoute(route: String, index: Int) {
+//        updateDataFillingTwo(uiState.value.dataFillingTwo.copy(route = route))
+        uiState.value.dataFillingTwo.route[index] =
+            uiState.value.dataFillingTwo.route[index].copy(text = route)
     }
 
     fun updateDataFillingTwoDateReturn(dateReturn: String) {
@@ -273,14 +277,14 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun isNextDataFillingTwoValidate(): Boolean {
-        return uiState.value.dataFillingTwo.route != "" &&
-                uiState.value.dataFillingTwo.dateDeparture != "" &&
+        return uiState.value.dataFillingTwo.dateDeparture != "" &&
                 uiState.value.dataFillingTwo.dateReturn != "" &&
                 uiState.value.dataFillingTwo.dateCrossingDeparture != "" &&
                 uiState.value.dataFillingTwo.dateCrossingDeparture != "" &&
                 uiState.value.dataFillingTwo.speedometerDeparture != "" &&
                 uiState.value.dataFillingTwo.speedometerReturn != "" &&
                 uiState.value.dataFillingTwo.fuelled != ""
+//        uiState.value.dataFillingTwo.route != "" &&
     }
 
     private fun updateProgressDetails(progressDetails: ProgressDetails) {
@@ -292,10 +296,15 @@ class CreateReportsViewModel @Inject constructor(
         updateProgressDetails(uiStateProgressReports.value.progressDetails.copy(country = country))
     }
 
-    fun updateProgressReportsTownship(township: String) {
+    fun updateProgressReportsTownshipOne(townshipOne: String) {
         updateProgressDetails(
-            uiStateProgressReports.value.progressDetails
-                .copy(township = township)
+            uiStateProgressReports.value.progressDetails.copy(townshipOne = townshipOne)
+        )
+    }
+
+    fun updateProgressReportsTownshipTwo(townshipTwo: String) {
+        updateProgressDetails(
+            uiStateProgressReports.value.progressDetails.copy(townshipTwo = townshipTwo)
         )
     }
 
@@ -326,7 +335,8 @@ class CreateReportsViewModel @Inject constructor(
     fun validateAddProgressReports(): Boolean {
         return uiStateProgressReports.value.progressDetails.date != "" &&
                 uiStateProgressReports.value.progressDetails.country != "" &&
-                uiStateProgressReports.value.progressDetails.township != "" &&
+                uiStateProgressReports.value.progressDetails.townshipOne != "" &&
+                uiStateProgressReports.value.progressDetails.townshipTwo != "" &&
                 uiStateProgressReports.value.progressDetails.distance != "" &&
                 uiStateProgressReports.value.progressDetails.cargoWeight != ""
     }
@@ -704,7 +714,7 @@ ${if (uiState.value.listTripExpenses.size > 0) expenseTrip() else ""}
             a += """<tr>
         <td>${i.progressDetails.date}</td>
         <td>${i.progressDetails.country}</td>
-        <td>${i.progressDetails.township}</td>
+        <td>${i.progressDetails.townshipOne} - ${i.progressDetails.townshipTwo}</td>
         <td>${i.progressDetails.distance}</td>
         <td>${i.progressDetails.cargoWeight}</td>
     </tr>"""

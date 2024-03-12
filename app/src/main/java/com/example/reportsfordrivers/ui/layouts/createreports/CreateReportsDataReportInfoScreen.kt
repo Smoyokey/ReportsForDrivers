@@ -33,6 +33,7 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
+import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 
 @Composable
@@ -62,21 +63,11 @@ fun CreateReportsDataReportInfoScreen(
                 .padding(end = 10.dp, start = 10.dp, top = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(R.string.date_create_report),
-                    modifier = Modifier.weight(1f)
-                )
-                TextButton(
-                    onClick = { viewModel.openDialogDataReportInfoDate.value = true }
-                ) {
-                    Text(text = viewModel.uiState.value.dataReportInfo.date.ifEmpty {
-                        stringResource(R.string.select_date)
-                    })
-                }
-            }
+            RowDate(
+                label = R.string.date_create_report,
+                openDialog = viewModel.openDialogDataReportInfoDate,
+                date = viewModel.uiState.value.dataReportInfo.date
+            )
 
             OutlinedTextFieldCustom(
                 label = R.string.township,

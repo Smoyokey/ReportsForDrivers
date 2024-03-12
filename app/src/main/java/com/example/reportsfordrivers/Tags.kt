@@ -13,7 +13,8 @@ object Tags {
     const val TAG_TEST_FIRST_ENTRY_BUTTON_TABLE: String = "tagTestFirstEntryButtonTable"
 
     const val TAG_TEST_PROGRESS_REPORTS_COUNTRY: String = "tagTestProgressReportsCountry"
-    const val TAG_TEST_PROGRESS_REPORTS_TOWNSHIP: String = "tagTestProgressReportsTownship"
+    const val TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_ONE: String = "tagTestProgressReportsTownshipOne"
+    const val TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_TWO: String = "tagTestProgressReportsTownshipTwo"
     const val TAG_TEST_PROGRESS_REPORTS_DISTANCE: String = "tagTestProgressReportsDistance"
     const val TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT: String = "tagTestProgressReportsCargoWeight"
 

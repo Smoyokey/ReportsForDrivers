@@ -70,7 +70,10 @@ fun CreateReportsPreviewScreen(
                 modifier = Modifier.padding(10.dp)
             )
 
-            LinePreviewText(R.string.route, viewModel.uiState.value.dataFillingTwo.route)
+            LinePreviewText(
+                R.string.route,
+                viewModel.uiState.value.dataFillingTwo.route.joinToString(" - "){ it.text }
+            )
             LinePreviewText(R.string.date_departure, viewModel.uiState.value.dataFillingTwo.dateDeparture)
             LinePreviewText(R.string.date_return, viewModel.uiState.value.dataFillingTwo.dateReturn)
             LinePreviewText(R.string.date_border_crossing_departure,
@@ -158,7 +161,8 @@ fun ProgressReportItem(item: ProgressDetails, size: Int, current: Int) {
     Column {
         RowProgressAndExpenses(title = R.string.date, text = item.date)
         RowProgressAndExpenses(title = R.string.country, text = item.country)
-        RowProgressAndExpenses(title = R.string.township, text = item.township)
+        RowProgressAndExpenses(title = R.string.township
+            , text = "${item.townshipOne} - ${item.townshipTwo}")
         RowProgressAndExpenses(title = R.string.distance, text = item.distance)
         RowProgressAndExpenses(title = R.string.cargo_weight, text = item.cargoWeight)
         if(size - 1 != current) Divider()

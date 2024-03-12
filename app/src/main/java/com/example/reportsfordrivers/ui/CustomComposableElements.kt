@@ -306,7 +306,29 @@ fun RowVehicleAndTrailerElement(
         onDelete = onDelete,
         objectVehicle = objectVehicle
     )
+}
 
+@Composable
+fun RowDate(
+    @StringRes label: Int,
+    openDialog: MutableState<Boolean>,
+    date: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(label),
+            modifier = Modifier.weight(1f)
+        )
+        TextButton(
+            onClick = { openDialog.value = true }
+        ) {
+            Text(
+                text = date.ifEmpty { stringResource(R.string.select_date) }
+            )
+        }
+    }
 }
 
 @Composable

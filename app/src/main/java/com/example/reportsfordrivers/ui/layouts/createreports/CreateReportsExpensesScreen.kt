@@ -41,6 +41,7 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
+import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
@@ -74,13 +75,11 @@ fun CreateReportsExpensesScreen(
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            OutlinedTextFieldDatePicker(
+
+            RowDate(
                 label = R.string.date,
-                value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.date,
-                interactionSource = source,
-                onValueChange = viewModel::updateTripExpensesDate,
-                tag = Tags.TAG_TEST_TRIP_EXPENSES_DATE,
-                modifier = Modifier.fillMaxWidth()
+                openDialog = viewModel.openDialogTripExpenseDate,
+                date = viewModel.uiStateTripExpenses.value.tripExpensesDetails.date
             )
 
             OutlinedTextFieldCustom(

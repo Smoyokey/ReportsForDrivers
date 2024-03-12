@@ -56,6 +56,8 @@
 <!--    <string name="report_stages_voucher">The report</string>-->
     <string name="country">Country</string>
     <string name="township">Township</string>
+    <string name="township_one">Township one</string>
+    <string name="township_two">Township two</string>
     <string name="townships">Townships</string>
     <string name="distance">Distance, km</string>
     <string name="cargo_weight">Weight, t</string>

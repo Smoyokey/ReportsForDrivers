@@ -86,6 +86,9 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
+    //Optionally
+//    implementation("com.google.android.libraries.places:places:3.1.0")
+
     //Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")

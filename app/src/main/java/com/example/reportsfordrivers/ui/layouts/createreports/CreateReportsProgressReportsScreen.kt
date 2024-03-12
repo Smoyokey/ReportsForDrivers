@@ -41,6 +41,7 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
+import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
@@ -74,13 +75,11 @@ fun CreateReportsProgressReportsScreen(
                 .verticalScroll(state = scrollState),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            OutlinedTextFieldDatePicker(
+
+            RowDate(
                 label = R.string.date,
-                value = viewModel.uiStateProgressReports.value.progressDetails.date,
-                interactionSource = source,
-                onValueChange = viewModel::updateProgressReportsDate,
-                tag = Tags.TAG_TEST_PROGRESS_REPORTS_DATE,
-                modifier = Modifier.fillMaxWidth()
+                openDialog = viewModel.openDialogProgressReportsDate,
+                date = viewModel.uiStateProgressReports.value.progressDetails.date
             )
 
             OutlinedTextFieldCustom(
@@ -93,10 +92,19 @@ fun CreateReportsProgressReportsScreen(
             )
 
             OutlinedTextFieldCustom(
-                label = R.string.township,
-                value = viewModel.uiStateProgressReports.value.progressDetails.township,
-                onValueChange = viewModel::updateProgressReportsTownship,
-                tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP,
+                label = R.string.township_one,
+                value = viewModel.uiStateProgressReports.value.progressDetails.townshipOne,
+                onValueChange = viewModel::updateProgressReportsTownshipOne,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_ONE,
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+            )
+
+            OutlinedTextFieldCustom(
+                label = R.string.township_two,
+                value = viewModel.uiStateProgressReports.value.progressDetails.townshipTwo,
+                onValueChange = viewModel::updateProgressReportsTownshipTwo,
+                tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_TWO,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
             )
@@ -187,7 +195,8 @@ fun ColumnProgressReports(
             )
             RowProgressAndExpenses(
                 title = R.string.township,
-                text = progressReports.progressDetails.township
+                text = "${progressReports.progressDetails.townshipOne} " +
+                        "- ${progressReports.progressDetails.townshipTwo}"
             )
             RowProgressAndExpenses(
                 title = R.string.distance,

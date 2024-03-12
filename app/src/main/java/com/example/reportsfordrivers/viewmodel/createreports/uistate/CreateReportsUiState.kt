@@ -33,7 +33,7 @@ data class DataVehicleInfo (
 )
 
 data class DataFillingTwo(
-    val route: String = "",
+    val route: SnapshotStateList<RouteElement> = SnapshotStateList(),
     val dateDeparture: String = "",
     val dateReturn: String = "",
     val dateCrossingDeparture: String = "",
@@ -49,7 +49,8 @@ data class ProgressReports(
 
 data class ProgressDetails(
     val country: String = "",
-    val township: String = "",
+    val townshipOne: String = "",
+    val townshipTwo: String = "",
     val distance: String = "",
     val cargoWeight: String = "",
     val date: String = ""
@@ -70,4 +71,9 @@ data class TripExpensesDetails(
 data class ListVehicleAndTrailer(
     var listVehicle: MutableList<ObjectVehicle> = mutableListOf(),
     var listTrailer: MutableList<ObjectVehicle> = mutableListOf()
+)
+
+data class RouteElement(
+    val id: Int,
+    val text: String
 )
