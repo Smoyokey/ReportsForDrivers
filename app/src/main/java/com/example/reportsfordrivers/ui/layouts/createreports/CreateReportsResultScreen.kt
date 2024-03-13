@@ -73,7 +73,7 @@ fun CreateReportsResultScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text (text = stringResource(R.string.save))
+                Text (text = stringResource(R.string.save_file))
             }
 
             Button(
@@ -81,7 +81,7 @@ fun CreateReportsResultScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = false
             ) {
-                Text (text = stringResource(R.string.create_new_report))
+                Text (text = stringResource(R.string.save_and_exit))
             }
 
             Button(

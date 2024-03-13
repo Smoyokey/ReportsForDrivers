@@ -270,20 +270,3 @@ fun TabRowProgressReports(
         )
     }
 }
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ColumnProgressReportsPreview() {
-//    ColumnProgressReports(
-//        ProgressReports(
-//            ProgressDetails(
-//                country = "BY",
-//                township = "Minsk-Kazan",
-//                distance = "1500",
-//                cargoWeight = "15",
-//                date = "02.11"
-//            )
-//        )
-//    ) {}
-//}

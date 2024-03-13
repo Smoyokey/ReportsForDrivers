@@ -1,6 +1,8 @@
 package com.example.reportsfordrivers
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,12 +20,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.navigate.ReportsForDriversNavHost
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,11 +80,31 @@ fun ReportsForDriversApp(
             )
         }
     ) { innerPadding ->
-        ReportsForDriversNavHost(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding),
-        )
+        Column() {
+            ReportsForDriversNavHost(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+                    .weight(1f),
+            )
+        AdmobBanner()
+        }
+
     }
+}
+
+@Composable
+fun AdmobBanner() {
+    AndroidView(
+        modifier = Modifier.fillMaxWidth(),
+        factory = { context ->
+            AdView(context).apply {
+//                adSize = AdSize.BANNER
+                setAdSize(AdSize.BANNER)
+                adUnitId = "ca-app-pub-3940256099942544/9214589741"
+                loadAd(AdRequest.Builder().build())
+            }
+        }
+    )
 }
 
 @Composable

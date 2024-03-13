@@ -65,7 +65,7 @@ fun MainMenuScreen(
         }
         OutlinedButton(
             onClick = onHistoryReports,
-            enabled = false,
+            enabled = true,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

@@ -88,6 +88,7 @@ dependencies {
 
     //Optionally
 //    implementation("com.google.android.libraries.places:places:3.1.0")
+    implementation("com.google.android.gms:play-services-ads:23.0.0")
 
     //Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")

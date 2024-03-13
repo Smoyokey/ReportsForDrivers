@@ -28,6 +28,8 @@
     <string name="save_entered_data">Save the entered data?</string>
     <string name="skip">Skip</string>
     <string name="save">Save</string>
+    <string name="save_file">Save file</string>
+    <string name="save_and_exit">Save and exit</string>
     <string name="info">Info</string>
     <string name="clear">Clear</string>
     <string name="driver">Driver:</string>
