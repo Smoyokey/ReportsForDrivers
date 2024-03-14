@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -63,7 +64,8 @@ fun ReportsForDriversTopBar(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ReportsForDriversApp(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    activity: Activity
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -85,6 +87,7 @@ fun ReportsForDriversApp(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding)
                     .weight(1f),
+                activity = activity
             )
         AdmobBanner()
         }

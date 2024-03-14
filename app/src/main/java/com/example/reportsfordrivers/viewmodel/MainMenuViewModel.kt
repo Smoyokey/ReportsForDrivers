@@ -14,10 +14,6 @@ class MainMenuViewModel @Inject constructor(
     private val firstEntryPreferencesRepository: FioFirstEntryRepository
 ): ViewModel() {
 
-    fun logs() {
-        Log.i(TAG, "MainMenuViewModel is ready")
-    }
-
     fun isFirstEntry(): Boolean = runBlocking {
         return@runBlocking firstEntryPreferencesRepository.getFirstEntry().getOrNull() ?: false
     }

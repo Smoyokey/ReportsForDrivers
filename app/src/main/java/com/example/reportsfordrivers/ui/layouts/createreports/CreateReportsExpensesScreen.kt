@@ -88,7 +88,10 @@ fun CreateReportsExpensesScreen(
                 onValueChange = viewModel::updateTripExpensesDocumentNumber,
                 tag = Tags.TAG_TEST_EXPENSES_DOCUMENT_NUMBER,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    autoCorrect = true
+                )
             )
 
             OutlinedTextFieldCustom(
@@ -97,7 +100,10 @@ fun CreateReportsExpensesScreen(
                 onValueChange = viewModel::updateTripExpensesExpenseItem,
                 tag = Tags.TAG_TEST_EXPENSES_EXPENSE_ITEM,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    autoCorrect = true
+                )
             )
 
             Row(

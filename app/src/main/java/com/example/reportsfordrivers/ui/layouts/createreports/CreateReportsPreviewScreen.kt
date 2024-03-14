@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Tab
@@ -49,7 +50,10 @@ fun CreateReportsPreviewScreen(
                 value = viewModel.uiState.value.reportName,
                 onValueChange = viewModel::updatePreviewReportName,
                 tag = Tags.TAG_TEST_PREVIEW_REPORT_NAME,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = true
+                )
             )
 
             Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp))

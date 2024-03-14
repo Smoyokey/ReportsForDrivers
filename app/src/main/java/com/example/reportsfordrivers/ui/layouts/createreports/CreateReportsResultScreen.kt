@@ -77,9 +77,11 @@ fun CreateReportsResultScreen(
             }
 
             Button(
-                onClick = {},
+                onClick = {
+                          viewModel.adShowScreen(context    )
+                },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = false
+                enabled = true
             ) {
                 Text (text = stringResource(R.string.save_and_exit))
             }
@@ -94,24 +96,6 @@ fun CreateReportsResultScreen(
         }
     }
 }
-
-@Composable
-fun ButtonReportsResult(text: Int, ) {
-    Button(
-        onClick = {  },
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = stringResource(text)
-        )
-    }
-}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun ButtonReportsResultPreview() {
-//    ButtonReportsResult(R.string.share)
-//}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

@@ -37,7 +37,7 @@ class HistoryReportNavigationTest {
             navController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
-            ReportsForDriversApp(navController = navController)
+            ReportsForDriversApp(navController = navController, activity = composeTestRule.activity)
         }
         start()
     }

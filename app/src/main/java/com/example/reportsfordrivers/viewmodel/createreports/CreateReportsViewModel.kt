@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers.viewmodel.createreports
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,10 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressRep
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesDetails
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -43,8 +48,10 @@ private const val TAG = "CreateReportsViewModel"
 
 @HiltViewModel
 class CreateReportsViewModel @Inject constructor(
-    private val fioPreferencesRepository: FioFirstEntryRepository
+    private val fioPreferencesRepository: FioFirstEntryRepository,
 ) : ViewModel() {
+
+    var activity: Activity = Activity()
 
     @Inject
     lateinit var vehicleAndTrailer: VehicleAndTrailerSaveDataDao
@@ -81,7 +88,6 @@ class CreateReportsViewModel @Inject constructor(
     var openMenuMakeVehicle = mutableStateOf(false)
     var openMenuMakeTrailer = mutableStateOf(false)
 
-    var routeSize = mutableIntStateOf(0)
     fun startFio() = runBlocking {
         if (!firstOpenPersonalScreen.value) {
             uiState.value = uiState.value.copy(
@@ -502,6 +508,28 @@ class CreateReportsViewModel @Inject constructor(
             }
         }
     }
+
+    fun adShowScreen(context: Context) {
+        Log.i("TAG", "adShowScreen")
+        InterstitialAd.load(
+            context,
+            "ca-app-pub-3940256099942544/1033173712",
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(p0: LoadAdError) {
+                    super.onAdFailedToLoad(p0)
+                    Log.i("TAG", "Error")
+                }
+
+                override fun onAdLoaded(p0: InterstitialAd) {
+                    super.onAdLoaded(p0)
+                    p0.show(activity)
+                    Log.i("TAG", "Complete")
+                }
+            }
+        )
+    }
+
 
     private fun onePageHtml(): String {
         return """<head>

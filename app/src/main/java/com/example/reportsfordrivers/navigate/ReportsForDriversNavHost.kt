@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.navigate
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -32,10 +33,12 @@ import com.example.reportsfordrivers.viewmodel.setting.PersonalDataViewModel
 fun ReportsForDriversNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    activity: Activity
 ) {
     val viewModelFirst: FirstEntryViewModel = hiltViewModel<FirstEntryViewModel>()
     val viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>()
     val viewModelCreateReports: CreateReportsViewModel = hiltViewModel<CreateReportsViewModel>()
+    viewModelCreateReports.activity = activity
 
     NavHost(
         navController = navController,

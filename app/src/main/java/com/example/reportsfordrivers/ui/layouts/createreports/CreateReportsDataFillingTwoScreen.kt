@@ -1,8 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,14 +15,11 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,7 +32,6 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
 import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.RouteElement
@@ -56,22 +50,7 @@ fun CreateReportsDataFillingTwoScreen(
         )
     }
 
-    
-
     val scrollState = rememberScrollState()
-
-    val sourceDateDeparture = remember { MutableInteractionSource() }
-    val sourceDateReturn = remember { MutableInteractionSource() }
-    val sourceDateCrossingDeparture = remember { MutableInteractionSource() }
-    val sourceDateCrossingReturn = remember { MutableInteractionSource() }
-    if (sourceDateDeparture.collectIsPressedAsState().value)
-        viewModel.openDialogDataFillingTwoDateDeparture.value = true
-    if (sourceDateReturn.collectIsPressedAsState().value)
-        viewModel.openDialogDataFillingTwoDateReturn.value = true
-    if (sourceDateCrossingDeparture.collectIsPressedAsState().value)
-        viewModel.openDialogDataFillingTwoDateCrossingDeparture.value = true
-    if (sourceDateCrossingReturn.collectIsPressedAsState().value)
-        viewModel.openDialogDataFillingTwoDateCrossingReturn.value = true
 
     Column {
         TabRowDataFillingTwo(navController = navController, viewModel = viewModel)
@@ -89,56 +68,42 @@ fun CreateReportsDataFillingTwoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            /**
-             * Для реализации нужен объект в котором будет его порядковый номер и значение
-             * А еще нужен список этих объектов, что бы хранить полностью информацию
-             */
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-//                OutlinedTextFieldCustom(
-//                    label = R.string.route,
-//                    value = viewModel.uiState.value.dataFillingTwo.route,
-//                    onValueChange = viewModel::updateDataFillingTwoRoute,
-//                    tag = Tags.TAG_TEST_DATA_FILLING_TWO_ROUTE,
-//                    modifier = Modifier.weight(1f),
-//                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
-//                )
-            }
-            for(i in 0..<viewModel.uiState.value.dataFillingTwo.route.size)
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedTextFieldCustom(
-                    label = R.string.route,
-                    value = viewModel.uiState.value.dataFillingTwo.route[i].text,
-                    onValueChange = { viewModel.updateDataFillingTwoRoute(it, i) },
-                    tag = "",
-                    modifier = Modifier.weight(1f)
-                )
-                if(i == viewModel.uiState.value.dataFillingTwo.route.size - 1) {
-                    IconButton(
-                        onClick = {
-                            viewModel.uiState.value.dataFillingTwo.route.add(
-                                RouteElement(i + 1, "")
+            for(i in 0..<viewModel.uiState.value.dataFillingTwo.route.size) {
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextFieldCustom(
+                        label = R.string.route,
+                        value = viewModel.uiState.value.dataFillingTwo.route[i].text,
+                        onValueChange = { viewModel.updateDataFillingTwoRoute(it, i) },
+                        tag = "",
+                        modifier = Modifier.weight(1f),
+                        keyboardOptions = KeyboardOptions(autoCorrect = true)
+                    )
+                    if(i == viewModel.uiState.value.dataFillingTwo.route.size - 1) {
+                        IconButton(
+                            onClick = {
+                                viewModel.uiState.value.dataFillingTwo.route.add(
+                                    RouteElement(i + 1, "")
+                                )
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Add,
+                                contentDescription = null
                             )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = null
-                        )
-                    }
-                } else if(i != 0){
-                    IconButton(
-                        onClick = {
-                            viewModel.uiState.value.dataFillingTwo.route.removeAt(i)
+                    } else if(i != 0){
+                        IconButton(
+                            onClick = {
+                                viewModel.uiState.value.dataFillingTwo.route.removeAt(i)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = null
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = null
-                        )
                     }
                 }
             }

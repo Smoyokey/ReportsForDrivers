@@ -3,6 +3,7 @@ package com.example.reportsfordrivers.di
 import android.content.Context
 import androidx.room.Room
 import com.example.reportsfordrivers.data.AppDatabase
+import com.example.reportsfordrivers.data.dao.MainInfoDao
 import com.example.reportsfordrivers.data.dao.PersonalInfoDao
 import com.example.reportsfordrivers.data.dao.ProgressReportDao
 import com.example.reportsfordrivers.data.dao.ReportNameDao
@@ -21,6 +22,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DatabaseModule {
+
+    @Provides
+    fun provideMainIndoDao(database: AppDatabase) : MainInfoDao {
+        return database.mainInfoDao()
+    }
 
     @Provides
     fun providePersonalInfoDao(database: AppDatabase) : PersonalInfoDao {

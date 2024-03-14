@@ -75,7 +75,10 @@ fun CreateReportsDataReportInfoScreen(
                 onValueChange = viewModel::updateDataReportInfoMainCity,
                 tag = Tags.TAG_TEST_DATA_REPORT_INFO_MAIN_CITY,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true
+                )
             )
 
             OutlinedTextFieldCustom(

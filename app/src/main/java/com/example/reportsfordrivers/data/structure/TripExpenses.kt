@@ -17,5 +17,7 @@ data class TripExpenses(
     @ColumnInfo(name = "sum")
     val sum: String,
     @ColumnInfo(name = "currency")
-    val currency: String
+    val currency: String,
+    @ColumnInfo(name = "report_name_id")
+    val reportNameId: Int
 )

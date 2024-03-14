@@ -88,7 +88,10 @@ fun CreateReportsProgressReportsScreen(
                 onValueChange = viewModel::updateProgressReportsCountry,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true
+                )
             )
 
             OutlinedTextFieldCustom(
@@ -97,7 +100,10 @@ fun CreateReportsProgressReportsScreen(
                 onValueChange = viewModel::updateProgressReportsTownshipOne,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_ONE,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true
+                )
             )
 
             OutlinedTextFieldCustom(
@@ -106,7 +112,10 @@ fun CreateReportsProgressReportsScreen(
                 onValueChange = viewModel::updateProgressReportsTownshipTwo,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_TWO,
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    autoCorrect = true
+                )
             )
 
             Row(

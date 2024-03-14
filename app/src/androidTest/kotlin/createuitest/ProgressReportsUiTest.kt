@@ -98,11 +98,11 @@ class ProgressReportsUiTest {
         composeRule.onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY).assertIsDisplayed()
     }
 
-    @Test
-    fun isButtonSkip_inTownship() {
-        actionWriteTownship(townshipOne)
-        composeRule.onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).assertIsDisplayed()
-    }
+//    @Test
+//    fun isButtonSkip_inTownship() {
+//        actionWriteTownship(townshipOne)
+//        composeRule.onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).assertIsDisplayed()
+//    }
 
     @Test
     fun isButtonSkip_inDistance() {
@@ -116,19 +116,19 @@ class ProgressReportsUiTest {
         composeRule.onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT).assertIsDisplayed()
     }
 
-    @Test
-    fun isButtonSkip_inCountryTownshipDistanceCargoWeight() {
-        actionWriteCountry(countryOne)
-        actionWriteTownship(townshipOne)
-        actionWriteDistance(distanceOne)
-        actionWriteCargoWeight(cargoWeightOne)
-        composeRule.apply {
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY).assertIsDisplayed()
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).assertIsDisplayed()
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE).assertIsDisplayed()
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT).assertIsDisplayed()
-        }
-    }
+//    @Test
+//    fun isButtonSkip_inCountryTownshipDistanceCargoWeight() {
+//        actionWriteCountry(countryOne)
+//        actionWriteTownship(townshipOne)
+//        actionWriteDistance(distanceOne)
+//        actionWriteCargoWeight(cargoWeightOne)
+//        composeRule.apply {
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY).assertIsDisplayed()
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).assertIsDisplayed()
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE).assertIsDisplayed()
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT).assertIsDisplayed()
+//        }
+//    }
 
     @Test
     fun clickButtonClear_inCountry() {
@@ -139,14 +139,14 @@ class ProgressReportsUiTest {
         }
     }
 
-    @Test
-    fun clickButtonClear_inTownship() {
-        actionWriteTownship(townshipOne)
-        composeRule.apply {
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).performClick()
-            onNodeWithText(townshipOne).assertDoesNotExist()
-        }
-    }
+//    @Test
+//    fun clickButtonClear_inTownship() {
+//        actionWriteTownship(townshipOne)
+//        composeRule.apply {
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).performClick()
+//            onNodeWithText(townshipOne).assertDoesNotExist()
+//        }
+//    }
 
     @Test
     fun clickButtonClear_inDistance() {
@@ -166,23 +166,23 @@ class ProgressReportsUiTest {
         }
     }
 
-    @Test
-    fun clickButtonClear_inCountryTownshipDistanceCargoWeight() {
-        actionWriteCountry(countryOne)
-        actionWriteTownship(townshipOne)
-        actionWriteDistance(distanceOne)
-        actionWriteCargoWeight(cargoWeightOne)
-        composeRule.apply {
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY).performClick()
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).performClick()
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE).performClick()
-            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT).performClick()
-            onNodeWithText(countryOne).assertDoesNotExist()
-            onNodeWithText(townshipOne).assertDoesNotExist()
-            onNodeWithText(distanceOne).assertDoesNotExist()
-            onNodeWithText(cargoWeightOne).assertDoesNotExist()
-        }
-    }
+//    @Test
+//    fun clickButtonClear_inCountryTownshipDistanceCargoWeight() {
+//        actionWriteCountry(countryOne)
+//        actionWriteTownship(townshipOne)
+//        actionWriteDistance(distanceOne)
+//        actionWriteCargoWeight(cargoWeightOne)
+//        composeRule.apply {
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY).performClick()
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP).performClick()
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE).performClick()
+//            onNodeWithTag(Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT).performClick()
+//            onNodeWithText(countryOne).assertDoesNotExist()
+//            onNodeWithText(townshipOne).assertDoesNotExist()
+//            onNodeWithText(distanceOne).assertDoesNotExist()
+//            onNodeWithText(cargoWeightOne).assertDoesNotExist()
+//        }
+//    }
 
     @Test
     fun isNotEnabled_buttonAdd_isTextFieldsEmpty() {

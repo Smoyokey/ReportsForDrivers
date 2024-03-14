@@ -8,14 +8,10 @@ import androidx.room.PrimaryKey
 data class ReportName(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    @ColumnInfo(name = "name_report")
-    val nameReport: String,
     @ColumnInfo(name = "waybill")
     val waybill: String,
     @ColumnInfo(name = "main_city")
     val mainCity: String,
-    @ColumnInfo(name = "date_create")
-    val dateCreate: String,
     @ColumnInfo(name = "date")
     val date: String,
     @ColumnInfo(name = "personal_info_id")
