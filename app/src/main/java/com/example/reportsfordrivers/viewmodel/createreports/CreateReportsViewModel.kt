@@ -15,6 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
+import com.example.reportsfordrivers.data.dao.CountryDao
+import com.example.reportsfordrivers.data.dao.CurrencyDao
+import com.example.reportsfordrivers.data.dao.TownshipDao
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.structure.VehicleAndTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
@@ -51,10 +54,20 @@ class CreateReportsViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository,
 ) : ViewModel() {
 
-    var activity: Activity = Activity()
-
     @Inject
     lateinit var vehicleAndTrailer: VehicleAndTrailerSaveDataDao
+
+    @Inject
+    lateinit var currencyDb: CurrencyDao
+
+    @Inject
+    lateinit var townshipDb: TownshipDao
+
+    @Inject
+    lateinit var countryDb: CountryDao
+
+    @SuppressLint("StaticFieldLeak")
+    lateinit var activity: Activity
 
     var uiState = mutableStateOf(CreateReports())
         private set
@@ -87,6 +100,15 @@ class CreateReportsViewModel @Inject constructor(
 
     var openMenuMakeVehicle = mutableStateOf(false)
     var openMenuMakeTrailer = mutableStateOf(false)
+
+    fun startCurrency() = runBlocking {
+        val list = currencyDb.getAllItem().first()
+        Log.i(TAG, "${list.size} currency")
+        val list1 = townshipDb.getAllItem().first()
+        Log.i(TAG, "${list1.size} township")
+        val list2 = countryDb.getAllItem().first()
+        Log.i(TAG, "${list2.size} country")
+    }
 
     fun startFio() = runBlocking {
         if (!firstOpenPersonalScreen.value) {

@@ -78,7 +78,7 @@ fun CreateReportsResultScreen(
 
             Button(
                 onClick = {
-                          viewModel.adShowScreen(context    )
+                          viewModel.adShowScreen(context)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = true

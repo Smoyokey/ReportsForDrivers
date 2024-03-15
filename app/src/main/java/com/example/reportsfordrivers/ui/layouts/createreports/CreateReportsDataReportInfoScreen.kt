@@ -51,8 +51,7 @@ fun CreateReportsDataReportInfoScreen(
         )
     }
 
-    val source = remember { MutableInteractionSource() }
-    if (source.collectIsPressedAsState().value) viewModel.openDialogDataReportInfoDate.value = true
+    viewModel.startCurrency()
 
     Column(modifier = Modifier.fillMaxSize()) {
         TabRowReportInfoScreen(navController = navController, viewModel = viewModel)
