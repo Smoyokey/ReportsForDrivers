@@ -1,25 +1,33 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
@@ -35,12 +43,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
+import com.example.reportsfordrivers.data.structure.Currency
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.AlertDialogDeleteElement
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.OutlinedTextFieldDatePicker
 import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
@@ -51,6 +59,11 @@ fun CreateReportsExpensesScreen(
     viewModel: CreateReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    if(viewModel.listCurrency.value.isEmpty()) {
+        viewModel.startCurrency()
+    }
+
     BackHandler {
         navController.navigate(
             ReportsForDriversSchema.ProgressReport.name,
@@ -119,12 +132,20 @@ fun CreateReportsExpensesScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                 )
 
-                OutlinedTextFieldCustom(
-                    label = R.string.currency,
+                OutlinedTextField(
+                    label = { Text(text = stringResource(R.string.currency)) },
                     value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.currency,
-                    onValueChange = viewModel::updateTripExpensesCurrency,
-                    tag = Tags.TAG_TEST_EXPENSES_CURRENCY,
-                    modifier = Modifier.weight(1f)
+                    onValueChange = {},
+                    modifier = Modifier.weight(1f),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowDropDown,
+                            contentDescription = null,
+                            modifier = Modifier.clickable {
+                                viewModel.openMenuTripExpensesCurrency.value = true
+                            }
+                        )
+                    }
                 )
             }
 
@@ -166,6 +187,56 @@ fun CreateReportsExpensesScreen(
             viewModel.openDialogTripExpenseDate,
             viewModel::updateTripExpensesDate
         )
+    }
+
+    if(viewModel.openMenuTripExpensesCurrency.value) {
+        ModalBottomSheetCurrency(
+            openMenu = viewModel.openMenuTripExpensesCurrency,
+            listCurrency = viewModel.listCurrency.value
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ModalBottomSheetCurrency(
+    openMenu: MutableState<Boolean>,
+    listCurrency: List<Currency>,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = { openMenu.value = false },
+        sheetState = sheetState,
+        modifier = Modifier.fillMaxHeight(0.75f)
+    ) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(text = stringResource(R.string.currency))
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(listCurrency.size) { element ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = listCurrency[element].fullNameCurrencyRus,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = listCurrency[element].shortNameCurrency
+                        )
+                    }
+                }
+            }
+            Button(
+                onClick = { openMenu.value = false}
+            ) {
+                Text(text = stringResource(R.string.cancel))
+            }
+        }
     }
 }
 

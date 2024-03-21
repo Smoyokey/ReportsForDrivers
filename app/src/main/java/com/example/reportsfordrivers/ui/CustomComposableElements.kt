@@ -3,14 +3,14 @@ package com.example.reportsfordrivers.ui
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -29,7 +29,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.ObjectVehicle
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -69,60 +67,6 @@ fun OutlinedTextFieldCustom(
                 Icon(
                     imageVector = Icons.Outlined.Clear,
                     contentDescription = stringResource(R.string.clear),
-                    modifier = Modifier
-                        .clickable { onValueChange("") }
-                        .testTag(tag)
-                )
-            }
-        }
-    )
-}
-
-//@Composable
-//fun OutlinedTextFieldWithMenu(
-//   @StringRes label: Int,
-//   value: String,
-//   onValueChange: (String) -> Unit,
-//) {
-//    OutlinedTextField(
-//        value = value,
-//        onValueChange = { onValueChange(it) },
-//        label = { Text(stringResource(label)) },
-//        singleLine = true,
-//        trailingIcon = {
-//            Icon(
-//                imageVector = Icons.Outlined.ArrowDropDown,
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .clickable {}
-//            )
-//        }
-//    )
-//}
-
-@Composable
-fun OutlinedTextFieldDatePicker(
-    @StringRes label: Int,
-    value: String,
-    modifier: Modifier = Modifier,
-    interactionSource: MutableInteractionSource,
-    onValueChange: (String) -> Unit,
-    tag: String
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = { },
-        label = { Text(stringResource(label)) },
-        modifier = modifier,
-        singleLine = true,
-        textStyle = typography.bodyLarge,
-        interactionSource = interactionSource,
-        readOnly = true,
-        trailingIcon = {
-            if (value.isNotEmpty()) {
-                Icon(
-                    imageVector = Icons.Outlined.Clear,
-                    contentDescription = stringResource(id = R.string.clear),
                     modifier = Modifier
                         .clickable { onValueChange("") }
                         .testTag(tag)
@@ -184,34 +128,34 @@ fun BottomBarCustom(
     NavigationBar {
         NavigationBarItem(
             selected = false,
-            onClick = { },
-            icon = { },
+            onClick = onBack,
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.ArrowBack,
+                    contentDescription = stringResource(R.string.back_button)
+                )
+            },
             label = {
-                Button(
-                    onClick = onBack,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
-                ) {
-                    Text(
-                        text = stringResource(R.string.back_button),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.back_button),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             },
             modifier = modifier
         )
         NavigationBarItem(
             selected = false,
-            onClick = { },
-            icon = { },
+            onClick = onNext,
+            icon = {
+                   Icon(
+                       imageVector = Icons.Outlined.ArrowForward,
+                       contentDescription = stringResource(R.string.next)
+                   )
+            },
             label = {
-                Button(
-                    onClick = onNext,
-                    enabled = true
-                ) {
-                    Text(text = stringResource(R.string.next))
-                }
+                Text(
+                    text = stringResource(R.string.next),
+                )
             },
         )
     }
@@ -315,11 +259,13 @@ fun RowDate(
     date: String
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = stringResource(label),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            style = typography.titleLarge
         )
         TextButton(
             onClick = { openDialog.value = true }
@@ -422,7 +368,7 @@ fun AlertDialogAddVehicle(
                     onValueChange = { text ->
                         uiStateVehicleObject.value = uiStateVehicleObject.value.copy(rn = text)
                     },
-                    tag  =""
+                    tag = ""
                 )
             }
         }
@@ -433,8 +379,21 @@ fun AlertDialogAddVehicle(
 
 @Preview(showBackground = true)
 @Composable
-fun AlertDialogAddVehiclePreview() {
-
+fun OutlinedTextFieldCustomPreview() {
+    Column {
+        OutlinedTextFieldCustom(
+            label = R.string.last_name,
+            value = "",
+            onValueChange = {},
+            tag = ""
+        )
+        OutlinedTextFieldCustom(
+            label = R.string.first_name,
+            value = "Ivan",
+            onValueChange = {},
+            tag = ""
+        )
+    }
 }
 
 @SuppressLint("UnrememberedMutableState")
@@ -443,3 +402,87 @@ fun AlertDialogAddVehiclePreview() {
 fun DatePickerDialogCustomPreview() {
     DatePickerDialogCustom(mutableStateOf(true)) {}
 }
+
+@Preview(showBackground = true)
+@Composable
+fun BottomBarCustomPreview() {
+    BottomBarCustom(
+        onNext = {},
+        onBack = {}
+    )
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview(showBackground = true)
+@Composable
+fun AlertDialogDeleteElementsPreview() {
+    AlertDialogDeleteElement(
+        isOpen = mutableStateOf(true),
+        delete = {},
+        position = 1
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RowProgressAndExpensesPreview() {
+    RowProgressAndExpenses(
+        title = R.string.date,
+        text = "10.02.2024"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RowVehicleAndTrailerElementPreview() {
+    RowVehicleAndTrailerElement(
+        objectVehicle = ObjectVehicle(
+            type = "Trailer",
+            make = "Schmitz",
+            rn = "P123EE-7"
+        ),
+        onDelete = {}
+    )
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview(showBackground = true)
+@Composable
+fun RowDatePreview() {
+    RowDate(
+        label = R.string.date_return,
+        openDialog = mutableStateOf(false),
+        date = "10.02.2024"
+    )
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview(showBackground = true)
+@Composable
+fun AlertDialogDeleteElementVehiclePreview() {
+    AlertDialogDeleteElementVehicle(
+        isOpenDialog = mutableStateOf(true),
+        onDelete = {},
+        objectVehicle = ObjectVehicle(
+            type = "Vehicle",
+            make = "DAF",
+            rn = "AE1234-7"
+        )
+    )
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview(showBackground = true)
+@Composable
+fun AlertDialogAddVehiclePreview() {
+    AlertDialogAddVehicle(
+        isOpenDialog = mutableStateOf(true),
+        title = R.string.test,
+        headText = R.string.test,
+        labelMake = R.string.make,
+        labelRn = R.string.rn,
+        saveInDB = {},
+        type = "VEHICLE"
+    )
+}
+

@@ -41,7 +41,7 @@ fun MainMenuScreen(
         verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterVertically),
         modifier = Modifier
             .fillMaxSize()
-            .padding(38.dp)
+            .padding(30.dp)
     ) {
         OutlinedButton(
             onClick = onCreateReport,
@@ -49,8 +49,8 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.create_report),
-                style = typography.headlineSmall,
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp)
+                style = typography.headlineMedium,
+//                modifier = Modifier.padding(start = 30.dp, end = 30.dp)
             )
         }
         OutlinedButton(
@@ -60,7 +60,7 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.be_continued),
-                style = typography.headlineSmall
+                style = typography.headlineMedium
             )
         }
         OutlinedButton(
@@ -70,7 +70,7 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.history_report),
-                style = typography.headlineSmall,
+                style = typography.headlineMedium,
 
                 )
         }
@@ -81,14 +81,8 @@ fun MainMenuScreen(
         ) {
             Text(
                 text = stringResource(R.string.settings),
-                style = typography.headlineSmall
+                style = typography.headlineMedium
             )
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun MainMenuScreenPreview() {
-    MainMenuScreen(onCreateReport = {}, onHistoryReports = {}, onSetting = {})
 }

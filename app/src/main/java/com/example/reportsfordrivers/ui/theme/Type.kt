@@ -12,12 +12,12 @@ val typography = Typography(
         lineHeight = 40.sp,
         letterSpacing = 0.sp
     ),
-//    headlineSmall = TextStyle(
-//        fontWeight = FontWeight.SemiBold,
-//        fontSize = 24.sp,
-//        lineHeight = 32.sp,
-//        letterSpacing = 0.sp
-//    ),
+    headlineMedium = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 26.sp,
+        lineHeight = 34.sp,
+        letterSpacing = 0.sp
+    ),
     headlineSmall = TextStyle(
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,

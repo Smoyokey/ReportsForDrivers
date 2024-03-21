@@ -10,15 +10,14 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.data.dao.CountryDao
 import com.example.reportsfordrivers.data.dao.CurrencyDao
 import com.example.reportsfordrivers.data.dao.TownshipDao
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
+import com.example.reportsfordrivers.data.structure.Currency
 import com.example.reportsfordrivers.data.structure.VehicleAndTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.ObjectVehicle
@@ -78,6 +77,8 @@ class CreateReportsViewModel @Inject constructor(
     var uiStateTripExpenses = mutableStateOf(TripExpensesReports())
         private set
 
+    var listCurrency = mutableStateOf(listOf<Currency>())
+
     var uiStateListVehicle = mutableStateOf(ListVehicleAndTrailer())
 
     var openDialogDataReportInfoDate = mutableStateOf(false)
@@ -89,9 +90,11 @@ class CreateReportsViewModel @Inject constructor(
 
     var openDialogProgressReportsDate = mutableStateOf(false)
     var openDialogProgressReportsDelete = mutableStateOf(false)
+    var openMenuProgressReportsCountry = mutableStateOf(false)
 
     var openDialogTripExpenseDate = mutableStateOf(false)
     var openDialogTripExpensesDelete = mutableStateOf(false)
+    var openMenuTripExpensesCurrency = mutableStateOf(false)
 
     var openDialogCreateVehicle = mutableStateOf(false)
     var openDialogCreateTrailer = mutableStateOf(false)
@@ -102,12 +105,9 @@ class CreateReportsViewModel @Inject constructor(
     var openMenuMakeTrailer = mutableStateOf(false)
 
     fun startCurrency() = runBlocking {
-        val list = currencyDb.getAllItem().first()
-        Log.i(TAG, "${list.size} currency")
-        val list1 = townshipDb.getAllItem().first()
-        Log.i(TAG, "${list1.size} township")
-        val list2 = countryDb.getAllItem().first()
-        Log.i(TAG, "${list2.size} country")
+        Log.i(TAG, "See every ")
+        listCurrency.value = currencyDb.getAllItem().first()
+//        return@runBlocking currencyDb.getAllItem().first<List<Currency>>()
     }
 
     fun startFio() = runBlocking {

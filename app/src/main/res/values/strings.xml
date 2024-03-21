@@ -117,5 +117,6 @@
 
     <string name="load_date">Load date</string>
     <string name="select_date">Select date</string>
+    <string name="missing_from_list_create">Missing from the list? Create</string>
 
 </resources>

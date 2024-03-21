@@ -111,12 +111,12 @@ fun CreateReportsDataVehicleInfoScreen(
             TextButton(
                 onClick = {
                     viewModel.openDialogCreateVehicle.value = true
-                }
+                },
+                modifier = Modifier.padding(bottom = 20.dp)
             ) {
-                Text(text = stringResource(R.string.test))
+                Text(text = stringResource(R.string.missing_from_list_create))
             }
 
-            Divider()
 
             ExposedDropdownMenuBox(
                 expanded = viewModel.openMenuMakeTrailer.value,
@@ -162,43 +162,12 @@ fun CreateReportsDataVehicleInfoScreen(
 
             TextButton(
                 onClick = {
-                    viewModel.openDialogCreateTrailer.value = true
-                }
+                    viewModel.openDialogCreateVehicle.value = true
+                },
+                modifier = Modifier.padding(bottom = 20.dp)
             ) {
-                Text(text = stringResource(R.string.test))
+                Text(text = stringResource(R.string.missing_from_list_create))
             }
-
-//            OutlinedTextFieldCustom(
-//                label = R.string.make_vehicle,
-//                value = viewModel.uiState.value.dataVehicleInfo.makeVehicle,
-//                onValueChange = viewModel::updateDataVehicleInfoMakeVehicle,
-//                tag = Tags.TAG_TEST_DATA_VEHICLE_INFO_MAKE_VEHICLE,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//
-//            OutlinedTextFieldCustom(
-//                label = R.string.rn_vehicle,
-//                value = viewModel.uiState.value.dataVehicleInfo.rnVehicle,
-//                onValueChange = viewModel::updateDataVehicleInfoRnVehicle,
-//                tag = Tags.TAG_TEST_DATA_VEHICLE_INFO_RN_VEHICLE,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//
-//            OutlinedTextFieldCustom(
-//                label = R.string.make_trailer,
-//                value = viewModel.uiState.value.dataVehicleInfo.makeTrailer,
-//                onValueChange = viewModel::updateDataVehicleInfoMakeTrailer,
-//                tag = Tags.TAG_TEST_DATA_VEHICLE_INFO_MAKE_TRAILER,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//
-//            OutlinedTextFieldCustom(
-//                label = R.string.rn_trailer,
-//                value = viewModel.uiState.value.dataVehicleInfo.rnTrailer,
-//                onValueChange = viewModel::updateDataVehicleInfoRnTrailer,
-//                tag = Tags.TAG_TEST_DATA_VEHICLE_INFO_RN_TRAILER,
-//                modifier = Modifier.fillMaxWidth()
-//            )
         }
 
         BottomBarCustom(

@@ -108,4 +108,6 @@
     <string name="personal_information">Персональная информация</string>
     <string name="vehicle_trailer_information">Информация о авто/м и прицепе</string>
 
+    <string name="missing_from_list_create">Отсутствует в списке? Создать</string>
+
 </resources>
