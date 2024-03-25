@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 
 private const val TAG = "CreateReportsResultScreen"
@@ -33,7 +34,7 @@ fun CreateReportsResultScreen(
     val permission = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
-        if(it) {
+        if (it) {
             Log.i(TAG, "Permission granted")
             viewModel.saveFile(context)
         } else {
@@ -49,41 +50,47 @@ fun CreateReportsResultScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
-            Button(
-                onClick = {
-                    viewModel.testShare(context)
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text (text = stringResource(R.string.share))
-            }
+//            Button(
+//                onClick = {
+//                    viewModel.testShare(context)
+//                },
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(text = stringResource(R.string.share))
+//            }
+
+//            Button(
+//                onClick = {
+//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+//                        val permissionCheckResult = ContextCompat.checkSelfPermission(
+//                            context,
+//                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                        )
+//                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+//                            viewModel.saveFile(context)
+//                        } else {
+//                            permission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                        }
+//                    } else {
+//                        viewModel.saveFile(context)
+//                    }
+//                },
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(text = stringResource(R.string.save_file))
+//            }
 
             Button(
                 onClick = {
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                        val permissionCheckResult = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        if(permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                            viewModel.saveFile(context)
-                        } else {
-                            permission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        }
-                    } else {
-                        viewModel.saveFile(context)
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text (text = stringResource(R.string.save_file))
-            }
-
-            Button(
-                onClick = {
-                          viewModel.adShowScreen(context)
+                    viewModel.adShowScreen(context)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = true
             ) {
-                Text (text = stringResource(R.string.save_and_exit))
+                Text(
+                    text = stringResource(R.string.save),
+                    style = typography.headlineMedium
+                )
             }
 
             Button(
@@ -91,7 +98,10 @@ fun CreateReportsResultScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = false
             ) {
-                Text (text = stringResource(R.string.delete))
+                Text(
+                    text = stringResource(R.string.delete),
+                    style = typography.headlineMedium
+                )
             }
         }
     }

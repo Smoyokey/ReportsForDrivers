@@ -32,7 +32,10 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.OutlinedTextFieldDateCustom
 import com.example.reportsfordrivers.ui.RowDate
+import com.example.reportsfordrivers.ui.RowDateWithTextField
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 
 @Composable
@@ -61,10 +64,12 @@ fun CreateReportsDataReportInfoScreen(
                 .padding(end = 10.dp, start = 10.dp, top = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            RowDate(
-                label = R.string.date_create_report,
+
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogDataReportInfoDate,
-                date = viewModel.uiState.value.dataReportInfo.date
+                date = viewModel.uiState.value.dataReportInfo.date,
+                modifier = Modifier.weight(1f),
+                text = R.string.date_create_report
             )
 
             OutlinedTextFieldCustom(

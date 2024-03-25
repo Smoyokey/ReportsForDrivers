@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.sharp.DateRange
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -373,7 +375,62 @@ fun AlertDialogAddVehicle(
             }
         }
     )
+}
 
+@Composable
+fun OutlinedTextFieldDateCustom(
+    openDialog: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
+    date: String
+) {
+    OutlinedTextField(
+        label = { Text(text = stringResource(R.string.date)) },
+        value = date,
+        onValueChange = {},
+        modifier = modifier
+            .clickable { openDialog.value = true },
+        readOnly = true,
+        enabled = false,
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledBorderColor = MaterialTheme.colorScheme.outline,
+            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+        ),
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Sharp.DateRange,
+                contentDescription = stringResource(R.string.calendar),
+                modifier = Modifier.clickable { openDialog.value = true }
+            )
+        }
+    )
+}
+
+@Composable
+fun RowDateWithTextField(
+    openDialog: MutableState<Boolean>,
+    date: String,
+    modifier: Modifier = Modifier,
+    @StringRes text: Int,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = stringResource(text),
+            modifier = Modifier.weight(1f),
+            style = typography.bodyLarge
+        )
+        OutlinedTextFieldDateCustom(
+            openDialog = openDialog,
+            date = date,
+            modifier = modifier
+        )
+    }
 }
 
 

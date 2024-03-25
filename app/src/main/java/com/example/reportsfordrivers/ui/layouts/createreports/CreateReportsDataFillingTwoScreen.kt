@@ -33,6 +33,7 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.RowDate
+import com.example.reportsfordrivers.ui.RowDateWithTextField
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.RouteElement
 
@@ -108,30 +109,32 @@ fun CreateReportsDataFillingTwoScreen(
                 }
             }
 
-            Divider()
-
-            RowDate(
-                label = R.string.date_departure,
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
-                date = viewModel.uiState.value.dataFillingTwo.dateDeparture
+                date = viewModel.uiState.value.dataFillingTwo.dateDeparture,
+                modifier = Modifier.weight(1f),
+                text = R.string.date_departure
             )
 
-            RowDate(
-                label = R.string.date_return,
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogDataFillingTwoDateReturn,
-                date = viewModel.uiState.value.dataFillingTwo.dateReturn
+                date = viewModel.uiState.value.dataFillingTwo.dateReturn,
+                modifier = Modifier.weight(1f),
+                text = R.string.date_return
             )
 
-            RowDate(
-                label = R.string.date_border_crossing_departure,
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
-                date = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture
+                date = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
+                modifier = Modifier.weight(1f),
+                text = R.string.date_border_crossing_departure
             )
 
-            RowDate(
-                label = R.string.date_border_crossing_return,
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
-                date = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn
+                date = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
+                modifier = Modifier.weight(1f),
+                text = R.string.date_border_crossing_return
             )
 
             OutlinedTextFieldCustom(

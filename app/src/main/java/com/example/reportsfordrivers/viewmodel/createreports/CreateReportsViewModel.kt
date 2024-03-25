@@ -243,7 +243,6 @@ class CreateReportsViewModel @Inject constructor(
     }
 
     fun updateDataFillingTwoRoute(route: String, index: Int) {
-//        updateDataFillingTwo(uiState.value.dataFillingTwo.copy(route = route))
         uiState.value.dataFillingTwo.route[index] =
             uiState.value.dataFillingTwo.route[index].copy(text = route)
     }

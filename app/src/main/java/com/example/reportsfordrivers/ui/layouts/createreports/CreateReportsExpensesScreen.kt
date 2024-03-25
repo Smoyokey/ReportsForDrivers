@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,8 +23,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -36,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -49,8 +53,9 @@ import com.example.reportsfordrivers.ui.AlertDialogDeleteElement
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.RowDate
+import com.example.reportsfordrivers.ui.RowDateWithTextField
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
 
@@ -60,7 +65,7 @@ fun CreateReportsExpensesScreen(
     navController: NavHostController = rememberNavController()
 ) {
 
-    if(viewModel.listCurrency.value.isEmpty()) {
+    if (viewModel.listCurrency.value.isEmpty()) {
         viewModel.startCurrency()
     }
 
@@ -89,10 +94,11 @@ fun CreateReportsExpensesScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            RowDate(
-                label = R.string.date,
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogTripExpenseDate,
-                date = viewModel.uiStateTripExpenses.value.tripExpensesDetails.date
+                date = viewModel.uiStateTripExpenses.value.tripExpensesDetails.date,
+                modifier = Modifier.weight(1f),
+                text = R.string.date
             )
 
             OutlinedTextFieldCustom(
@@ -136,15 +142,29 @@ fun CreateReportsExpensesScreen(
                     label = { Text(text = stringResource(R.string.currency)) },
                     value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.currency,
                     onValueChange = {},
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { viewModel.openMenuTripExpensesCurrency.value = true },
+                    readOnly = true,
+                    enabled = false,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
                     trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.ArrowDropDown,
-                            contentDescription = null,
-                            modifier = Modifier.clickable {
+                        IconButton(
+                            onClick = {
                                 viewModel.openMenuTripExpensesCurrency.value = true
                             }
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.ArrowDropDown,
+                                contentDescription = stringResource(R.string.currency)
+                            )
+                        }
                     }
                 )
             }
@@ -189,10 +209,11 @@ fun CreateReportsExpensesScreen(
         )
     }
 
-    if(viewModel.openMenuTripExpensesCurrency.value) {
+    if (viewModel.openMenuTripExpensesCurrency.value) {
         ModalBottomSheetCurrency(
             openMenu = viewModel.openMenuTripExpensesCurrency,
-            listCurrency = viewModel.listCurrency.value
+            listCurrency = viewModel.listCurrency.value,
+            updateCurrency = viewModel::updateTripExpensesCurrency
         )
     }
 }
@@ -202,39 +223,63 @@ fun CreateReportsExpensesScreen(
 fun ModalBottomSheetCurrency(
     openMenu: MutableState<Boolean>,
     listCurrency: List<Currency>,
+    updateCurrency: (String) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         onDismissRequest = { openMenu.value = false },
         sheetState = sheetState,
-        modifier = Modifier.fillMaxHeight(0.75f)
+        modifier = Modifier.fillMaxHeight(0.75f),
     ) {
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 20.dp, top = 20.dp, end = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Text(text = stringResource(R.string.currency))
+            Text(
+                text = stringResource(R.string.select_currency),
+                style = typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
             LazyColumn(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f),
             ) {
                 items(listCurrency.size) { element ->
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
+                            .clickable {
+                                Log.i("TAGS", listCurrency[element].fullNameCurrencyRus)
+                                updateCurrency(listCurrency[element].shortNameCurrency)
+                                openMenu.value = false
+                            },
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         Text(
                             text = listCurrency[element].fullNameCurrencyRus,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            style = typography.titleLarge
                         )
                         Text(
-                            text = listCurrency[element].shortNameCurrency
+                            text = listCurrency[element].shortNameCurrency,
+                            style = typography.titleLarge
                         )
                     }
                 }
             }
             Button(
-                onClick = { openMenu.value = false}
+                onClick = { openMenu.value = false },
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = stringResource(R.string.cancel))
+                Text(
+                    text = stringResource(R.string.cancel),
+                    style = typography.titleLarge
+                )
             }
         }
     }
@@ -270,9 +315,14 @@ fun ColumnTripExpense(
                 title = R.string.currency,
                 text = tripExpenses.tripExpensesDetails.currency
             )
-            if(size - 1 != position) {
+            if (size - 1 != position) {
                 Divider(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 10.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 10.dp,
+                        bottom = 10.dp
+                    )
                 )
             }
         }

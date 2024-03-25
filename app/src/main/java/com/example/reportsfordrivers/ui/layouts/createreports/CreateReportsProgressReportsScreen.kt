@@ -41,6 +41,7 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.RowDate
+import com.example.reportsfordrivers.ui.RowDateWithTextField
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
@@ -75,10 +76,11 @@ fun CreateReportsProgressReportsScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
 
-            RowDate(
-                label = R.string.date,
+            RowDateWithTextField(
                 openDialog = viewModel.openDialogProgressReportsDate,
-                date = viewModel.uiStateProgressReports.value.progressDetails.date
+                date = viewModel.uiStateProgressReports.value.progressDetails.date,
+                modifier = Modifier.weight(1f),
+                text = R.string.date
             )
 
             OutlinedTextFieldCustom(

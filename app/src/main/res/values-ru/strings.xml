@@ -109,5 +109,6 @@
     <string name="vehicle_trailer_information">Информация о авто/м и прицепе</string>
 
     <string name="missing_from_list_create">Отсутствует в списке? Создать</string>
+    <string name="select_currency">Select currency</string>
 
 </resources>
