@@ -72,16 +72,23 @@
 --------------------------------------------------
 
 Таблица валют (Currency)
-1. Порядковый номере (id)
-2. Полное название валюты(fullNameCurrency)
-3. Сокращенное название валюты(shortNameCurrency)
+1. Порядковый номере. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Полное название валюты на русском. Тип: String. Название: "fullNameCurrencyRus". NOT NULL
+3. Полное название валюты на английском. Тип: String. Название: "fullNameCurrencyEng". NOT NULL
+3. Сокращенное название валюты. Тип: String. Название: "shortNameCurrency". NOT NULL
 
 Таблица стран (Country)
-1. Порядковый номер (id)
-2. Полное название страны (fullNameCountry)
-3. Сокращенное название страны (shortNameCountry)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Полное название страны на русском. Тип: String. Название: "fullNameCountryRus". NOT NULL.
+3. Полное название страны на английском. Тип: String. Название: "fullNameCountryEng". NOT NULL.
+4. Сокращенное название страны. Тип: String. Название: "shortNameCountry". NOT NULL.
+5. Рейтинг страны. Тип: Int. Название: "rating". NOT NULL, DEFAULT = 0.
+6. Избранные страны. Тип: Int. Название: "favorite". NOT NULL, DEFAULT = 0. (1 = TRUE, 0 = FALSE)
 
 Таблица городов (Township)
-1. Порядковый номер (id)
-2. Город (township)
-3. К какой стране относится, связь с таблицей *СТРАН* (countryId)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Город на русском. Тип: String. Название: "townshipRus". NOT NULL.
+3. Город на английском. Тип: String. Название: "townshipEng". NOT NULL.
+4. К какой стране относится, связь с таблицей *СТРАН*. Тип: Int. Название: "countryId". NOT NULL
+5. Рейтинг городов. Тип: Int. Название: "rating". NOT NULL, DEFAULT = 0.
+6. Избранные страны. Тип: Int. Название: "favorite". NOT NULL, DEFAULT = 0. (1 = TRUE, 0 = FALSE)
