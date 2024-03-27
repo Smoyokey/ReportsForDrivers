@@ -20,6 +20,7 @@ import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsProgr
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
 import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
 import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsScreen
+import com.example.reportsfordrivers.ui.layouts.setting.SettingCountriesCitiesScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrailersScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
@@ -147,6 +148,9 @@ fun ReportsForDriversNavHost(
         }
         composable(route = ReportsForDriversSchema.VehicleAndTrailerData.name) {
             SettingDataVehiclesTrailersScreen()
+        }
+        composable(route = ReportsForDriversSchema.CountriesCities.name) {
+            SettingCountriesCitiesScreen()
         }
         composable(route = ReportsForDriversSchema.Feedback.name) {
             SettingFeedbackScreen()

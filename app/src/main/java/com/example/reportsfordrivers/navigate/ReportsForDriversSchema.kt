@@ -22,5 +22,6 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
     SettingStart(title = R.string.settings),
     PersonalInformation(title = R.string.personal_data),
     VehicleAndTrailerData(title = R.string.settings),
+    CountriesCities(title = R.string.countries_cities),
     Feedback(title = R.string.settings)
 }

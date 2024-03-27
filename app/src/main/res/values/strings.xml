@@ -120,5 +120,6 @@
     <string name="missing_from_list_create">Missing from the list? Create</string>
     <string name="select_currency">Select currency</string>
     <string name="calendar">Calendar</string>
+    <string name="countries_cities">Countries and cities</string>
 
 </resources>
