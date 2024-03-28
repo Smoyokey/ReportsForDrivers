@@ -1,0 +1,119 @@
+Запросы
+
+
+1. Выгрузка всех данных:
+    Выгружаются все строки общей информации отчета из первой таблицы (MainInfo)
+(Столбцы:id, nameReport, dateCreate, routeMainInfo)
+
+2. Выгрузка определенного одного отчёта:
+    Выгружается отчет из первой таблицы (MainInfo) по id, со стобцами: id, nameReport, dateCreate,
+reportNameId
+    Далее по цепочке идет выгрузка данных из второй таблицы (ReportName) по id, взятый из
+reportNameId(MainInfo). Выгружаются все столбцы
+    Из 3-ей таблицы (PersonalInfo) по personalInfoId (ReportName). Столбцы:
+lastName, firstName, patronymic.
+    Из 4-ой таблицы (vehicle) по vehicleId (ReportName). Столбцы: makeVehicle,
+registrationNumberVehicle.
+    Из 5-ой таблицы (Trailer) по trailerId (ReportName). Столбцы: makeTrailer,
+registrationNumberTrailer
+    Из 6-ой таблицы (Route) по routeId (ReportName). Столбцы: route, date, dateDeparture,
+dateReturn, dateBorderCrossingDeparture, dateBorderCrossingReturn, speedometerReadingDeparture,
+speedometerReadingReturn.
+
+Т е в итоге должна получится новая таблица со столбцами:
+    1) id (mainInfo)
+    2) nameReport (mainInfo)
+    3) dateCreate (mainInfo)
+    4) reportNameId (mainInfo)
+    5) idReportName (ReportName)
+    6) waybill (ReportName)
+    7) mainCity (ReportName)
+    8) date (ReportName)
+    9) personalInfoId (ReportName)
+    10) vehicleId (ReportName)
+    11) trailerId (ReportName)
+    12) routeId (ReportName)
+    13) lastName (PersonalInfo)
+    14) firstName (PersonalInfo)
+    15) patronymic (PersonalInfo)
+    16) makeVehicle (Vehicle)
+    17) registrationNumberVehicle (Vehicle)
+    18) makeTrailer (Trailer)
+    19) registrationNumberTrailer (Trailer)
+    20) route (Route)
+    21) dateDeparture (Route)
+    22) dateReturn (Route)
+    23) dateBorderCrossingDeparture (Route)
+    24) dateBorderCrossingReturn (Route)
+    25) speedometerReadingDeparture (Route)
+    26) speedometerReadingReturn (Route)
+    27) fulled (Route)
+
+
+К этому запросу еще 2 запроса будет дополнительных:
+
+    Выгрузить данные из 7-ой таблицы (ProgressReport) по условию:
+        reportNameId (ProgressReport) == id (ReportName)
+    Столбцы: id, date, country, townshipOne, townshipTwo, distance, weight.
+        В итоге получится новая таблица:
+            1) id (ProgressReport)
+            2) date (ProgressReport)
+            3) country (ProgressReport)
+            4) townshipOne (ProgressReport)
+            5) townshipTwo (ProgressReport)
+            6) distance (ProgressReport)
+            7) weight (ProgressReport)
+
+    И второй запрос выгрузить данные из 8-ой таблицы (ExpensesTrip) по условию:
+        reportNameId (ExpensesTrip == id (ReportName)
+    Столбцы: id, date, documentNumber, expenseItem, sum, currency
+        В итоге получится новая таблица:
+            1) id (ExpensesTrip)
+            2) date (ExpensesTrip)
+            3) documentNumber (ExpensesTrip)
+            4) expenseItem (ExpensesTrip)
+            5) sum (ExpensesTrip)
+            6) currency (ExpensesTrip)
+
+
+3. Выгрузка данных из таблицы Country с сортировкой по алфавиту по столбцу *fullNameCountryRus*
+    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
+4. Выгрузка данных из таблицы Country с сортировкой по алфавиту по столбцу *fullNameCountryEng*
+    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
+5. Выгрузка данных из таблицы Country с сортировкой от большего к меньшему по столбцу *rating*
+    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
+6. Выгрузка данных из таблицы Country с сортировкой от большего к меньшему по столбцу *rating*
+    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
+!!!IGNORE!!!7. Выгрузка данных из таблицы Country избранных (favorite == 1).
+!!!IGNORE!!!    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
+!!!IGNORE!!!8. Выгрузка данных из таблицы Country избранных (favorite == 1).
+!!!IGNORE!!!    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
+!!!IGNORE!!!9. Выгрузка данных из таблицы Country, по fullNameCountryRus (fullNameCountryRus == STRING)
+!!!IGNORE!!!   Столбцы: id, fullNameCountryRus, rating, favorite.
+!!!IGNORE!!!10. Выгрузка данных из таблицы Country, по fullNameCountryEng (fullNameCountryEng == STRING)
+!!!IGNORE!!!    Столбцы: id, fullNameCountryEng, rating, favorite.
+
+11. Выгрузка данных из таблицы Township с сортировкой по алфавиту по столбцу *townshipRus*
+    Столбцы: id, townshipRus, countryId, rating, favorite
+12. Выгрузка данных из таблицы Township с сортировкой по алфавиту по столбцу *townshipEng*
+    Столбцы: id, townshipEng, countryId, rating, favorite
+13. Выгрузка данных из таблицы Township с сортировкой от большего к меньшему по столбцу *rating*
+    Столбцы: id, townshipRus, countryId, rating, favorite
+14. Выгрузка данных из таблицы Township с сортировкой от большего к меньшему по столбцу *rating*
+    Столбцы: id, townshipEng, countryId, rating, favorite
+!!!IGNORE!!!15. Выгрузка данных из таблицы Township избранных (favorite == 1)
+!!!IGNORE!!!    Столбцы: id, townshipRus, countryId, rating, favorite
+!!!IGNORE!!!16. Выгрузка данных из таблицы Township избранных (favorite == 1)
+!!!IGNORE!!!    Столбцы: id, townshipEng, countryId, rating, favorite
+17. Выгрузка данных из таблицы Township по townshipRus (townshipRus = STRING)
+    Столбцы: id, townshipRus, countryId, rating, favorite
+18. Выгрузка данных из таблицы Township по townshipEng (townshipEng = STRING)
+    Столбцы: id, townshipEng, countryId, rating, favorite
+19. Выгрузка данных из таблицы Township по countryId (CountryId (Township) == id (Country))
+    Столбцы: id, townshipRus, countryId, rating, favorite
+20. Выгрузка данных из таблицы Township по countryId (CountryId (Township) == id (Country))
+    Столбцы: id, townshipEng, countryId, rating, favorite
+
+
+21. Выгрузка данных из 9-ой таблицы (VehicleTrailerSaveData) по условию (vehicleOrTrailer == ENUM)
+    Cтолбцы: id, vehicleOrTrailer, make, registrationNumber

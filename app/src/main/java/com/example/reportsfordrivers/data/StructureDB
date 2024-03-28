@@ -1,83 +1,83 @@
 Структура базы данных
 
-Первая таблица (MainInfo)
-1. Порядковый номер(id)
-2. Название отчета (nameReport)
-3. Дата создания (dateCreate)
-4. Маршрут (route)
-5. Связь со второй таблицей (reportNameId)
+Первая таблица MainInfo (main_info)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Название отчета. Тип: String. Название: "nameReport". NOT NULL.
+3. Дата создания. Тип: String. Название: "dateCreate". NOT NULL.
+4. Маршрут. Тип: String. Название: "routeMainInfo". NOT NULL.
+5. Связь со второй таблицей. Тип: Int. Название: "reportNameId". NOT NULL.
 
-Вторая таблица (ReportName)
-1. Порядковый номер (id)
-2. Путевой лист № (waybill)
-3. Главный город (mainCity)
-4. Дата рейса (date)
-5. Связь ко второй таблице (personalInfoId)
-6. Связь к третье таблице (vehicleId)
-7. Связь к четвертой таблице (trailerId)
-8. Связь к пятой таблице (routeId)
+Вторая таблица ReportName (report_name)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Путевой лист №. Тип: Int. Название: "waybill". NOT NULL.
+3. Главный город. Тип: String. Название: "mainCity". NOT NULL.
+4. Дата рейса. Тип: String. Название: "date". NOT NULL.
+5. Связь к третьей таблице. Тип: Int. Название: "personalInfoId". NOT NULL.
+6. Связь к четвертой таблице. Тип: Int. Название: "vehicleId". NOT NULL.
+7. Связь к пятой таблице. Тип: Int. Название: "trailerId". NOT NULL.
+8. Связь к шестой таблице. Тип: Int. Название: "routeId". NOT NULL.
 
-Третья таблица (PersonalInfo)
-1. Порядковый номер (id)
-2. Фамилия (lastName)
-3. Имя (firstName)
-4. Отчество (patronymic)
+Третья таблица PersonalInfo (personal_info)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Фамилия. Тип: String. Название: "lastName". NOT NULL.
+3. Имя. Тип: String. Название: "firstName". NOT NULL.
+4. Отчество. Тип: String. Название: "patronymic". NOT NULL.
 
-Четвертая таблица (Vehicle)
-1. Порядковый номер (id)
-2. Марка транспортного средства (makeVehicle)
-3. Государственный номер транспортного средства (registrationNumberVehicle)
+Четвертая таблица Vehicle (vehicle)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Марка транспортного средства. Тип: String. Название: "makeVehicle". NOT NULL.
+3. Государственный номер ТС. Тип: String. Название: "registrationNumberVehicle". NOT NULL.
 
-Пятая таблица (Trailer)
-1. Порядковый номер (id)
-2. Марка прицепа (makeTrailer)
+Пятая таблица Trailer (trailer)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Марка прицепа. Тип: String. Название: "makeTrailer". NOT NULL.
 3. Государственный номер прицепа (registrationNumberTrailer)
 
-Шестая таблица (Route)
-1. Порядковый номер (id)
-2. Маршрут (route)
-3. Дата выезда (dateDeparture)
-4. Дата возврата (dateReturn)
-5. Дата пересечения границы при отъезде (dateBorderCrossingDeparture)
-6. Дата пересечения границы при возврате (dateBorderCrossingReturn)
-7. Показание спидометра при выезде (speedometerReadingDeparture)
-8. Показание спидометра при отъезде (speedometerReadingReturn)
-9. Заправлено (fulled)
+Шестая таблица Route. (route)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Маршрут. Тип: String. Название: "route". NOT NULL.
+3. Дата выезда. Тип: String. Название: "dateDeparture". NOT NULL.
+4. Дата возврата. Тип: String. Название: "dateReturn". NOT NULL.
+5. Дата пересечения границы при отъезде. Тип: String. Название: "dateBorderCrossingDeparture". NOT NULL.
+6. Дата пересечения границы при возврате. Тип: String. Название: "dateBorderCrossingReturn". NOT NULL
+7. Показание спидометра при выезде. Тип: String. Название: "speedometerReadingDeparture". NOT NULL.
+8. Показание спидометра при отъезде. Тип: String. Название: "speedometerReadingReturn". NOT NULL.
+9. Заправлено. Тип: Double. Название: "fulled". NOT NULL.
 
-Седьмая таблица (ProgressReport)
-1. Порядковый номер (id)
-2. Дата (date)
-3. Страна (country)
-4. Населенный пункт 1 (townshipOne)
-5. Населенный пункт 2 (townshipTwo)
-5. Расстояние (distance)
-6. Вес груза (weight)
-7. Связь cо второй таблицей (reportNameId)
+Седьмая таблица ProgressReport (progress_report)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Дата. Тип: String. Название: "date". NOT NULL.
+3. Страна. Тип: String. Название: "country". NOT NULL.
+4. Населенный пункт 1. Тип: String. Название: "townshipOne". NOT NULL.
+5. Населенный пункт 2. Тип: String. Название: "townshipTwo". NOT NULL.
+5. Расстояние. Тип: Double. Название: "distance". NOT NULL.
+6. Вес груза. Тип: Double. Название: "weight". NOT NULL.
+7. Связь cо второй таблицей. Тип: Int. Название: "reportNameId". NOT NULL.
 
-Восьмая таблица (ExpensesTrip)
-1. Порядковый номер (id)
-2. Дата (date)
-3. Номер документа (documentNumber)
-4. Статья расходов (expenseItem)
-5. Сумма (sum)
-6. Валюта (currency)
-7. Связь со второй таблицей (reportNameId)
+Восьмая таблица ExpensesTrip (expenses_trip)
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Дата. Тип: String. Название: "date". NOT NULL.
+3. Номер документа. Тип: String. Название: "documentNumber". NOT NULL.
+4. Статья расходов. Тип: String. Название: "expenseItem". NOT NULL.
+5. Сумма. Тип: Double. Название: "sum". NOT NULL.
+6. Валюта. Тип: String. Название: "currency". NOT NULL.
+7. Связь со второй таблицей. Тип: Int. Название: "reportNameId". NOT NULL.
 
-Девятая таблица (VehicleTrailerSaveData)
-1. Порядковый номер (id)
-2. Машина или прицеп (VehicleOrTrailer)
-3. Марка (make)
-4. Гос номер (registrationNumber)
+Девятая таблица VehicleTrailerSaveData (vehicle_trailer_save_data(
+1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
+2. Машина или прицеп. Тип: String. Название: "vehicleOrTrailer". NOT NULL.
+3. Марка. Тип: String. Название: "make". NOT NULL.
+4. Гос номер. Тип: String. Название: "registrationNumber". NOT NULL.
 
 --------------------------------------------------
 
-Таблица валют (Currency)
+Таблица валют Currency (currency)
 1. Порядковый номере. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
 2. Полное название валюты на русском. Тип: String. Название: "fullNameCurrencyRus". NOT NULL
 3. Полное название валюты на английском. Тип: String. Название: "fullNameCurrencyEng". NOT NULL
 3. Сокращенное название валюты. Тип: String. Название: "shortNameCurrency". NOT NULL
 
-Таблица стран (Country)
+Таблица стран Country (country)
 1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
 2. Полное название страны на русском. Тип: String. Название: "fullNameCountryRus". NOT NULL.
 3. Полное название страны на английском. Тип: String. Название: "fullNameCountryEng". NOT NULL.
@@ -85,7 +85,7 @@
 5. Рейтинг страны. Тип: Int. Название: "rating". NOT NULL, DEFAULT = 0.
 6. Избранные страны. Тип: Int. Название: "favorite". NOT NULL, DEFAULT = 0. (1 = TRUE, 0 = FALSE)
 
-Таблица городов (Township)
+Таблица городов Township (township)
 1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
 2. Город на русском. Тип: String. Название: "townshipRus". NOT NULL.
 3. Город на английском. Тип: String. Название: "townshipEng". NOT NULL.
