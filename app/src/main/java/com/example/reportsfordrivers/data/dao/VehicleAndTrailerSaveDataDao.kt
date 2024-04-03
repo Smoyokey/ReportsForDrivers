@@ -25,4 +25,7 @@ interface VehicleAndTrailerSaveDataDao {
 
     @Query("SELECT * FROM VEHICLE_TRAILER_SAVE_DATA WHERE id = :id")
     fun getOneItem(id: Int): Flow<VehicleAndTrailer>
+
+    @Query("DELETE FROM VEHICLE_TRAILER_SAVE_DATA WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

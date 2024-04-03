@@ -26,4 +26,7 @@ interface ProgressReportDao {
 
     @Query("SELECT * FROM progress_report WHERE id = :id")
     fun getOneItem(id: Int): Flow<ProgressReport>
+
+    @Query("DELETE FROM PROGRESS_REPORT WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

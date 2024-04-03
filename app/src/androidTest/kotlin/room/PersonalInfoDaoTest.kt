@@ -35,8 +35,8 @@ class PersonalInfoDaoTest{
     lateinit var database: AppDatabase
     private lateinit var personalInfoDao: PersonalInfoDao
 
-    private var item1 = PersonalInfo(1, "Ivanov", "Ivan", "Ivanovich")
-    private var item2 = PersonalInfo(2, "Petrov", "Petr", "Petrovich")
+    private var item1 = PersonalInfo(lastName = "Ivanov", firstName = "Ivan", patronymic = "Ivanovich")
+    private var item2 = PersonalInfo(lastName = "Petrov", firstName = "Petr", patronymic = "Petrovich")
 
     private suspend fun addOneElement() {
         personalInfoDao.insert(item1)
@@ -92,8 +92,8 @@ class PersonalInfoDaoTest{
     @Throws(Exception::class)
     fun daoDeleteItems_deletesItemsInDb() = runBlocking {
         addTwoElements()
-        personalInfoDao.delete(item1)
-        personalInfoDao.delete(item2)
+        personalInfoDao.deleteOneElementForId(1)
+        personalInfoDao.deleteOneElementForId(2)
 
         val allItems = personalInfoDao.getAllItem().first()
         assertTrue(allItems.isEmpty())

@@ -25,4 +25,7 @@ interface RouteDao {
 
     @Query("SELECT * FROM ROUTE WHERE id = :id")
     fun getOneItem(id: Int): Flow<Route>
+
+    @Query("DELETE FROM ROUTE WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

@@ -26,4 +26,7 @@ interface VehicleDao {
 
     @Query("SELECT * FROM VEHICLE WHERE id = :id")
     fun getOneItem(id: Int): Flow<Vehicle>
+
+    @Query("DELETE FROM VEHICLE WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

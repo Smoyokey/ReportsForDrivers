@@ -8,6 +8,8 @@ interface VehicleAndTrailerSaveDataRepository {
 
     fun getOneItemStream(id: Int) : Flow<VehicleAndTrailer?>
 
+    suspend fun deleteOneElementForId(id: Int)
+
     suspend fun insertItem(item: VehicleAndTrailer)
 
     suspend fun deleteItem(item: VehicleAndTrailer)

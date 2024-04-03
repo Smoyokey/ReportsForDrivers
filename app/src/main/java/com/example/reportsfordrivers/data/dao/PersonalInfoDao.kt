@@ -25,4 +25,7 @@ interface PersonalInfoDao {
 
     @Query("SELECT * FROM PERSONAL_INFO WHERE id = :id")
     fun getOneItem(id: Int): Flow<PersonalInfo>
+
+    @Query("DELETE FROM PERSONAL_INFO WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

@@ -13,6 +13,8 @@ class TrailerDiRepo @Inject constructor(private val trailerDao: TrailerDao) : Tr
 
     override fun getOneItemStream(id: Int): Flow<Trailer?> = trailerDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = trailerDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: Trailer) = trailerDao.insert(item)
 
     override suspend fun deleteItem(item: Trailer) = trailerDao.delete(item)

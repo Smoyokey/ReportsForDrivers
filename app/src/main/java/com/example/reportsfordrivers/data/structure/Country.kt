@@ -13,5 +13,9 @@ data class Country (
     @ColumnInfo(name = "full_name_country_eng")
     val fullNameCountryEng: String,
     @ColumnInfo(name = "short_name_country")
-    val shortNameCountry: String
+    val shortNameCountry: String,
+    @ColumnInfo(name = "rating")
+    val rating: Int = 0,
+    @ColumnInfo(name = "favorite")
+    val favorite: Int = 0
 )

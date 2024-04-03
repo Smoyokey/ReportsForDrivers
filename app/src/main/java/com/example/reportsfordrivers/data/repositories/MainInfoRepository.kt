@@ -8,6 +8,8 @@ interface MainInfoRepository {
 
     fun getOneItemStream(id: Int) : Flow<MainInfo?>
 
+    suspend fun deleteOneElementForId(id: Int)
+
     suspend fun insertItem (item: MainInfo)
 
     suspend fun deleteItem (item: MainInfo)

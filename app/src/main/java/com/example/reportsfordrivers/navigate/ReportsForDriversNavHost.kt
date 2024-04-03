@@ -138,6 +138,9 @@ fun ReportsForDriversNavHost(
                 onVehicleAndTrailerDate = {
                     navController.navigate(ReportsForDriversSchema.VehicleAndTrailerData.name)
                 },
+                onCountriesCities = {
+                    navController.navigate(ReportsForDriversSchema.CountriesCities.name)
+                },
                 onFeedback = {
                     navController.navigate(ReportsForDriversSchema.Feedback.name)
                 }

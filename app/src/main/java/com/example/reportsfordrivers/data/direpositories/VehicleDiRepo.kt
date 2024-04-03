@@ -13,6 +13,8 @@ class VehicleDiRepo @Inject constructor(private val vehicleDao: VehicleDao) : Ve
 
     override fun getOneItemStream(id: Int): Flow<Vehicle?> = vehicleDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = vehicleDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: Vehicle) = vehicleDao.insert(item)
 
     override suspend fun deleteItem(item: Vehicle) = vehicleDao.delete(item)

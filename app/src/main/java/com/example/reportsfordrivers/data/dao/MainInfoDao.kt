@@ -25,4 +25,7 @@ interface MainInfoDao {
 
     @Query("SELECT * FROM MAIN_INFO WHERE id = :id")
     fun getOneItem(id: Int): Flow<MainInfo>
+
+    @Query("DELETE FROM MAIN_INFO WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

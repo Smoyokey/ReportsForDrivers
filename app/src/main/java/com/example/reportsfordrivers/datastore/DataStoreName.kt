@@ -19,4 +19,16 @@ object DataStoreName {
     val PATRONYMIC = stringPreferencesKey(
         name = "patronymic"
     )
+
+    val LANGUAGE_REPORT = stringPreferencesKey(
+        name = "languageReport"
+    )
+
+    val THEME_APP = stringPreferencesKey(
+        name = "themeApp"
+    )
+
+    val DEFAULT_CURRENCY = stringPreferencesKey(
+        name = "defaultCurrency"
+    )
 }

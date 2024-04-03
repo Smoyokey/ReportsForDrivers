@@ -13,6 +13,8 @@ class ReportNameDiRepo @Inject constructor(private val reportNameDao: ReportName
 
     override fun getOneItemStream(id: Int): Flow<ReportName?> = reportNameDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = reportNameDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: ReportName) = reportNameDao.insert(item)
 
     override suspend fun deleteItem(item: ReportName) = reportNameDao.delete(item)

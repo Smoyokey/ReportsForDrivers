@@ -13,5 +13,9 @@ data class Township (
     @ColumnInfo(name = "township_eng")
     val townshipEng: String,
     @ColumnInfo(name = "country_id")
-    val countryId: Int
+    val countryId: Int,
+    @ColumnInfo(name = "rating")
+    val rating: Int,
+    @ColumnInfo(name = "favorite")
+    val favorite: Int
 )

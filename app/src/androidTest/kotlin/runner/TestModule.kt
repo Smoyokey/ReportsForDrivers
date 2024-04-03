@@ -3,10 +3,13 @@ package runner
 import android.content.Context
 import androidx.room.Room
 import com.example.reportsfordrivers.data.AppDatabase
+import com.example.reportsfordrivers.data.dao.CountryDao
+import com.example.reportsfordrivers.data.dao.CurrencyDao
 import com.example.reportsfordrivers.data.dao.PersonalInfoDao
 import com.example.reportsfordrivers.data.dao.ProgressReportDao
 import com.example.reportsfordrivers.data.dao.ReportNameDao
 import com.example.reportsfordrivers.data.dao.RouteDao
+import com.example.reportsfordrivers.data.dao.TownshipDao
 import com.example.reportsfordrivers.data.dao.TrailerDao
 import com.example.reportsfordrivers.data.dao.TripExpensesDao
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
@@ -82,9 +85,38 @@ object TestModule {
 
     @Provides
     @Named("test_db")
-    fun providePersonalInfo (@ApplicationContext context: Context) =
-        Room.inMemoryDatabaseBuilder(
+    fun provideCountryDao(database: AppDatabase) : CountryDao {
+        return database.countryDao()
+    }
+
+    @Provides
+    @Named("test_db")
+    fun provideTownshipDao(database: AppDatabase) : TownshipDao {
+        return database.townshipDao()
+    }
+
+    @Provides
+    @Named("test_db")
+    fun provideCurrencyDao(database: AppDatabase) : CurrencyDao {
+        return database.currencyDao()
+    }
+
+    @Provides
+    @Named("test_db")
+    fun provideDatabase (@ApplicationContext context: Context): AppDatabase {
+        return Room.inMemoryDatabaseBuilder(
             context,
-            AppDatabase::class.java
-        ).allowMainThreadQueries().build()
+            AppDatabase::class.java,
+        )
+            .allowMainThreadQueries()
+//            .createFromAsset("databases/reports.db")
+            .build()
+    }
+//        Room.inMemoryDatabaseBuilder(
+//            context,
+//            AppDatabase::class.java
+//        ).allowMainThreadQueries()
+////            .createFromAsset("databases/reports.db")
+//            .build()
+
 }

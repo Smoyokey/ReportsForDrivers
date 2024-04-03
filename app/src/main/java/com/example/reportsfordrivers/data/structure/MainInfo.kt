@@ -12,8 +12,8 @@ data class MainInfo (
     val nameReport: String,
     @ColumnInfo(name = "date_create")
     val dateCreate: String,
-    @ColumnInfo(name = "route")
-    val route: String,
+    @ColumnInfo(name = "route_main_info")
+    val routeMainInfo: String,
     @ColumnInfo(name = "report_name_id")
     val reportNameId: Int
 )

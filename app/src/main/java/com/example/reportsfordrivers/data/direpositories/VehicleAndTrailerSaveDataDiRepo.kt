@@ -18,6 +18,9 @@ class VehicleAndTrailerSaveDataDiRepo @Inject constructor(
     override fun getOneItemStream(id: Int): Flow<VehicleAndTrailer?> =
         vehicleAndTrailerSaveDataDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) =
+        vehicleAndTrailerSaveDataDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: VehicleAndTrailer) =
         vehicleAndTrailerSaveDataDao.insert(item)
 

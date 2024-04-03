@@ -13,6 +13,8 @@ class RouteDiRepo @Inject constructor(private val routeDao: RouteDao) : RouteRep
 
     override fun getOneItemStream(id: Int): Flow<Route?> = routeDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = routeDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: Route) = routeDao.insert(item)
 
     override suspend fun deleteItem(item: Route) = routeDao.delete(item)

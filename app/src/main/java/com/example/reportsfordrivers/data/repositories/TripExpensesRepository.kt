@@ -8,6 +8,8 @@ interface TripExpensesRepository {
 
     fun getOneItemStream(id: Int) : Flow<TripExpenses?>
 
+    suspend fun deleteOneElementForId(id: Int)
+
     suspend fun insertItem(item: TripExpenses)
 
     suspend fun deleteItem(item: TripExpenses)

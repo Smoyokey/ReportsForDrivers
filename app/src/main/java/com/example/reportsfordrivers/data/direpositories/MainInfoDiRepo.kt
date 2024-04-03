@@ -14,6 +14,8 @@ class MainInfoDiRepo @Inject constructor(private val mainInfoDao: MainInfoDao) :
 
     override fun getOneItemStream(id: Int): Flow<MainInfo?> = mainInfoDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = mainInfoDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: MainInfo) = mainInfoDao.insert(item)
 
     override suspend fun deleteItem(item: MainInfo) = mainInfoDao.delete(item)

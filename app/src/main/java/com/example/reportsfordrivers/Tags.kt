@@ -1,7 +1,5 @@
 package com.example.reportsfordrivers
 
-
-
 object Tags {
     const val TAG_COLUMN_FIRST_ENTRY: String = "tagColumnFirstEntry"
     const val TAG_TEST_FIRST_ENTRY_LAST_NAME: String = "tagTestFirstEntryLastName"

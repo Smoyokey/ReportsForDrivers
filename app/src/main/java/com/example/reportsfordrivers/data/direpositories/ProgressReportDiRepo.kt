@@ -14,6 +14,8 @@ class ProgressReportDiRepo @Inject constructor(private val progressReportDao: Pr
 
     override fun getOneItemStream(id: Int): Flow<ProgressReport?> = progressReportDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = progressReportDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: ProgressReport) = progressReportDao.insert(item)
 
     override suspend fun deleteItem(item: ProgressReport) = progressReportDao.delete(item)

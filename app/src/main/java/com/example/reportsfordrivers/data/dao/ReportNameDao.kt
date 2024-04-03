@@ -25,4 +25,7 @@ interface ReportNameDao {
 
     @Query("SELECT * FROM report_name WHERE id = :id")
     fun getOneItem(id: Int): Flow<ReportName>
+
+    @Query("DELETE FROM REPORT_NAME WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

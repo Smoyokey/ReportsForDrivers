@@ -8,6 +8,8 @@ interface TrailerRepository {
 
     fun getOneItemStream(id: Int) : Flow<Trailer?>
 
+    suspend fun deleteOneElementForId(id: Int)
+
     suspend fun insertItem(item: Trailer)
 
     suspend fun deleteItem(item: Trailer)

@@ -8,6 +8,8 @@ interface RouteRepository {
 
     fun getOneItemStream(id: Int) : Flow<Route?>
 
+    suspend fun deleteOneElementForId(id: Int)
+
     suspend fun insertItem(item: Route)
 
     suspend fun deleteItem(item: Route)

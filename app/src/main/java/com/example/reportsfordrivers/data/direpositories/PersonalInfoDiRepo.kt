@@ -14,6 +14,8 @@ class PersonalInfoDiRepo @Inject constructor(private val personalInfoDao: Person
 
     override fun getOneItemStream(id: Int): Flow<PersonalInfo?> = personalInfoDao.getOneItem(id)
 
+    override suspend fun deleteOneElementForId(id: Int) = personalInfoDao.deleteOneElementForId(id)
+
     override suspend fun insertItem(item: PersonalInfo) = personalInfoDao.insert(item)
 
     override suspend fun deleteItem(item: PersonalInfo) = personalInfoDao.delete(item)

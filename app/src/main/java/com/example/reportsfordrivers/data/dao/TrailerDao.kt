@@ -25,4 +25,7 @@ interface TrailerDao {
 
     @Query("SELECT * FROM TRAILER WHERE id = :id")
     fun getOneItem(id: Int): Flow<Trailer>
+
+    @Query("DELETE FROM TRAILER WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

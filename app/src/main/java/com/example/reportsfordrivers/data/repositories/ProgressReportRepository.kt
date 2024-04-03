@@ -8,6 +8,8 @@ interface ProgressReportRepository {
 
     fun getOneItemStream(id: Int) : Flow<ProgressReport?>
 
+    suspend fun deleteOneElementForId(id: Int)
+
     suspend fun insertItem(item: ProgressReport)
 
     suspend fun deleteItem(item: ProgressReport)
