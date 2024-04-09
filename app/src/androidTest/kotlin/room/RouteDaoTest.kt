@@ -1,13 +1,8 @@
 package room
 
-import androidx.activity.compose.setContent
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import com.example.reportsfordrivers.MainActivity
-import com.example.reportsfordrivers.ReportsForDriversApp
 import com.example.reportsfordrivers.data.AppDatabase
 import com.example.reportsfordrivers.data.dao.RouteDao
 import com.example.reportsfordrivers.data.structure.Route
-import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -18,7 +13,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import runner.HiltTestRunner
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
@@ -43,7 +37,7 @@ class RouteDaoTest {
         "5",
         "6",
         "7",
-        8.0
+        "8.0"
     )
     private var item2 = Route(
         2,
@@ -54,7 +48,7 @@ class RouteDaoTest {
         "5",
         "6",
         "7",
-        8.0
+        "8.0"
     )
 
     private var item3 = Route(
@@ -66,7 +60,7 @@ class RouteDaoTest {
         "Five",
         "Six",
         "Seven",
-        10.0
+        "10.0"
     )
 
     private var item4 = Route(
@@ -78,7 +72,7 @@ class RouteDaoTest {
         "Five",
         "Six",
         "Seven",
-        10.0
+        "10.0"
     )
 
     private suspend fun addOneElement() {

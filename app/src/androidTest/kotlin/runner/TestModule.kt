@@ -104,19 +104,13 @@ object TestModule {
     @Provides
     @Named("test_db")
     fun provideDatabase (@ApplicationContext context: Context): AppDatabase {
-        return Room.inMemoryDatabaseBuilder(
+        return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
+            "test.db"
         )
             .allowMainThreadQueries()
-//            .createFromAsset("databases/reports.db")
+            .createFromAsset("databases/testdb.db")
             .build()
     }
-//        Room.inMemoryDatabaseBuilder(
-//            context,
-//            AppDatabase::class.java
-//        ).allowMainThreadQueries()
-////            .createFromAsset("databases/reports.db")
-//            .build()
-
 }

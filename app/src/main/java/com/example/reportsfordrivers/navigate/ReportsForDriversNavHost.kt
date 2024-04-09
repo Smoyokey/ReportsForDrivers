@@ -2,10 +2,8 @@ package com.example.reportsfordrivers.navigate
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +16,8 @@ import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsExpen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsPreviewScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsProgressReportsScreen
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
-import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
+import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryOneScreen
+import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryTwoScreen
 import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingCountriesCitiesScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrailersScreen
@@ -28,7 +27,6 @@ import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScree
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
-import com.example.reportsfordrivers.viewmodel.setting.PersonalDataViewModel
 
 @Composable
 fun ReportsForDriversNavHost(
@@ -50,10 +48,13 @@ fun ReportsForDriversNavHost(
         composable(route = ReportsForDriversSchema.Start.name) {
 
             if (viewModelMain.isFirstEntry()) {
-                FirstEntryScreen(
+                FirstEntryOneScreen(
                     onMainMenu = {
                         navController.navigate(ReportsForDriversSchema.Start.name)
                         viewModelFirst.onFirstEntry()
+                    },
+                    onFirstEntryTwo = {
+                        navController.navigate(ReportsForDriversSchema.FirstEntryTwo.name)
                     },
                     viewModel = viewModelFirst
                 )
@@ -141,9 +142,6 @@ fun ReportsForDriversNavHost(
                 onCountriesCities = {
                     navController.navigate(ReportsForDriversSchema.CountriesCities.name)
                 },
-                onFeedback = {
-                    navController.navigate(ReportsForDriversSchema.Feedback.name)
-                }
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInformation.name) {
@@ -155,12 +153,20 @@ fun ReportsForDriversNavHost(
         composable(route = ReportsForDriversSchema.CountriesCities.name) {
             SettingCountriesCitiesScreen()
         }
-        composable(route = ReportsForDriversSchema.Feedback.name) {
-            SettingFeedbackScreen()
-        }
 
-        composable(route = ReportsForDriversSchema.FirstEntry.name) {
-            FirstEntryScreen(
+
+        composable(route = ReportsForDriversSchema.FirstEntryOne.name) {
+            FirstEntryOneScreen(
+                onMainMenu = {
+                    navController.navigate(ReportsForDriversSchema.Start.name)
+                },
+                onFirstEntryTwo = {
+                    navController.navigate(ReportsForDriversSchema.FirstEntryTwo.name)
+                }
+            )
+        }
+        composable(route = ReportsForDriversSchema.FirstEntryTwo.name) {
+            FirstEntryTwoScreen(
                 onMainMenu = {
                     navController.navigate(ReportsForDriversSchema.Start.name)
                 }

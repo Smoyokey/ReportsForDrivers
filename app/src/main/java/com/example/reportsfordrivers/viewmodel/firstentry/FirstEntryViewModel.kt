@@ -18,6 +18,7 @@ private const val TAG = "FirstEntryViewModel"
 @HiltViewModel
 class FirstEntryViewModel @Inject constructor (
     private val fioFirstEntryPreferencesRepository: FioFirstEntryRepository,
+
 ): ViewModel(){
 
 

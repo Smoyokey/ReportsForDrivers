@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Easy reports</string>
 
     <string name="driver_report">Business trip report</string>
@@ -7,7 +7,7 @@
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
     <string name="patronymic">Patronymic</string>
-    <string name="add_makes_registration_vehicles_trailers">Makes and license plates
+    <string name="add_makes_registration_vehicles_trailers" tools:ignore="MissingTranslation">Makes and license plates
         of vehicles (trailers):</string>
     <string name="vehicle">Vehicle</string>
     <string name="trailer">Trailer</string>
@@ -28,8 +28,8 @@
     <string name="save_entered_data">Save the entered data?</string>
     <string name="skip">Skip</string>
     <string name="save">Save</string>
-    <string name="save_file">Save file</string>
-    <string name="save_and_exit">Save and exit</string>
+    <string name="save_file" tools:ignore="MissingTranslation">Save file</string>
+    <string name="save_and_exit" tools:ignore="MissingTranslation">Save and exit</string>
     <string name="info">Info</string>
     <string name="clear">Clear</string>
     <string name="driver">Driver:</string>
@@ -58,8 +58,8 @@
 <!--    <string name="report_stages_voucher">The report</string>-->
     <string name="country">Country</string>
     <string name="township">Township</string>
-    <string name="township_one">Township one</string>
-    <string name="township_two">Township two</string>
+    <string name="township_one" tools:ignore="MissingTranslation">Township one</string>
+    <string name="township_two" tools:ignore="MissingTranslation">Township two</string>
     <string name="townships">Townships</string>
     <string name="distance">Distance, km</string>
     <string name="cargo_weight">Weight, t</string>
@@ -88,9 +88,8 @@
     <string name="edit">Edit</string>
 
 
-    <string name="personal_data">Personal data</string>
-    <string name="data_vehicles_trailers">Data on vehicles and trailers</string>
-    <string name="feedback">Feedback (wishes and suggestions)</string>
+
+
     <string name="cancel">Cancel</string>
     <string name="your_name">Your name</string>
     <string name="your_contact_email">Your contact email</string>
@@ -115,11 +114,35 @@
     <string name="personal_information">Personal information</string>
     <string name="vehicle_trailer_information">Vehicle and trailer info</string>
 
-    <string name="load_date">Load date</string>
-    <string name="select_date">Select date</string>
+    <string name="load_date" tools:ignore="MissingTranslation">Load date</string>
+    <string name="select_date" tools:ignore="MissingTranslation">Select date</string>
     <string name="missing_from_list_create">Missing from the list? Create</string>
-    <string name="select_currency">Select currency</string>
-    <string name="calendar">Calendar</string>
-    <string name="countries_cities">Countries and cities</string>
+    <string name="calendar" tools:ignore="MissingTranslation">Calendar</string>
+
+
+    <!-- FirstEntryTwo -->
+    <string name="report_language" tools:ignore="MissingTranslation">Report language:</string>
+    <string name="russian" tools:ignore="MissingTranslation">Russian</string>
+    <string name="english" tools:ignore="MissingTranslation">English</string>
+    <string name="select_currency">Select currency:</string>
+    <string name="make_list_favorite_countries_cities" tools:ignore="MissingTranslation">
+        Make a list of favorite countries and cities
+    </string>
+    <string name="countries" tools:ignore="MissingTranslation">Countries</string>
+    <string name="cities" tools:ignore="MissingTranslation">Cities</string>
+
+
+
+    <!-- SettingMainMenu -->
+    <string name="personal_data">Personal data</string>
+    <string name="data_vehicles_trailers">Data on vehicles and trailers</string>
+    <string name="countries_cities" tools:ignore="MissingTranslation">Countries and cities</string>
+    <string name="default_currency" tools:ignore="MissingTranslation">Default currency</string>
+    <string name="dark_theme" tools:ignore="MissingTranslation">Dark theme</string>
+    <string name="information" tools:ignore="MissingTranslation">Information</string>
+    <string name="send_questions_suggestions" tools:ignore="MissingTranslation">
+        Send questions or suggestions
+    </string>
+    <string name="privacy_policy" tools:ignore="MissingTranslation">Privacy policy</string>
 
 </resources>

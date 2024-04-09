@@ -19,3 +19,29 @@ data class Township (
     @ColumnInfo(name = "favorite")
     val favorite: Int
 )
+
+data class TownshipRus(
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
+    @ColumnInfo(name = "township_rus")
+    val townshipRus: String,
+    @ColumnInfo(name = "country_id")
+    val countryId: Int,
+    @ColumnInfo(name = "rating")
+    val rating: Int,
+    @ColumnInfo(name = "favorite")
+    val favorite: Int
+)
+
+data class TownshipEng(
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
+    @ColumnInfo(name = "township_eng")
+    val townshipEng: String,
+    @ColumnInfo(name = "country_id")
+    val countryId: Int,
+    @ColumnInfo(name = "rating")
+    val rating: Int,
+    @ColumnInfo(name = "favorite")
+    val favorite: Int
+)

@@ -66,12 +66,6 @@ class SettingNavigationTest {
     }
 
     @Test
-    fun reportsForDriversNavHost_moveToSettings_inFeedback() {
-        feedback()
-        navController.assertCurrentRouteName(ReportsForDriversSchema.Feedback.name)
-    }
-
-    @Test
     fun reportsForDriversNavHost_moveToMainMenu_inMainSetting() {
         mainSetting()
         buttonNavigateUp()
@@ -106,20 +100,6 @@ class SettingNavigationTest {
         navController.assertCurrentRouteName(ReportsForDriversSchema.Start.name)
     }
 
-    @Test
-    fun reportsForDriversNavHost_moveToMainSetting_inFeedback() {
-        feedback()
-        buttonNavigateUp()
-        navController.assertCurrentRouteName(ReportsForDriversSchema.SettingStart.name)
-    }
-
-    @Test
-    fun reportsForDriversNavHost_moveToMainMenu_inFeedback() {
-        feedback()
-        repeat(2) { buttonNavigateUp() }
-        navController.assertCurrentRouteName(ReportsForDriversSchema.Start.name)
-    }
-
     private fun mainSetting() {
         composeTestRule.onNodeWithStringId(R.string.settings).performClick()
     }
@@ -134,10 +114,6 @@ class SettingNavigationTest {
         composeTestRule.onNodeWithStringId(R.string.data_vehicles_trailers).performClick()
     }
 
-    private fun feedback() {
-        mainSetting()
-        composeTestRule.onNodeWithStringId(R.string.feedback).performClick()
-    }
 
     private fun buttonNavigateUp() {
         val backButton = composeTestRule.activity.getString(R.string.back_button)

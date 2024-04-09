@@ -22,6 +22,6 @@ data class Route(
     val speedometerReadingDeparture: String,
     @ColumnInfo(name = "speedometer_reading_return")
     val speedometerReadingReturn: String,
-    @ColumnInfo(name = "fulled")
-    val fulled: Double
+    @ColumnInfo(name = "fuelled")
+    val fuelled: String
 )

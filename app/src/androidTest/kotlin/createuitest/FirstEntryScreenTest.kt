@@ -15,7 +15,7 @@ import com.example.reportsfordrivers.MainActivity
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigationtest.helpmethods.onNodeWithStringId
-import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
+import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryOneScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -44,7 +44,7 @@ class FirstEntryScreenTest {
     fun init() {
         hiltRule.inject()
         composeRule.activity.setContent {
-            FirstEntryScreen()
+            FirstEntryOneScreen()
         }
     }
 

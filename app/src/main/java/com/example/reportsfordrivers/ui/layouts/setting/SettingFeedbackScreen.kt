@@ -33,9 +33,6 @@ fun SettingFeedbackScreen() {
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(R.string.feedback)
-        )
 
         Divider(
             modifier = Modifier.padding(10.dp)

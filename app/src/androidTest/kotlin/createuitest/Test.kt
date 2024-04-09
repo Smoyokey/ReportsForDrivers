@@ -2,15 +2,11 @@ package createuitest
 
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.MainActivity
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.navigationtest.helpmethods.onNodeWithStringId
 import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResultScreen
-import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryScreen
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert.assertTrue

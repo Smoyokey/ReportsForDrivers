@@ -24,11 +24,11 @@ object DataStoreName {
         name = "languageReport"
     )
 
-    val THEME_APP = stringPreferencesKey(
-        name = "themeApp"
-    )
-
     val DEFAULT_CURRENCY = stringPreferencesKey(
         name = "defaultCurrency"
+    )
+
+    val THEME_APP = stringPreferencesKey(
+        name = "themeApp"
     )
 }

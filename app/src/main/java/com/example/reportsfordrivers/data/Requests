@@ -76,22 +76,22 @@ speedometerReadingReturn.
             6) currency (ExpensesTrip)
 
 
-3. Выгрузка данных из таблицы Country с сортировкой по алфавиту по столбцу *fullNameCountryRus*
-    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
-4. Выгрузка данных из таблицы Country с сортировкой по алфавиту по столбцу *fullNameCountryEng*
-    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
-5. Выгрузка данных из таблицы Country с сортировкой от большего к меньшему по столбцу *rating*
-    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
-6. Выгрузка данных из таблицы Country с сортировкой от большего к меньшему по столбцу *rating*
-    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
-!!!IGNORE!!!7. Выгрузка данных из таблицы Country избранных (favorite == 1).
-!!!IGNORE!!!    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
-!!!IGNORE!!!8. Выгрузка данных из таблицы Country избранных (favorite == 1).
-!!!IGNORE!!!    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
-!!!IGNORE!!!9. Выгрузка данных из таблицы Country, по fullNameCountryRus (fullNameCountryRus == STRING)
-!!!IGNORE!!!   Столбцы: id, fullNameCountryRus, rating, favorite.
-!!!IGNORE!!!10. Выгрузка данных из таблицы Country, по fullNameCountryEng (fullNameCountryEng == STRING)
-!!!IGNORE!!!    Столбцы: id, fullNameCountryEng, rating, favorite.
+!!!COMPLETE!!!3. Выгрузка данных из таблицы Country с сортировкой по алфавиту по столбцу *fullNameCountryRus*
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
+!!!COMPLETE!!!4. Выгрузка данных из таблицы Country с сортировкой по алфавиту по столбцу *fullNameCountryEng*
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
+!!!COMPLETE!!!5. Выгрузка данных из таблицы Country с сортировкой от большего к меньшему по столбцу *rating*
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
+!!!COMPLETE!!!6. Выгрузка данных из таблицы Country с сортировкой от большего к меньшему по столбцу *rating*
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
+!!!COMPLETE!!!7. Выгрузка данных из таблицы Country избранных (favorite == 1).
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryRus, shortNameCountry, rating, favorite.
+!!!COMPLETE!!!8. Выгрузка данных из таблицы Country избранных (favorite == 1).
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryEng, shortNameCountry, rating, favorite.
+!!!COMPLETE!!!9. Выгрузка данных из таблицы Country, по fullNameCountryRus (fullNameCountryRus == STRING)
+!!!COMPLETE!!!   Столбцы: id, fullNameCountryRus, rating, favorite.
+!!!COMPLETE!!!10. Выгрузка данных из таблицы Country, по fullNameCountryEng (fullNameCountryEng == STRING)
+!!!COMPLETE!!!    Столбцы: id, fullNameCountryEng, rating, favorite.
 
 11. Выгрузка данных из таблицы Township с сортировкой по алфавиту по столбцу *townshipRus*
     Столбцы: id, townshipRus, countryId, rating, favorite

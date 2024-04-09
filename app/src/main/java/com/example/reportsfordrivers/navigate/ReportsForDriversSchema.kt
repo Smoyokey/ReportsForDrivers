@@ -4,7 +4,8 @@ import androidx.annotation.StringRes
 import com.example.reportsfordrivers.R
 
 enum class ReportsForDriversSchema(@StringRes val title: Int) {
-    FirstEntry(title = R.string.driver_report),
+    FirstEntryOne(title = R.string.driver_report),
+    FirstEntryTwo(title = R.string.driver_report),
     Start(title = R.string.driver_report),
 
     ReportInfo(title = R.string.report_information),
@@ -23,5 +24,4 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
     PersonalInformation(title = R.string.personal_data),
     VehicleAndTrailerData(title = R.string.settings),
     CountriesCities(title = R.string.countries_cities),
-    Feedback(title = R.string.settings)
 }

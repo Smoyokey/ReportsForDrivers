@@ -19,3 +19,26 @@ data class Country (
     @ColumnInfo(name = "favorite")
     val favorite: Int = 0
 )
+
+data class CountryRus (
+    @ColumnInfo(name = "id")
+    val id: Int,
+    @ColumnInfo(name = "full_name_country_rus")
+    val fullNameCountryRus: String,
+    @ColumnInfo(name = "short_name_country")
+    val shortNameCountry: String,
+    @ColumnInfo(name = "rating")
+    val rating: Int,
+    @ColumnInfo(name = "favorite")
+    val favorite: Int
+)
+
+data class CountryEng (
+    val id: Int,
+    @ColumnInfo(name = "full_name_country_eng")
+    val fullNameCountryEng: String,
+    @ColumnInfo(name = "short_name_country")
+    val shortNameCountry: String,
+    val rating: Int,
+    val favorite: Int
+)

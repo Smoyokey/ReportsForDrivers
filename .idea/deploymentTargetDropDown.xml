@@ -2,22 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PersonalInfoDaoTest">
-        <State />
-      </entry>
-      <entry key="PersonalInfoUiTest">
-        <State />
-      </entry>
-      <entry key="ProgressReportDaoTest">
+      <entry key="TownshipDaoTest">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="daoDeleteItems_deletesItemsInDb()">
+      <entry key="getCountryIdNameTownshipFavoriteSortRatingEng()">
         <State />
       </entry>
-      <entry key="daoSelectOneItem_selectItemInDb()">
+      <entry key="getCountryIdNameTownshipFavoriteSortRatingRus()">
+        <State />
+      </entry>
+      <entry key="getCountryIdTownshipSortNameEng()">
+        <State />
+      </entry>
+      <entry key="getNameTownshipSortNameRus()">
         <State />
       </entry>
     </value>

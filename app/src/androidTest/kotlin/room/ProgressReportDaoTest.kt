@@ -35,10 +35,12 @@ class ProgressReportDaoTest {
         "1",
         "1",
         "1",
+        "1",
         1
     )
     private var item2 = ProgressReport(
         2,
+        "2",
         "2",
         "2",
         "2",
@@ -53,10 +55,12 @@ class ProgressReportDaoTest {
         "3",
         "3",
         "3",
+        "3",
         3
     )
     private var item4 = ProgressReport(
         2,
+        "4",
         "4",
         "4",
         "4",

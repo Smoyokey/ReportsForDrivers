@@ -2,7 +2,6 @@ package com.example.reportsfordrivers.datastore.fiofirstentry
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.example.reportsfordrivers.datastore.DataStoreName
 import kotlinx.coroutines.flow.catch
@@ -83,11 +82,45 @@ class FioFirstEntryRepo @Inject constructor(
     override suspend fun getPatronymic(): Result<String> {
         return Result.runCatching {
             val flow = dataStore.data
-                .catch { exception ->
-
-                }
+                .catch {}
                 .map { preferences ->
                     preferences[DataStoreName.PATRONYMIC]
+                }
+            val value = flow.firstOrNull() ?: ""
+            value
+        }
+    }
+
+    override suspend fun setLanguageReport(languageReport: String) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.LANGUAGE_REPORT] = languageReport
+        }
+    }
+
+    override suspend fun getLanguageReport(): Result<String> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.LANGUAGE_REPORT]
+                }
+            val value = flow.firstOrNull() ?: ""
+            value
+        }
+    }
+
+    override suspend fun setDefaultCurrency(defaultCurrency: String) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.DEFAULT_CURRENCY] = defaultCurrency
+        }
+    }
+
+    override suspend fun getDefaultCurrency(): Result<String> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.DEFAULT_CURRENCY]
                 }
             val value = flow.firstOrNull() ?: ""
             value

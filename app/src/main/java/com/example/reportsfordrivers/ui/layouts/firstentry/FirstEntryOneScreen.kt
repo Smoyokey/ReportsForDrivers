@@ -31,9 +31,10 @@ import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTrailer
 
 @Composable
-fun FirstEntryScreen(
+fun FirstEntryOneScreen(
     viewModel: FirstEntryViewModel = hiltViewModel(),
-    onMainMenu: () -> Unit = {}
+    onMainMenu: () -> Unit = {},
+    onFirstEntryTwo: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val modifierDivider = Modifier.padding(start = 16.dp, end = 16.dp)
@@ -82,8 +83,8 @@ fun FirstEntryScreen(
         Row(
             modifier = Modifier.selectableGroup()
         ) {
-            RadioButtonDef(
-                R.string.vehicle,
+            RadioButtonFirstEntry(
+                text = R.string.vehicle,
                 modifier = Modifier.weight(1f),
                 selected = viewModel.vehicleUiState.value.isSelected.stateRadioGroup,
                 onClick = {
@@ -91,8 +92,8 @@ fun FirstEntryScreen(
                         IsSelectedVehicleAndTrailer(true)
                     )
                 })
-            RadioButtonDef(
-                R.string.trailer,
+            RadioButtonFirstEntry(
+                text = R.string.trailer,
                 modifier = Modifier.weight(1f),
                 selected = !viewModel.vehicleUiState.value.isSelected.stateRadioGroup,
                 onClick = {
@@ -188,29 +189,8 @@ fun FirstEntryScreen(
     }
 }
 
-
-@Composable
-fun RadioButtonDef(
-    text: Int, modifier: Modifier = Modifier, selected: Boolean,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        RadioButton(
-            selected = selected,
-            onClick = onClick,
-            modifier = Modifier.semantics { contentDescription = text.toString() }
-        )
-        Text(
-            text = stringResource(text),
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun FirstEntryScreenPreview() {
-    FirstEntryScreen(onMainMenu = {})
+    FirstEntryOneScreen(onMainMenu = {})
 }
