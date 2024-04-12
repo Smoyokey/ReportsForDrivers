@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.data.dao
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -28,71 +29,74 @@ interface CountryDao {
     @Query("SELECT * FROM COUNTRY WHERE id = :id")
     fun getOneItem(id: Int): Flow<Country>
 
+    @Query("UPDATE COUNTRY SET favorite = :value WHERE id = :id")
+    suspend fun updateFavorite(value: Int, id: Int)
+
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "ORDER BY full_name_country_rus")
-    fun getSortNameRus(): Flow<List<CountryRus>>
+    suspend fun getSortNameRus(): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "ORDER BY full_name_country_eng")
-    fun getSortNameEng(): Flow<List<CountryEng>>
+    suspend fun getSortNameEng(): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "ORDER BY rating DESC")
-    fun getSortRatingRus(): Flow<List<CountryRus>>
+    suspend fun getSortRatingRus(): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "ORDER BY rating DESC")
-    fun getSortRatingEng(): Flow<List<CountryEng>>
+    suspend fun getSortRatingEng(): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 ORDER BY full_name_country_rus")
-    fun getFavoriteSortNameRus(): Flow<List<CountryRus>>
+    suspend fun getFavoriteSortNameRus(): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating,favorite FROM country " +
             "WHERE favorite = 1 ORDER BY full_name_country_eng")
-    fun getFavoriteSortNameEng(): Flow<List<CountryEng>>
+    suspend fun getFavoriteSortNameEng(): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 ORDER BY rating DESC")
-    fun getFavoriteSortRatingRus(): Flow<List<CountryRus>>
+    suspend fun getFavoriteSortRatingRus(): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 ORDER BY rating DESC")
-    fun getFavoriteSortRatingEng(): Flow<List<CountryEng>>
+    suspend fun getFavoriteSortRatingEng(): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "WHERE full_name_country_rus LIKE :fullNameCountryRus || '%' ORDER BY full_name_country_rus")
-    fun getNameCountrySortNameRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountrySortNameRus(fullNameCountryRus: String): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "WHERE full_name_country_eng LIKE :fullNameCountryEng || '%' ORDER BY full_name_country_eng")
-    fun getNameCountrySortNameEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountrySortNameEng(fullNameCountryEng: String): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "WHERE full_name_country_rus LIKE :fullNameCountryRus || '%' ORDER BY rating DESC")
-    fun getNameCountrySortRatingRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountrySortRatingRus(fullNameCountryRus: String): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "WHERE full_name_country_eng LIKE :fullNameCountryEng || '%' ORDER BY rating DESC")
-    fun getNameCountrySortRatingEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountrySortRatingEng(fullNameCountryEng: String): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 AND full_name_country_rus LIKE :fullNameCountryRus || '%' " +
             "ORDER BY full_name_country_rus")
-    fun getNameCountryFavoriteSortNameRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountryFavoriteSortNameRus(fullNameCountryRus: String): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 AND full_name_country_eng LIKE :fullNameCountryEng || '%' " +
             "ORDER BY full_name_country_eng")
-    fun getNameCountryFavoriteSortNameEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountryFavoriteSortNameEng(fullNameCountryEng: String): List<CountryEng>
 
     @Query("SELECT id, full_name_country_rus, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 AND full_name_country_rus LIKE :fullNameCountryRus || '%' " +
             "ORDER BY rating DESC")
-    fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): List<CountryRus>
 
     @Query("SELECT id, full_name_country_eng, short_name_country, rating, favorite FROM country " +
             "WHERE favorite = 1 AND full_name_country_eng LIKE :fullNameCountryEng || '%' " +
             "ORDER BY rating DESC")
-    fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): List<CountryEng>
 }

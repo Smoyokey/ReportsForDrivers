@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.data.direpositories
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.reportsfordrivers.data.dao.CountryDao
 import com.example.reportsfordrivers.data.repositories.CountryRepository
 import com.example.reportsfordrivers.data.structure.Country
@@ -21,47 +22,49 @@ class CountryDiRepo @Inject constructor(private val countryDao: CountryDao): Cou
 
     override suspend fun updateItem(item: Country) = countryDao.update(item)
 
-    override fun getSortNameRus(): Flow<List<CountryRus>> = countryDao.getSortNameRus()
+    override suspend fun updateFavorite(value: Int, id: Int) = countryDao.updateFavorite(value, id)
 
-    override fun getSortNameEng(): Flow<List<CountryEng>> = countryDao.getSortNameEng()
+    override suspend fun getSortNameRus(): List<CountryRus> = countryDao.getSortNameRus()
 
-    override fun getSortRatingRus(): Flow<List<CountryRus>> = countryDao.getSortRatingRus()
+    override suspend fun getSortNameEng(): List<CountryEng> = countryDao.getSortNameEng()
 
-    override fun getSortRatingEng(): Flow<List<CountryEng>> = countryDao.getSortRatingEng()
+    override suspend fun getSortRatingRus(): List<CountryRus> = countryDao.getSortRatingRus()
 
-    override fun getFavoriteSortNameRus(): Flow<List<CountryRus>> =
+    override suspend fun getSortRatingEng(): List<CountryEng> = countryDao.getSortRatingEng()
+
+    override suspend fun getFavoriteSortNameRus(): List<CountryRus> =
         countryDao.getFavoriteSortNameRus()
 
-    override fun getFavoriteSortNameEng(): Flow<List<CountryEng>> =
+    override suspend fun getFavoriteSortNameEng(): List<CountryEng> =
         countryDao.getFavoriteSortNameEng()
 
-    override fun getFavoriteSortRatingRus(): Flow<List<CountryRus>> =
+    override suspend fun getFavoriteSortRatingRus(): List<CountryRus> =
         countryDao.getFavoriteSortRatingRus()
 
-    override fun getFavoriteSortRatingEng(): Flow<List<CountryEng>> =
+    override suspend fun getFavoriteSortRatingEng(): List<CountryEng> =
         countryDao.getFavoriteSortRatingEng()
 
-    override fun getNameCountrySortNameRus(fullNameCountryRus: String): Flow<List<CountryRus>> =
+    override suspend fun getNameCountrySortNameRus(fullNameCountryRus: String): List<CountryRus> =
         countryDao.getNameCountrySortNameRus(fullNameCountryRus)
 
-    override fun getNameCountrySortNameEng(fullNameCountryEng: String): Flow<List<CountryEng>> =
+    override suspend fun getNameCountrySortNameEng(fullNameCountryEng: String): List<CountryEng> =
         countryDao.getNameCountrySortNameEng(fullNameCountryEng)
 
-    override fun getNameCountrySortRatingRus(fullNameCountryRus: String): Flow<List<CountryRus>> =
+    override suspend fun getNameCountrySortRatingRus(fullNameCountryRus: String): List<CountryRus> =
         countryDao.getNameCountrySortRatingRus(fullNameCountryRus)
 
-    override fun getNameCountrySortRatingEng(fullNameCountryEng: String): Flow<List<CountryEng>> =
+    override suspend fun getNameCountrySortRatingEng(fullNameCountryEng: String): List<CountryEng> =
         countryDao.getNameCountrySortRatingEng(fullNameCountryEng)
 
-    override fun getNameCountryFavoriteSortNameRus(fullNameCountryRus: String): Flow<List<CountryRus>> =
+    override suspend fun getNameCountryFavoriteSortNameRus(fullNameCountryRus: String): List<CountryRus> =
         countryDao.getNameCountryFavoriteSortNameRus(fullNameCountryRus)
 
-    override fun getNameCountryFavoriteSortNameEng(fullNameCountryEng: String): Flow<List<CountryEng>> =
+    override suspend fun getNameCountryFavoriteSortNameEng(fullNameCountryEng: String): List<CountryEng> =
         countryDao.getNameCountryFavoriteSortNameEng(fullNameCountryEng)
 
-    override fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): Flow<List<CountryRus>> =
+    override suspend fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): List<CountryRus> =
         countryDao.getNameCountryFavoriteSortRatingRus(fullNameCountryRus)
 
-    override fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): Flow<List<CountryEng>> =
+    override suspend fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): List<CountryEng> =
         countryDao.getNameCountryFavoriteSortRatingEng(fullNameCountryEng)
 }

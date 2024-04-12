@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class CurrencyDiRepo @Inject constructor(private val currencyDao: CurrencyDao) : CurrencyRepository
 {
-    override fun getAllItemStream(): Flow<List<Currency>> = currencyDao.getAllItem()
+    override suspend fun getAllItemStream(): List<Currency> = currencyDao.getAllItem()
 
     override fun getOneItemStream(id: Int): Flow<Currency?> = currencyDao.getOneItem(id)
 

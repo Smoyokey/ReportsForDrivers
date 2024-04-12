@@ -21,7 +21,7 @@ interface CurrencyDao {
     suspend fun update(item: Currency)
 
     @Query("SELECT * FROM CURRENCY")
-    fun getAllItem() : Flow<List<Currency>>
+    suspend fun getAllItem() : List<Currency>
 
     @Query("SELECT * FROM CURRENCY WHERE id = :id")
     fun getOneItem(id: Int): Flow<Currency>

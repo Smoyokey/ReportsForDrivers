@@ -106,7 +106,7 @@ class CreateReportsViewModel @Inject constructor(
 
     fun startCurrency() = runBlocking {
         Log.i(TAG, "See every ")
-        listCurrency.value = currencyDb.getAllItem().first()
+        listCurrency.value = currencyDb.getAllItem()
     }
 
     fun startFio() = runBlocking {

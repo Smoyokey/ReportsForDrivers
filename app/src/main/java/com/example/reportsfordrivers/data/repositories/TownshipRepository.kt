@@ -10,73 +10,79 @@ interface TownshipRepository {
 
     fun getOneItemStream(id: Int) : Flow<Township?>
 
+    suspend fun getOneItemName(name: String): Township
+
     suspend fun insertItem(item: Township)
 
     suspend fun deleteItem(item: Township)
 
     suspend fun updateItem(item: Township)
 
-    fun getSortNameRus(): Flow<List<TownshipRus>>
+    suspend fun updateFavorite(value: Int, id: Int)
 
-    fun getSortNameEng(): Flow<List<TownshipEng>>
+    suspend fun updateFavoriteName(value: Int, name: String)
 
-    fun getSortRatingRus(): Flow<List<TownshipRus>>
+    suspend fun getSortNameRus(): List<TownshipRus>
 
-    fun getSortRatingEng(): Flow<List<TownshipEng>>
+    suspend fun getSortNameEng(): List<TownshipEng>
 
-    fun getFavoriteSortNameRus(): Flow<List<TownshipRus>>
+    suspend fun getSortRatingRus(): List<TownshipRus>
 
-    fun getFavoriteSortNameEng(): Flow<List<TownshipEng>>
+    suspend fun getSortRatingEng(): List<TownshipEng>
 
-    fun getFavoriteSortRatingRus(): Flow<List<TownshipRus>>
+    suspend fun getFavoriteSortNameRus(): List<TownshipRus>
 
-    fun getFavoriteSortRatingEng(): Flow<List<TownshipEng>>
+    suspend fun getFavoriteSortNameEng(): List<TownshipEng>
 
-    fun getNameTownshipSortNameRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getFavoriteSortRatingRus(): List<TownshipRus>
 
-    fun getNameTownshipSortNameEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getFavoriteSortRatingEng(): List<TownshipEng>
 
-    fun getNameTownshipSortRatingRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipSortNameRus(townshipRus: String): List<TownshipRus>
 
-    fun getNameTownshipSortRatingEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipSortNameEng(townshipEng: String): List<TownshipEng>
 
-    fun getCountryIdTownshipSortNameRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipSortRatingRus(townshipRus: String): List<TownshipRus>
 
-    fun getCountryIdTownshipSortNameEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipSortRatingEng(townshipEng: String): List<TownshipEng>
 
-    fun getCountryIdTownshipSortRatingRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getCountryIdTownshipSortNameRus(countryId: Int): List<TownshipRus>
 
-    fun getCountryIdTownshipSortRatingEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getCountryIdTownshipSortNameEng(countryId: Int): List<TownshipEng>
 
-    fun getCountryIdNameTownshipSortNameRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdTownshipSortRatingRus(countryId: Int): List<TownshipRus>
 
-    fun getCountryIdNameTownshipSortNameEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdTownshipSortRatingEng(countryId: Int): List<TownshipEng>
 
-    fun getCountryIdNameTownshipSortRatingRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipSortNameRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
-    fun getCountryIdNameTownshipSortRatingEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipSortNameEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
-    fun getNameTownshipFavoriteSortNameRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipSortRatingRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
-    fun getNameTownshipFavoriteSortNameEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipSortRatingEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
-    fun getNameTownshipFavoriteSortRatingRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipFavoriteSortNameRus(townshipRus: String): List<TownshipRus>
 
-    fun getNameTownshipFavoriteSortRatingEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipFavoriteSortNameEng(townshipEng: String): List<TownshipEng>
 
-    fun getCountryIdFavoriteSortNameRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipFavoriteSortRatingRus(townshipRus: String): List<TownshipRus>
 
-    fun getCountryIdFavoriteSortNameEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipFavoriteSortRatingEng(townshipEng: String): List<TownshipEng>
 
-    fun getCountryIdFavoriteSortRatingRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getCountryIdFavoriteSortNameRus(countryId: Int): List<TownshipRus>
 
-    fun getCountryIdFavoriteSortRatingEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getCountryIdFavoriteSortNameEng(countryId: Int): List<TownshipEng>
 
-    fun getCountryIdNameTownshipFavoriteSortNameRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdFavoriteSortRatingRus(countryId: Int): List<TownshipRus>
 
-    fun getCountryIdNameTownshipFavoriteSortNameEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdFavoriteSortRatingEng(countryId: Int): List<TownshipEng>
 
-    fun getCountryIdNameTownshipFavoriteSortRatingRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipFavoriteSortNameRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
-    fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipRus: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipFavoriteSortNameEng(countryId: Int, townshipEng: String): List<TownshipEng>
+
+    suspend fun getCountryIdNameTownshipFavoriteSortRatingRus(countryId: Int, townshipRus: String): List<TownshipRus>
+
+    suspend fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipRus: String): List<TownshipEng>
 }

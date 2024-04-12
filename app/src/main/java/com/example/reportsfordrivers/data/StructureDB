@@ -1,5 +1,7 @@
 Структура базы данных
 
+@Insert(onConflict = OnConflictStrategy.REPLACE)
+
 Первая таблица MainInfo (main_info)
 1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
 2. Название отчета. Тип: String. Название: "nameReport". NOT NULL.

@@ -30,7 +30,7 @@ data class CountryRus (
     @ColumnInfo(name = "rating")
     val rating: Int,
     @ColumnInfo(name = "favorite")
-    val favorite: Int
+    var favorite: Int
 )
 
 data class CountryEng (

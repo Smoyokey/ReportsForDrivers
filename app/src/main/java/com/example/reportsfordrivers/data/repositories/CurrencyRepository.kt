@@ -4,7 +4,7 @@ import com.example.reportsfordrivers.data.structure.Currency
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepository {
-    fun getAllItemStream() : Flow<List<Currency>>
+    suspend fun getAllItemStream() : List<Currency>
 
     fun getOneItemStream(id: Int) : Flow<Currency?>
 

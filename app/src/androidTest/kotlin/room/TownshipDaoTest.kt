@@ -238,5 +238,4 @@ class TownshipDaoTest {
         assertTrue(list[0].townshipEng == "Minsk")
         assertTrue(list.size == 2)
     }
-
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
@@ -33,7 +34,6 @@ import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTr
 @Composable
 fun FirstEntryOneScreen(
     viewModel: FirstEntryViewModel = hiltViewModel(),
-    onMainMenu: () -> Unit = {},
     onFirstEntryTwo: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
@@ -158,39 +158,14 @@ fun FirstEntryOneScreen(
             modifier = modifierDivider
         )
 
-        Row(
-            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterHorizontally)
+        Button(
+            onClick = onFirstEntryTwo,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            OutlinedButton(
-                onClick = onMainMenu,
-                modifier = Modifier.weight(1f),
-
-            ) {
-                Text(
-                    text = stringResource(R.string.skip),
-                    style = typography.titleLarge
-                )
-            }
-            OutlinedButton(
-                onClick = {
-                    onMainMenu()
-                    viewModel.saveButton()
-                },
-                enabled = viewModel.validateSave(),
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = stringResource(R.string.save),
-                    style = typography.titleLarge
-                )
-            }
+            Text(
+                text = stringResource(R.string.next),
+                style = typography.titleLarge
+            )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FirstEntryScreenPreview() {
-    FirstEntryOneScreen(onMainMenu = {})
 }

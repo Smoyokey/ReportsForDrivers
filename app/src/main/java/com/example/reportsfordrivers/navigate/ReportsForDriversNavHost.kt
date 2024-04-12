@@ -49,10 +49,6 @@ fun ReportsForDriversNavHost(
 
             if (viewModelMain.isFirstEntry()) {
                 FirstEntryOneScreen(
-                    onMainMenu = {
-                        navController.navigate(ReportsForDriversSchema.Start.name)
-                        viewModelFirst.onFirstEntry()
-                    },
                     onFirstEntryTwo = {
                         navController.navigate(ReportsForDriversSchema.FirstEntryTwo.name)
                     },
@@ -157,9 +153,6 @@ fun ReportsForDriversNavHost(
 
         composable(route = ReportsForDriversSchema.FirstEntryOne.name) {
             FirstEntryOneScreen(
-                onMainMenu = {
-                    navController.navigate(ReportsForDriversSchema.Start.name)
-                },
                 onFirstEntryTwo = {
                     navController.navigate(ReportsForDriversSchema.FirstEntryTwo.name)
                 }
@@ -169,6 +162,9 @@ fun ReportsForDriversNavHost(
             FirstEntryTwoScreen(
                 onMainMenu = {
                     navController.navigate(ReportsForDriversSchema.Start.name)
+                },
+                onFirstEntryOneScreen = {
+                    navController.navigate(ReportsForDriversSchema.FirstEntryOne.name)
                 }
             )
         }

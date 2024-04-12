@@ -130,6 +130,9 @@
     </string>
     <string name="countries" tools:ignore="MissingTranslation">Countries</string>
     <string name="cities" tools:ignore="MissingTranslation">Cities</string>
+    <string name="add_city" tools:ignore="MissingTranslation">Add city</string>
+    <string name="name_city" tools:ignore="MissingTranslation">Name of the city</string>
+    <string name="name_country" tools:ignore="MissingTranslation">Country name</string>
 
 
 

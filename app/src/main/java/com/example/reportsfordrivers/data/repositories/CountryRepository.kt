@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.data.repositories
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.example.reportsfordrivers.data.structure.Country
 import com.example.reportsfordrivers.data.structure.CountryEng
 import com.example.reportsfordrivers.data.structure.CountryRus
@@ -16,35 +17,37 @@ interface CountryRepository {
 
     suspend fun updateItem(item: Country)
 
-    fun getSortNameRus(): Flow<List<CountryRus>>
+    suspend fun updateFavorite(value: Int, id: Int)
 
-    fun getSortNameEng(): Flow<List<CountryEng>>
+    suspend fun getSortNameRus(): List<CountryRus>
 
-    fun getSortRatingRus(): Flow<List<CountryRus>>
+    suspend fun getSortNameEng(): List<CountryEng>
 
-    fun getSortRatingEng(): Flow<List<CountryEng>>
+    suspend fun getSortRatingRus(): List<CountryRus>
 
-    fun getFavoriteSortNameRus(): Flow<List<CountryRus>>
+    suspend fun getSortRatingEng(): List<CountryEng>
 
-    fun getFavoriteSortNameEng(): Flow<List<CountryEng>>
+    suspend fun getFavoriteSortNameRus(): List<CountryRus>
 
-    fun getFavoriteSortRatingRus(): Flow<List<CountryRus>>
+    suspend fun getFavoriteSortNameEng(): List<CountryEng>
 
-    fun getFavoriteSortRatingEng(): Flow<List<CountryEng>>
+    suspend fun getFavoriteSortRatingRus(): List<CountryRus>
 
-    fun getNameCountrySortNameRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getFavoriteSortRatingEng(): List<CountryEng>
 
-    fun getNameCountrySortNameEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountrySortNameRus(fullNameCountryRus: String): List<CountryRus>
 
-    fun getNameCountrySortRatingRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountrySortNameEng(fullNameCountryEng: String): List<CountryEng>
 
-    fun getNameCountrySortRatingEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountrySortRatingRus(fullNameCountryRus: String): List<CountryRus>
 
-    fun getNameCountryFavoriteSortNameRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountrySortRatingEng(fullNameCountryEng: String): List<CountryEng>
 
-    fun getNameCountryFavoriteSortNameEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountryFavoriteSortNameRus(fullNameCountryRus: String): List<CountryRus>
 
-    fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): Flow<List<CountryRus>>
+    suspend fun getNameCountryFavoriteSortNameEng(fullNameCountryEng: String): List<CountryEng>
 
-    fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): Flow<List<CountryEng>>
+    suspend fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): List<CountryRus>
+
+    suspend fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): List<CountryEng>
 }

@@ -28,144 +28,152 @@ interface TownshipDao {
     @Query("SELECT * FROM TOWNSHIP WHERE id = :id")
     fun getOneItem(id: Int): Flow<Township>
 
+    @Query("SELECT * FROM TOWNSHIP WHERE township_eng = :name")
+    suspend fun getOneItemName(name: String): Township
+
+    @Query("UPDATE TOWNSHIP SET favorite = :value WHERE id = :id")
+    suspend fun updateFavorite(value: Int, id: Int)
+    @Query("UPDATE TOWNSHIP SET favorite = :value WHERE township_rus = :name")
+    suspend fun updateFavoriteName(value: Int, name: String)
+
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township ORDER BY township_rus")
-    fun getSortNameRus(): Flow<List<TownshipRus>>
+    suspend fun getSortNameRus(): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township ORDER BY township_eng")
-    fun getSortNameEng(): Flow<List<TownshipEng>>
+    suspend fun getSortNameEng(): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township ORDER BY rating DESC")
-    fun getSortRatingRus(): Flow<List<TownshipRus>>
+    suspend fun getSortRatingRus(): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township ORDER BY rating DESC")
-    fun getSortRatingEng(): Flow<List<TownshipEng>>
+    suspend fun getSortRatingEng(): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township WHERE favorite = 1 " +
             "ORDER BY township_rus")
-    fun getFavoriteSortNameRus(): Flow<List<TownshipRus>>
+    suspend fun getFavoriteSortNameRus(): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township WHERE favorite = 1 " +
             "ORDER BY township_eng")
-    fun getFavoriteSortNameEng(): Flow<List<TownshipEng>>
+    suspend fun getFavoriteSortNameEng(): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township WHERE favorite = 1 " +
             "ORDER BY rating DESC")
-    fun getFavoriteSortRatingRus(): Flow<List<TownshipRus>>
+    suspend fun getFavoriteSortRatingRus(): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township WHERE favorite = 1 " +
             "ORDER BY rating DESC")
-    fun getFavoriteSortRatingEng(): Flow<List<TownshipEng>>
+    suspend fun getFavoriteSortRatingEng(): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE township_rus LIKE :townshipRus || '%' ORDER BY township_rus")
-    fun getNameTownshipSortNameRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipSortNameRus(townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE township_eng LIKE :townshipEng || '%' ORDER BY township_eng")
-    fun getNameTownshipSortNameEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipSortNameEng(townshipEng: String): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE township_rus LIKE :townshipRus || '%' ORDER BY rating DESC")
-    fun getNameTownshipSortRatingRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipSortRatingRus(townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE township_eng LIKE :townshipEng || '%' ORDER BY rating DESC")
-    fun getNameTownshipSortRatingEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipSortRatingEng(townshipEng: String): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId ORDER BY township_rus")
-    fun getCountryIdTownshipSortNameRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getCountryIdTownshipSortNameRus(countryId: Int): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId ORDER BY township_eng")
-    fun getCountryIdTownshipSortNameEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getCountryIdTownshipSortNameEng(countryId: Int): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId ORDER BY rating DESC")
-    fun getCountryIdTownshipSortRatingRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getCountryIdTownshipSortRatingRus(countryId: Int): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId ORDER BY rating DESC")
-    fun getCountryIdTownshipSortRatingEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getCountryIdTownshipSortRatingEng(countryId: Int): List<TownshipEng>
 
     //name + country (nameRus, nameEng, ratingRus, ratingEng)
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId AND township_rus LIKE :townshipRus || '%' " +
             "ORDER BY township_rus")
-    fun getCountryIdNameTownshipSortNameRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipSortNameRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId AND township_eng LIKE :townshipEng || '%' " +
             "ORDER BY township_eng")
-    fun getCountryIdNameTownshipSortNameEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipSortNameEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId AND township_rus LIKE :townshipRus || '%' " +
             "ORDER BY rating DESC")
-    fun getCountryIdNameTownshipSortRatingRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipSortRatingRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE country_id = :countryId AND township_eng LIKE :townshipEng || '%' " +
             "ORDER BY rating DESC")
-    fun getCountryIdNameTownshipSortRatingEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipSortRatingEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
     //name + favorite (nameRus+, nameEng+, ratingRus+, ratingEng+)
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND township_rus LIKE :townshipRus || '%' " +
             "ORDER BY township_rus")
-    fun getNameTownshipFavoriteSortNameRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipFavoriteSortNameRus(townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND township_eng LIKE :townshipEng || '%' " +
             "ORDER BY township_eng")
-    fun getNameTownshipFavoriteSortNameEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipFavoriteSortNameEng(townshipEng: String): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND township_rus LIKE :townshipRus || '%' " +
             "ORDER BY rating DESC")
-    fun getNameTownshipFavoriteSortRatingRus(townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getNameTownshipFavoriteSortRatingRus(townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND township_eng LIKE :townshipEng || '%' " +
             "ORDER BY rating DESC")
-    fun getNameTownshipFavoriteSortRatingEng(townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getNameTownshipFavoriteSortRatingEng(townshipEng: String): List<TownshipEng>
 
     //country + favorite (nameRus+, nameEng+, ratingRus+, ratingEng+)
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId ORDER BY township_rus")
-    fun getCountryIdFavoriteSortNameRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getCountryIdFavoriteSortNameRus(countryId: Int): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId ORDER BY township_eng")
-    fun getCountryIdFavoriteSortNameEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getCountryIdFavoriteSortNameEng(countryId: Int): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId ORDER BY rating DESC")
-    fun getCountryIdFavoriteSortRatingRus(countryId: Int): Flow<List<TownshipRus>>
+    suspend fun getCountryIdFavoriteSortRatingRus(countryId: Int): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId ORDER BY rating DESC")
-    fun getCountryIdFavoriteSortRatingEng(countryId: Int): Flow<List<TownshipEng>>
+    suspend fun getCountryIdFavoriteSortRatingEng(countryId: Int): List<TownshipEng>
 
     //name + favorite + country (nameRus+, nameEng+, ratingRus, ratingEng)
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId AND township_rus LIKE :townshipRus || '%' " +
             "ORDER BY township_rus")
-    fun getCountryIdNameTownshipFavoriteSortNameRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipFavoriteSortNameRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId AND township_eng LIKE :townshipEng || '%' " +
             "ORDER BY township_eng")
-    fun getCountryIdNameTownshipFavoriteSortNameEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipFavoriteSortNameEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
     @Query("SELECT id, township_rus, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId AND township_rus LIKE :townshipRus || '%' " +
             "ORDER BY rating DESC")
-    fun getCountryIdNameTownshipFavoriteSortRatingRus(countryId: Int, townshipRus: String): Flow<List<TownshipRus>>
+    suspend fun getCountryIdNameTownshipFavoriteSortRatingRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
     @Query("SELECT id, township_eng, country_id, favorite, rating FROM township " +
             "WHERE favorite = 1 AND country_id = :countryId AND township_eng LIKE :townshipEng || '%' " +
             "ORDER BY rating DESC")
-    fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipEng: String): Flow<List<TownshipEng>>
+    suspend fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
 }
