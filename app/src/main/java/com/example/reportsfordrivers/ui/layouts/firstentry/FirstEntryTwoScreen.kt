@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +29,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -38,6 +41,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -59,9 +63,15 @@ fun FirstEntryTwoScreen(
     onFirstEntryOneScreen: () -> Unit = {},
     viewModel: FirstEntryViewModel = hiltViewModel()
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 15.dp, bottom = 15.dp, start = 10.dp, end = 10.dp)
+
+    ) {
         Text(
-            text = stringResource(R.string.report_language)
+            text = stringResource(R.string.report_language),
+            style = typography.titleLarge
         )
 
         Row(
@@ -92,14 +102,16 @@ fun FirstEntryTwoScreen(
                 onClick = { viewModel.openBottomSheetCurrency() },
             ) {
                 Text(
-                    text = stringResource(R.string.select_currency)
+                    text = stringResource(R.string.select_currency),
+                    style = typography.titleLarge
                 )
             }
 
             Text(
                 text = viewModel.uiState.value.currency,
                 modifier = Modifier.weight(1f),
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                style = typography.titleLarge
             )
         }
 
@@ -109,7 +121,8 @@ fun FirstEntryTwoScreen(
             }
         ) {
             Text(
-                text = stringResource(R.string.make_list_favorite_countries_cities)
+                text = stringResource(R.string.make_list_favorite_countries_cities),
+                style = typography.titleLarge
             )
         }
 
@@ -118,7 +131,9 @@ fun FirstEntryTwoScreen(
                 isVisible = viewModel.openSelectedCountriesAndCities.value,
                 viewModel = viewModel,
                 state = viewModel.state,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(bottom = 10.dp)
             )
         } else {
             Column(
@@ -164,7 +179,8 @@ fun FirstEntryTwoScreen(
         BottomSheetAddCity(
             isOpen = viewModel.openBottomSheetAddCity,
             listCountry = viewModel.listCountriesUiState.value.listCountries,
-            viewModel = viewModel
+            viewModel = viewModel,
+
         )
     }
 }
@@ -181,7 +197,8 @@ fun CountryAndCiti(
     val searchTextTownship by viewModel.searchTextTownship.collectAsState()
 
     Column(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         TabRow(selectedTabIndex = state.value) {
             Tab(
@@ -213,7 +230,6 @@ fun CountryAndCiti(
             } else {
                 SearchTownship(
                     modifier = Modifier.weight(1f),
-//                    townshipsList = townshipsListTownship,
                     viewModel = viewModel,
                     state = state,
                     searchTextTownship = searchTextTownship
@@ -223,111 +239,6 @@ fun CountryAndCiti(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomSheetAddCity(
-    isOpen: MutableState<Boolean>,
-    listCountry: List<CountryDetailing>,
-    viewModel: FirstEntryViewModel
-) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-    ModalBottomSheet(
-        onDismissRequest = { isOpen.value = false },
-        sheetState = sheetState,
-        modifier = Modifier.fillMaxHeight(0.75f)
-    ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.add_city),
-            )
-
-            OutlinedTextField(
-                value = viewModel.addCityUiState.value.nameCity,
-                onValueChange = {
-                    viewModel.updateAddCityNameCity(nameCity = it)
-                },
-                label = { Text(stringResource(R.string.name_city)) },
-                singleLine = true,
-                textStyle = typography.bodyLarge,
-                trailingIcon = {
-                    if (viewModel.addCityUiState.value.nameCity.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    viewModel.updateAddCityNameCity(nameCity = "")
-                                },
-                        )
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = viewModel.addCityUiState.value.nameCountry,
-                onValueChange = {
-                    viewModel.updateAddCityNameCountry(nameCountry = it)
-                },
-                label = { Text(stringResource(R.string.name_country)) },
-                singleLine = true,
-                textStyle = typography.bodyLarge,
-                trailingIcon = {
-                    if (viewModel.addCityUiState.value.nameCountry.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    viewModel.updateAddCityNameCountry(nameCountry = "")
-                                }
-                        )
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            LazyColumn {
-                items(listCountry.size) { element ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                viewModel.updateAddCityCountry(listCountry[element])
-                                Log.i(TAG, viewModel.addCityUiState.value.country.toString())
-                            }
-                    ) {
-                        Text(
-                            text = listCountry[element].country,
-                            modifier = Modifier.weight(1f)
-                        )
-                        Text(
-                            text = listCountry[element].shortCountry,
-                        )
-                    }
-                }
-            }
-        }
-
-        Button(
-            onClick = {
-                isOpen.value = false
-                viewModel.saveAddCity()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = viewModel.validateAddCity()
-        ) {
-            Text(
-                text = stringResource(R.string.save)
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -338,44 +249,45 @@ fun SearchCountry(
     state: MutableState<Int>,
     searchTextCountry: String,
 ) {
-
-    SearchBar(
-        query = searchTextCountry,
-        onQueryChange = viewModel::onSearchTextChangeCountry,
-        onSearch = viewModel::onSearchTextChangeCountry,
-        active = true,
-        onActiveChange = {
-            viewModel.onToogleSearchCountry()
-        },
-        placeholder = {
-            Text(
-                text = if (state.value == 0) {
-                    stringResource(R.string.countries)
-                } else {
-                    stringResource(R.string.cities)
-                }
-            )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Search,
-                contentDescription = null
-            )
-        },
-        trailingIcon = {
-            if (state.value == 1) {
-                IconButton(
-                    onClick = {
-                        viewModel.openBottomSheetAddCity.value =
-                            !viewModel.openBottomSheetAddCity.value
+    Column() {
+        DockedSearchBar(
+            query = searchTextCountry,
+            onQueryChange = viewModel::onSearchTextChangeCountry,
+            onSearch = viewModel::onSearchTextChangeCountry,
+            active = false,
+            onActiveChange = {
+                viewModel.onToogleSearchCountry()
+            },
+            placeholder = {
+                Text(
+                    text = if (state.value == 0) {
+                        stringResource(R.string.countries)
+                    } else {
+                        stringResource(R.string.cities)
                     }
-                ) {
-                    Icon(Icons.Outlined.Add, stringResource(R.string.add))
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Search,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                if (state.value == 1) {
+                    IconButton(
+                        onClick = {
+                            viewModel.openBottomSheetAddCity.value =
+                                !viewModel.openBottomSheetAddCity.value
+                        }
+                    ) {
+                        Icon(Icons.Outlined.Add, stringResource(R.string.add))
+                    }
                 }
-            }
-        },
-        modifier = Modifier.fillMaxWidth()
-    ) {
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {}
+
         LazyColumn(
             modifier = modifier
         ) {
@@ -385,7 +297,8 @@ fun SearchCountry(
                 }
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
                         onClick = {
@@ -426,7 +339,6 @@ fun SearchCountry(
             }
         }
     }
-
 }
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -438,46 +350,47 @@ fun SearchTownship(
     state: MutableState<Int>,
     searchTextTownship: String
 ) {
-    SearchBar(
-        query = searchTextTownship,
-        onQueryChange = viewModel::onSearchTextChangeTownship,
-        onSearch = viewModel::onSearchTextChangeTownship,
-        active = true,
-        onActiveChange = {
-            viewModel.onToogleSearchTownship()
-        },
-        placeholder = {
-            Text(
-                text = if (state.value == 0) {
-                    stringResource(R.string.countries)
-                } else {
-                    stringResource(R.string.cities)
-                }
-            )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Search,
-                contentDescription = null
-            )
-        },
-        trailingIcon = {
-            if (state.value == 1) {
-                IconButton(
-                    onClick = {
-                        viewModel.openBottomSheetAddCity.value =
-                            !viewModel.openBottomSheetAddCity.value
-                    }
-                ) {
-                    Icon(Icons.Outlined.Add, stringResource(R.string.add))
-                }
-            }
-        },
+    Column(
         modifier = Modifier.fillMaxWidth()
     ) {
+        DockedSearchBar(
+            query = searchTextTownship,
+            onQueryChange = viewModel::onSearchTextChangeTownship,
+            onSearch = viewModel::onSearchTextChangeTownship,
+            active = false,
+            onActiveChange = {
+                viewModel.onToogleSearchTownship()
+            },
+            placeholder = {
+                Text(
+                    text = if (state.value == 0) {
+                        stringResource(R.string.countries)
+                    } else {
+                        stringResource(R.string.cities)
+                    }
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Search,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                if (state.value == 1) {
+                    IconButton(
+                        onClick = {
+                            viewModel.openBottomSheetAddCity.value =
+                                !viewModel.openBottomSheetAddCity.value
+                        }
+                    ) {
+                        Icon(Icons.Outlined.Add, stringResource(R.string.add))
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {}
 
-        Log.i(TAG, "List " + viewModel._townshipsListTownship.value.joinToString("::"))
-        Log.i(TAG, "SearchList: " + viewModel.townshipsListTownship.value.joinToString("::"))
         val townshipsList by viewModel.townshipsListTownship.collectAsState()
         if (viewModel.townshipsListTownship.value.isEmpty()) {
             if (viewModel.selectedCountrySearch.value != "") {
@@ -503,7 +416,8 @@ fun SearchTownship(
                     }
 
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = townshipsList[element].township,
@@ -533,6 +447,8 @@ fun SearchTownship(
             }
         }
     }
+
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -552,6 +468,8 @@ fun BottomSheetCurrency(
         Column(
             modifier = Modifier
                 .weight(1f)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.select_currency),
@@ -560,7 +478,8 @@ fun BottomSheetCurrency(
                 textAlign = TextAlign.Center
             )
             LazyColumn(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 items(listCurrency.size) { element ->
                     Row(
@@ -598,6 +517,117 @@ fun BottomSheetCurrency(
                     style = typography.titleLarge
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetAddCity(
+    isOpen: MutableState<Boolean>,
+    listCountry: List<CountryDetailing>,
+    viewModel: FirstEntryViewModel,
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val searchTextAddCity by viewModel.searchTextAddCity.collectAsState()
+    val countriesListAddCity by viewModel.countriesListAddCity.collectAsState()
+
+    ModalBottomSheet(
+        onDismissRequest = { isOpen.value = false },
+        sheetState = sheetState,
+        modifier = Modifier.fillMaxHeight(0.75f)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.add_city),
+                style = typography.headlineSmall
+            )
+
+            OutlinedTextField(
+                value = viewModel.addCityUiState.value.nameCity,
+                onValueChange = {
+                    viewModel.updateAddCityNameCity(nameCity = it)
+                },
+                label = { Text(stringResource(R.string.name_city)) },
+                singleLine = true,
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.addCityUiState.value.nameCity.isNotEmpty()) {
+                        Icon(
+                            imageVector = Icons.Outlined.Clear,
+                            contentDescription = stringResource(R.string.clear),
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.updateAddCityNameCity(nameCity = "")
+                                },
+                        )
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            DockedSearchBar(
+                query = searchTextAddCity,
+                onQueryChange = viewModel::onSearchTextChangeAddCity,
+                onSearch = viewModel::onSearchTextChangeAddCity,
+                active = false,
+                onActiveChange = {
+                    viewModel.onToogleSearchAddCity()
+                },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.country),
+                        style = typography.bodyLarge
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = null
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {}
+
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
+                items(countriesListAddCity.size) { element ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                viewModel.updateAddCityCountry(countriesListAddCity[element])
+                                Log.i(TAG, viewModel.addCityUiState.value.country.toString())
+                            }
+                    ) {
+                        Text(
+                            text = countriesListAddCity[element].country,
+                            modifier = Modifier.weight(1f),
+                            style = typography.titleLarge
+                        )
+                    }
+                }
+            }
+        }
+
+        Button(
+            onClick = {
+                isOpen.value = false
+                viewModel.saveAddCity()
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = viewModel.validateAddCity()
+        ) {
+            Text(
+                text = stringResource(R.string.save)
+            )
         }
     }
 }

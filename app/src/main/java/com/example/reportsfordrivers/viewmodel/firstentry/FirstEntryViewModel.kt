@@ -427,6 +427,41 @@ class FirstEntryViewModel @Inject constructor(
         uiState.value = uiState.value.copy(languageReport = if(isSelected) 0 else 1)
     }
 
+
+
+    private val _isSearchingAddCity = MutableStateFlow(false)
+    private val _searchTextAddCity = MutableStateFlow("")
+    val searchTextAddCity = _searchTextAddCity.asStateFlow()
+    private val _countriesListAddCity = MutableStateFlow(listCountriesUiState.value.listCountries)
+    var countriesListAddCity = addCityFilter()
+
+    private fun addCityFilter(): StateFlow<List<CountryDetailing>> {
+        return searchTextAddCity
+            .combine(_countriesListAddCity) { text, countries ->
+                if(text.isBlank()) {
+                    countries
+                }
+                countries.filter { country ->
+                    country.country.uppercase().contains(text.trim().uppercase())
+                }
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(2000),
+                initialValue = _countriesListAddCity.value
+            )
+    }
+
+    fun onSearchTextChangeAddCity(text: String) {
+        _searchTextAddCity.value = text
+    }
+
+    fun onToogleSearchAddCity() {
+        _isSearchingAddCity.value = !_isSearchingAddCity.value
+        if(!_isSearchingAddCity.value) {
+            onSearchTextChangeAddCity("")
+        }
+    }
+
     /**
      * Добавление городов в БД
      */

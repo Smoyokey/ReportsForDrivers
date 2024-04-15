@@ -46,7 +46,10 @@ fun ReportsForDriversTopBar(
         title = { Text(text = stringResource(currentScreen.title)) },
 
         navigationIcon = {
-            if (navigate.currentDestination?.route != ReportsForDriversSchema.Start.name) {
+            if (
+                navigate.currentDestination?.route == ReportsForDriversSchema.Start.name ||
+                navigate.currentDestination?.route == ReportsForDriversSchema.FirstEntryTwo.name
+            ) {} else {
                 IconButton(onClick = {
                     isOpenAlertDialogExit.value = true
                 }) {
@@ -85,11 +88,12 @@ fun ReportsForDriversApp(
         Column() {
             ReportsForDriversNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .padding(innerPadding)
                     .weight(1f),
                 activity = activity
             )
-        AdmobBanner()
+            AdmobBanner()
         }
 
     }
@@ -112,13 +116,14 @@ fun AdmobBanner() {
 
 @Composable
 fun AlertDialogToMainMenu(isOpen: MutableState<Boolean>, navigate: NavHostController) {
-    if(isOpen.value) {
+    if (isOpen.value) {
         AlertDialog(
             onDismissRequest = { isOpen.value = false },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        navigate.navigate(ReportsForDriversSchema.Start.name,
+                        navigate.navigate(
+                            ReportsForDriversSchema.Start.name,
                             navOptions = NavOptions.Builder()
                                 .setPopUpTo(ReportsForDriversSchema.Start.name, true)
                                 .build()

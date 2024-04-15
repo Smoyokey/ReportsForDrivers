@@ -221,12 +221,6 @@ fun RowVehicleAndTrailerElement(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = objectVehicle.type,
-            modifier = Modifier.weight(1f),
-            style = typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-        Text(
             text = objectVehicle.make,
             modifier = Modifier.weight(1f),
             style = typography.bodyMedium,
