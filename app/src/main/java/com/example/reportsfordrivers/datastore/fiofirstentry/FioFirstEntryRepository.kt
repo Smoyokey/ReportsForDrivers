@@ -18,9 +18,9 @@ interface FioFirstEntryRepository {
 
     suspend fun getPatronymic(): Result<String>
 
-    suspend fun setLanguageReport(languageReport: String)
+    suspend fun setLanguageReport(languageReport: Int)
 
-    suspend fun getLanguageReport(): Result<String>
+    suspend fun getLanguageReport(): Result<Int>
 
     suspend fun setDefaultCurrency(defaultCurrency: String)
 

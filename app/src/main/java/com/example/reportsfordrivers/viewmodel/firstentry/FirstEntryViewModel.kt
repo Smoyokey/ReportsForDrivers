@@ -31,7 +31,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.Locale
 import javax.inject.Inject
@@ -64,6 +66,9 @@ class FirstEntryViewModel @Inject constructor(
     var uiState = mutableStateOf(FirstEntryUiState())
         private set
     var vehicleUiState = mutableStateOf(VehicleObject())
+        private set
+
+    var languageUiState = mutableStateOf(IsSelectedLanguage())
         private set
 
     var listCountriesUiState = mutableStateOf(Countries())
@@ -190,22 +195,23 @@ class FirstEntryViewModel @Inject constructor(
      */
     var openBottomSheetAddCity = mutableStateOf(false)
 
+    var selectedCountrySearch = mutableStateOf("")
+
     var selectedCountryInAddCity = mutableStateOf(false)
     val state = mutableStateOf(0)
 
     /**
-     * Поисковик пробный
+     * Поиск страны
      */
-    private val _isSearching = MutableStateFlow(false)
-    val isSearching = _isSearching.asStateFlow()
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
-    private val _countriesList = MutableStateFlow((listCountriesUiState.value.listCountries))
-    var countriesList = countriesFilter()
+    private val _isSearchingCountry = MutableStateFlow(false)
+    private val _searchTextCountry = MutableStateFlow("")
+    val searchTextCountry = _searchTextCountry.asStateFlow()
+    private val _countriesListCountry = MutableStateFlow(listCountriesUiState.value.listCountries)
+    var countriesListCountry = countriesFilter()
 
-    private fun countriesFilter() : StateFlow<List<CountryDetailing>> {
-        return searchText
-            .combine(_countriesList) { text, countries ->
+    private fun countriesFilter(): StateFlow<List<CountryDetailing>> {
+        return searchTextCountry
+            .combine(_countriesListCountry) { text, countries ->
                 if (text.isBlank()) {
                     countries
                 }
@@ -215,32 +221,18 @@ class FirstEntryViewModel @Inject constructor(
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(1000),
-                initialValue = _countriesList.value
+                initialValue = _countriesListCountry.value
             )
     }
 
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
+    fun onSearchTextChangeCountry(text: String) {
+        _searchTextCountry.value = text
     }
 
-    fun onToogleSearch() {
-        _isSearching.value = !_isSearching.value
-        if (!_isSearching.value) {
-            onSearchTextChange("")
-        }
-    }
-
-
-    /**
-     * При клике по кнопке *Выбрать валюту* открывается BottomSheet и при первом открытии
-     * выгружается валюты в список
-     */
-    fun openBottomSheetCurrency() = runBlocking {
-        Log.i(TAG, "CLICK")
-        openBottomSheetCurrency.value = true
-        if (listCurrency.value.isEmpty()) {
-            listCurrency.value = currencyDb.getAllItem()
-            Log.i(TAG, listCurrency.value.size.toString())
+    fun onToogleSearchCountry() {
+        _isSearchingCountry.value = !_isSearchingCountry.value
+        if (!_isSearchingCountry.value) {
+            onSearchTextChangeCountry("")
         }
     }
 
@@ -281,94 +273,159 @@ class FirstEntryViewModel @Inject constructor(
                 }
             }
         }
+        searchTownship(0)
     }
 
     /**
      * Добавление и удаление элементов из списка избранных СТРАН
      */
     fun updateItemCountry(element: CountryDetailing) = runBlocking {
-        val index = idList(element)
-        listCountriesUiState.value.listCountries[index] = listCountriesUiState.value.listCountries[index].copy(
-            favorite = if(listCountriesUiState.value.listCountries[index].favorite == 0) 1 else 0
-        )
-        if (listCountriesUiState.value.listCountries[index].favorite == 1) {
-            uiState.value.selectedCountriesAndCities.listFavoriteCountry.add(
-                listCountriesUiState.value.listCountries[index]
+        val index = idListCountry(element)
+        listCountriesUiState.value.listCountries[index] =
+            listCountriesUiState.value.listCountries[index].copy(
+                favorite = if (listCountriesUiState.value.listCountries[index].favorite == 0) 1 else 0
             )
-        } else {
-            uiState.value.selectedCountriesAndCities.listFavoriteCountry.removeAll {
-                element.id == it.id
-            }
-        }
+        countryDb.updateFavorite(
+            listCountriesUiState.value.listCountries[index].favorite,
+            listCountriesUiState.value.listCountries[index].id
+        )
+
     }
 
     /**
      * Получение порядкового номера в основном списке по элементу из поискового списка
      */
-    fun idList(countryDetailing: CountryDetailing): Int {
+    fun idListCountry(countryDetailing: CountryDetailing): Int {
         var a = -1
-        for(i in listCountriesUiState.value.listCountries.indices) {
-            if(countryDetailing.id == listCountriesUiState.value.listCountries[i].id) {
+        for (i in listCountriesUiState.value.listCountries.indices) {
+            if (countryDetailing.id == listCountriesUiState.value.listCountries[i].id) {
                 a = i
             }
         }
         return a
     }
 
-    /**
-     * Функция для выгрузки списка городов из БД и добавление в UIState
-     */
-    fun openSelectedTownship() = runBlocking {
-        if (listTownshipsUiState.value.listTownships.isEmpty()) {
-            if (Locale.getDefault().language == "ru") {
-                val a = townshipDb.getSortNameRus()
-                a.forEach {
-                    listTownshipsUiState.value.listTownships.add(
-                        TownshipDetailing(
-                            id = it.id,
-                            township = it.townshipRus,
-                            countryId = it.countryId,
-                            rating = it.rating,
-                            favorite = it.favorite
-                        )
-                    )
-                }
+
+    private val _isSearchingTownship = MutableStateFlow(false)
+    val isSearchingTownship = _isSearchingTownship.asStateFlow()
+    private val _searchTextTownship = MutableStateFlow("")
+    val searchTextTownship = _searchTextTownship.asStateFlow()
+    var _townshipsListTownship = MutableStateFlow(listTownshipsUiState.value.listTownships)
+    var townshipsListTownship = townshipsFilter()
+
+    fun searchTownship(countryId: Int) = runBlocking {
+        listTownshipsUiState.value.listTownships = SnapshotStateList()
+        if (Locale.getDefault().language == "ru") {
+            val a = if (countryId != 0) {
+                townshipDb.getCountryIdTownshipSortNameRus(countryId)
             } else {
-                val a = townshipDb.getSortNameEng()
-                a.forEach {
-                    listTownshipsUiState.value.listTownships.add(
-                        TownshipDetailing(
-                            id = it.id,
-                            township = it.townshipEng,
-                            countryId = it.countryId,
-                            rating = it.rating,
-                            favorite = it.favorite
-                        )
-                    )
-                }
+                townshipDb.getSortNameRus()
             }
+            a.forEach {
+                listTownshipsUiState.value.listTownships.add(
+                    TownshipDetailing(
+                        id = it.id,
+                        township = it.townshipRus,
+                        countryId = it.countryId,
+                        rating = it.rating,
+                        favorite = it.favorite
+                    )
+                )
+            }
+        } else {
+            val a = if (countryId != 0) {
+                townshipDb.getCountryIdTownshipSortNameEng(countryId)
+            } else {
+                townshipDb.getSortNameEng()
+            }
+            a.forEach {
+                listTownshipsUiState.value.listTownships.add(
+                    TownshipDetailing(
+                        id = it.id,
+                        township = it.townshipEng,
+                        countryId = it.countryId,
+                        rating = it.rating,
+                        favorite = it.favorite
+                    )
+                )
+            }
+        }
+        _townshipsListTownship = MutableStateFlow(listTownshipsUiState.value.listTownships)
+        townshipsListTownship = townshipsFilter()
+    }
+
+
+    private fun townshipsFilter(): StateFlow<List<TownshipDetailing>> {
+        return searchTextTownship
+            .combine(_townshipsListTownship) { text, townships ->
+                if (text.isBlank()) {
+                    townships
+                }
+                townships.filter { township ->
+                    township.township.uppercase().contains(text.trim().uppercase())
+                }
+
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(2000),
+                initialValue = _townshipsListTownship.value
+            )
+    }
+
+    fun onSearchTextChangeTownship(text: String) {
+        _searchTextTownship.value = text
+    }
+
+    fun onToogleSearchTownship() {
+        _isSearchingTownship.value = !_isSearchingTownship.value
+        if (!_isSearchingTownship.value) {
+            onSearchTextChangeTownship("")
         }
     }
 
     /**
      * Добавление и удаление элементов из списка избранных ГОРОДОВ
      */
-    fun updateItemTownship(index: Int, element: TownshipDetailing) {
+    fun updateItemTownship(element: TownshipDetailing) = runBlocking {
+        val index = idListTownship(element)
         listTownshipsUiState.value.listTownships[index] =
             listTownshipsUiState.value.listTownships[index].copy(
                 favorite = if (listTownshipsUiState.value.listTownships[index].favorite == 0) 1 else 0
             )
-        if (listTownshipsUiState.value.listTownships[index].favorite == 1) {
-            uiState.value.selectedCountriesAndCities.listFavoriteTownship.add(
-                listTownshipsUiState.value.listTownships[index]
-            )
-        } else {
-            uiState.value.selectedCountriesAndCities.listFavoriteTownship.removeAll {
-                element.id == it.id
+        townshipDb.updateFavorite(
+            listTownshipsUiState.value.listTownships[index].favorite,
+            listTownshipsUiState.value.listTownships[index].id
+        )
+    }
+
+    fun idListTownship(townshipDetailing: TownshipDetailing): Int {
+        var a = -1
+        for (i in listTownshipsUiState.value.listTownships.indices) {
+            if (townshipDetailing.id == listTownshipsUiState.value.listTownships[i].id) {
+                a = i
             }
+        }
+        return a
+    }
+
+
+    /**
+     * При клике по кнопке *Выбрать валюту* открывается BottomSheet и при первом открытии
+     * выгружается валюты в список
+     */
+    fun openBottomSheetCurrency() = runBlocking {
+        Log.i(TAG, "CLICK")
+        openBottomSheetCurrency.value = true
+        if (listCurrency.value.isEmpty()) {
+            listCurrency.value = currencyDb.getAllItem()
+            Log.i(TAG, listCurrency.value.size.toString())
         }
     }
 
+    fun selectedLanguage(isSelected: Boolean) {
+        languageUiState.value = languageUiState.value.copy(languageRadioGroup = isSelected)
+        uiState.value = uiState.value.copy(languageReport = if(isSelected) 0 else 1)
+    }
 
     /**
      * Добавление городов в БД
@@ -428,9 +485,6 @@ class FirstEntryViewModel @Inject constructor(
 
         saveLanguage()
         saveCurrency()
-
-        saveListFavoriteCountry()
-        saveListFavoriteTownship()
     }
 
     /**
@@ -479,40 +533,16 @@ class FirstEntryViewModel @Inject constructor(
     /**
      * Сохранение языка в DataStore
      */
-    private fun saveLanguage() {
-
+    private fun saveLanguage() = runBlocking {
+        fioFirstEntryPreferencesRepository.setLanguageReport(uiState.value.languageReport)
     }
 
     /**
      * Сохранение валюты по умолчанию в DataStore
      */
-    private fun saveCurrency() {
-
-    }
-
-    /**
-     * Сохранение listFavoriteCountry в БД
-     */
-    private fun saveListFavoriteCountry() = runBlocking {
-        if (uiState.value.selectedCountriesAndCities.listFavoriteCountry.isNotEmpty()) {
-            Log.i(
-                TAG,
-                uiState.value.selectedCountriesAndCities.listFavoriteCountry.joinToString("::")
-            )
-            for (i in uiState.value.selectedCountriesAndCities.listFavoriteCountry) {
-                countryDb.updateFavorite(i.favorite, i.id)
-            }
-        }
-    }
-
-    /**
-     * Сохранение listFavoriteTownship в БД
-     */
-    private fun saveListFavoriteTownship() = runBlocking {
-        if (uiState.value.selectedCountriesAndCities.listFavoriteTownship.isNotEmpty()) {
-            for (i in uiState.value.selectedCountriesAndCities.listFavoriteTownship) {
-                townshipDb.updateFavoriteName(i.favorite, i.township)
-            }
+    private fun saveCurrency() = runBlocking    {
+        if(uiState.value.currency.isNotEmpty()) {
+            fioFirstEntryPreferencesRepository.setDefaultCurrency(uiState.value.currency)
         }
     }
 }

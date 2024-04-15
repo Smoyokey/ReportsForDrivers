@@ -91,20 +91,20 @@ class FioFirstEntryRepo @Inject constructor(
         }
     }
 
-    override suspend fun setLanguageReport(languageReport: String) {
+    override suspend fun setLanguageReport(languageReport: Int) {
         dataStore.edit { preferences ->
             preferences[DataStoreName.LANGUAGE_REPORT] = languageReport
         }
     }
 
-    override suspend fun getLanguageReport(): Result<String> {
+    override suspend fun getLanguageReport(): Result<Int> {
         return Result.runCatching {
             val flow = dataStore.data
                 .catch {}
                 .map { preferences ->
                     preferences[DataStoreName.LANGUAGE_REPORT]
                 }
-            val value = flow.firstOrNull() ?: ""
+            val value = flow.firstOrNull() ?: 0
             value
         }
     }

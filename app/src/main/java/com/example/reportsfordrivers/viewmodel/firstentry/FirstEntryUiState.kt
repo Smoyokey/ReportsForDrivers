@@ -17,7 +17,8 @@ data class VehicleObject(
 data class FirstEntryUiState(
     val listVehicles: SnapshotStateList<ObjectVehicle> = SnapshotStateList(),
     val fioItemDetails: FioItemDetails = FioItemDetails(),
-    val selectedCountriesAndCities: SelectedCountriesAndCities = SelectedCountriesAndCities()
+    val currency: String = "",
+    val languageReport: Int = 0 //0 - Russian, 1 - English
 )
 
 data class FioItemDetails (
@@ -28,6 +29,10 @@ data class FioItemDetails (
 
 data class IsSelectedVehicleAndTrailer(
     val stateRadioGroup: Boolean = true
+)
+
+data class IsSelectedLanguage(
+    val languageRadioGroup: Boolean = true
 )
 
 data class MakeRnItemDetails (
@@ -67,15 +72,6 @@ data class AddCity(
     val nameCity: String = "",
     val nameCountry: String = "",
     val country: CountryDetailing = CountryDetailing()
-)
-
-
-/**
- * Добавленные города в избранное
- */
-data class SelectedCountriesAndCities(
-    val listFavoriteCountry: MutableList<CountryDetailing> = mutableListOf(),
-    val listFavoriteTownship: MutableList<TownshipDetailing> = mutableListOf()
 )
 
 data class SearchField(

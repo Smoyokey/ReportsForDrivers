@@ -133,6 +133,7 @@
     <string name="add_city" tools:ignore="MissingTranslation">Add city</string>
     <string name="name_city" tools:ignore="MissingTranslation">Name of the city</string>
     <string name="name_country" tools:ignore="MissingTranslation">Country name</string>
+    <string name="not_list_add" tools:ignore="MissingTranslation">Not on the list? Add</string>
 
 
 

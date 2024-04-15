@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers.datastore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 object DataStoreName {
@@ -20,7 +21,7 @@ object DataStoreName {
         name = "patronymic"
     )
 
-    val LANGUAGE_REPORT = stringPreferencesKey(
+    val LANGUAGE_REPORT = intPreferencesKey(
         name = "languageReport"
     )
 
