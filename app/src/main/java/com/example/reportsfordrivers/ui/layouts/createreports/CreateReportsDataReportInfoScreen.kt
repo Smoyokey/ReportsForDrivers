@@ -1,12 +1,8 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,11 +10,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -32,15 +25,12 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.OutlinedTextFieldDateCustom
-import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.ui.RowDateWithTextField
-import com.example.reportsfordrivers.ui.theme.typography
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportInfoViewModel
 
 @Composable
 fun CreateReportsDataReportInfoScreen(
-    viewModel: CreateReportsViewModel = hiltViewModel(),
+    viewModel: CreateReportInfoViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
 
@@ -53,8 +43,6 @@ fun CreateReportsDataReportInfoScreen(
         )
     }
 
-    viewModel.startCurrency()
-
     Column(modifier = Modifier.fillMaxSize()) {
         TabRowReportInfoScreen(navController = navController, viewModel = viewModel)
 
@@ -66,16 +54,16 @@ fun CreateReportsDataReportInfoScreen(
         ) {
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogDataReportInfoDate,
-                date = viewModel.uiState.value.dataReportInfo.date,
+                openDialog = viewModel.openDialogDateCreateReportInfo,
+                date = viewModel.uiStateCreateReportInfo.value.date,
                 modifier = Modifier.weight(1f),
                 text = R.string.date_create_report
             )
 
             OutlinedTextFieldCustom(
                 label = R.string.township,
-                value = viewModel.uiState.value.dataReportInfo.mainCity,
-                onValueChange = viewModel::updateDataReportInfoMainCity,
+                value = viewModel.uiStateCreateReportInfo.value.mainCity,
+                onValueChange = viewModel::updateDataCreateReportInfoMainCity,
                 tag = Tags.TAG_TEST_DATA_REPORT_INFO_MAIN_CITY,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -86,8 +74,8 @@ fun CreateReportsDataReportInfoScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.waybill,
-                value = viewModel.uiState.value.dataReportInfo.waybill,
-                onValueChange = viewModel::updateDataReportInfoWaybill,
+                value = viewModel.uiStateCreateReportInfo.value.waybill,
+                onValueChange = viewModel::updateDataCreateReportInfoWaybill,
                 tag = Tags.TAG_TEST_DATA_REPORT_INFO_WAYBILL,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -97,20 +85,20 @@ fun CreateReportsDataReportInfoScreen(
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
             onBack = { navController.navigateUp() },
-            enabled = viewModel.isValidateDataReportInfo()
+            enabled = viewModel.isValidateDateCreateReportInfo()
         )
     }
 
     DatePickerDialogCustom(
-        openDialog = viewModel.openDialogDataReportInfoDate,
-        onValueChange = viewModel::updateDataReportInfoDate
+        openDialog = viewModel.openDialogDateCreateReportInfo,
+        onValueChange = viewModel::updateDataCreateReportInfoDate
     )
 }
 
 @Composable
 private fun TabRowReportInfoScreen(
     navController: NavHostController,
-    viewModel: CreateReportsViewModel
+    viewModel: CreateReportInfoViewModel
 ) {
     TabRow(selectedTabIndex = 0) {
         Tab(
@@ -123,50 +111,46 @@ private fun TabRowReportInfoScreen(
             text = {
                 Text(
                     text = "2",
-//                    color = MaterialTheme.colorScheme.error
                 )
             },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) },
-            enabled = viewModel.isValidateDataReportInfo(),
-//            modifier = Modifier.background(
-//                if (viewModel.isValidateDataReportInfo()) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onPrimaryContainer
-//            )
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateReportInfo,
             modifier = Modifier
         )
         Tab(
             text = { Text("3") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) },
-            enabled = viewModel.isValidateDataReportInfo() &&
-                    viewModel.isValidateDataPersonalInfo()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateReportInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo
         )
         Tab(
             text = { Text("4") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
-            enabled = viewModel.isValidateDataReportInfo() &&
-                    viewModel.isValidateDataPersonalInfo() &&
-                    viewModel.isValidateDataVehicleInfo()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateReportInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer
         )
         Tab(
             text = { Text("5") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-            enabled = viewModel.isValidateDataReportInfo() &&
-                    viewModel.isValidateDataPersonalInfo() &&
-                    viewModel.isValidateDataVehicleInfo() &&
-                    viewModel.isNextDataFillingTwoValidate()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateReportInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateRoute
         )
         Tab(
             text = { Text("6") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            enabled = viewModel.isValidateDataReportInfo() &&
-                    viewModel.isValidateDataPersonalInfo() &&
-                    viewModel.isValidateDataVehicleInfo() &&
-                    viewModel.isNextDataFillingTwoValidate() &&
-                    viewModel.isValidateNextProgressReports()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateReportInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateRoute &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
         )
     }
 }

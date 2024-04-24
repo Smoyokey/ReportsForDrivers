@@ -3,6 +3,7 @@ package com.example.reportsfordrivers.viewmodel.firstentry
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -198,7 +199,7 @@ class FirstEntryViewModel @Inject constructor(
     var selectedCountrySearch = mutableStateOf("")
 
     var selectedCountryInAddCity = mutableStateOf(false)
-    val state = mutableStateOf(0)
+    val state = mutableIntStateOf(0)
 
     /**
      * Поиск страны
@@ -364,7 +365,6 @@ class FirstEntryViewModel @Inject constructor(
                 townships.filter { township ->
                     township.township.uppercase().contains(text.trim().uppercase())
                 }
-
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(2000),

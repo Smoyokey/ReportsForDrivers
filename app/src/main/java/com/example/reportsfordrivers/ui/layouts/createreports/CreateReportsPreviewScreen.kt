@@ -9,8 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,15 +23,15 @@ import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.ui.theme.typography
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressDetails
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesDetails
+import com.example.reportsfordrivers.viewmodel.createreports.CreatePreviewAndResultViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgressReportsDetailingUiState
 
 @Composable
 fun CreateReportsPreviewScreen(
     onNext: () -> Unit,
     onBack: () -> Unit,
-    viewModel: CreateReportsViewModel = hiltViewModel()
+    viewModel: CreatePreviewAndResultViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
 
@@ -58,17 +56,17 @@ fun CreateReportsPreviewScreen(
 
             Divider(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp))
 
-            LinePreviewText(R.string.date_create_report, viewModel.uiState.value.dataReportInfo.date)
-            LinePreviewText(R.string.last_name, viewModel.uiState.value.dataPersonalInfo.lastName)
-            LinePreviewText(R.string.first_name, viewModel.uiState.value.dataPersonalInfo.firstName)
-            LinePreviewText(R.string.patronymic, viewModel.uiState.value.dataPersonalInfo.patronymic)
-            LinePreviewText(R.string.waybill, viewModel.uiState.value.dataReportInfo.waybill)
-            LinePreviewText(R.string.make_vehicle, viewModel.uiState.value.dataVehicleInfo.makeVehicle)
+            LinePreviewText(R.string.date_create_report, viewModel.uiState.value.dataCreateReportInfo.date)
+            LinePreviewText(R.string.last_name, viewModel.uiState.value.dataCreatePersonalInfo.lastName)
+            LinePreviewText(R.string.first_name, viewModel.uiState.value.dataCreatePersonalInfo.firstName)
+            LinePreviewText(R.string.patronymic, viewModel.uiState.value.dataCreatePersonalInfo.patronymic)
+            LinePreviewText(R.string.waybill, viewModel.uiState.value.dataCreateReportInfo.waybill)
+            LinePreviewText(R.string.make_vehicle, viewModel.uiState.value.dataCreateVehicleInfo.makeVehicle)
             LinePreviewText(R.string.registration_number_vehicle,
-                viewModel.uiState.value.dataVehicleInfo.rnVehicle)
-            LinePreviewText(R.string.make_trailer, viewModel.uiState.value.dataVehicleInfo.makeTrailer)
+                viewModel.uiState.value.dataCreateVehicleInfo.rnVehicle)
+            LinePreviewText(R.string.make_trailer, viewModel.uiState.value.dataCreateVehicleInfo.makeTrailer)
             LinePreviewText(R.string.registration_number_trailer,
-                viewModel.uiState.value.dataVehicleInfo.rnTrailer)
+                viewModel.uiState.value.dataCreateVehicleInfo.rnTrailer)
 
             Divider(
                 modifier = Modifier.padding(10.dp)
@@ -76,17 +74,17 @@ fun CreateReportsPreviewScreen(
 
             LinePreviewText(
                 R.string.route,
-                viewModel.uiState.value.dataFillingTwo.route.joinToString(" - "){ it.text }
+                viewModel.uiState.value.dataCreateRoute.route
             )
-            LinePreviewText(R.string.date_departure, viewModel.uiState.value.dataFillingTwo.dateDeparture)
-            LinePreviewText(R.string.date_return, viewModel.uiState.value.dataFillingTwo.dateReturn)
+            LinePreviewText(R.string.date_departure, viewModel.uiState.value.dataCreateRoute.dateDeparture)
+            LinePreviewText(R.string.date_return, viewModel.uiState.value.dataCreateRoute.dateReturn)
             LinePreviewText(R.string.date_border_crossing_departure,
-                viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture)
+                viewModel.uiState.value.dataCreateRoute.dateCrossingDeparture)
             LinePreviewText(R.string.date_border_crossing_return,
-                viewModel.uiState.value.dataFillingTwo.dateCrossingReturn)
-            LinePreviewText(R.string.speedometer_reading_departure, viewModel.uiState.value.dataFillingTwo.speedometerDeparture)
-            LinePreviewText(R.string.speedometer_reading_return, viewModel.uiState.value.dataFillingTwo.speedometerReturn)
-            LinePreviewText(R.string.fuelled, viewModel.uiState.value.dataFillingTwo.fuelled)
+                viewModel.uiState.value.dataCreateRoute.dateCrossingReturn)
+            LinePreviewText(R.string.speedometer_reading_departure, viewModel.uiState.value.dataCreateRoute.speedometerDeparture)
+            LinePreviewText(R.string.speedometer_reading_return, viewModel.uiState.value.dataCreateRoute.speedometerReturn)
+            LinePreviewText(R.string.fuelled, viewModel.uiState.value.dataCreateRoute.fuelled)
 
             Divider(
                 modifier = Modifier.padding(10.dp)
@@ -99,10 +97,10 @@ fun CreateReportsPreviewScreen(
                 textAlign = TextAlign.Center
             )
             
-            for(i in 0..<viewModel.uiState.value.listProgress.size) {
+            for(i in 0..<viewModel.uiState.value.listDataCreateProgressReports.size) {
                 ProgressReportItem(
-                    item = viewModel.uiState.value.listProgress[i].progressDetails,
-                    size = viewModel.uiState.value.listProgress.size,
+                    item = viewModel.uiState.value.listDataCreateProgressReports[i],
+                    size = viewModel.uiState.value.listDataCreateProgressReports.size,
                     current = i
                 )
             }
@@ -111,7 +109,7 @@ fun CreateReportsPreviewScreen(
                 modifier = Modifier.padding(10.dp)
             )
 
-            if(viewModel.uiState.value.listTripExpenses.size > 0) {
+            if(viewModel.uiState.value.listDataCreateExpensesTrip.size > 0) {
                 Text(
                     text = stringResource(id = R.string.business_trip_expenses),
                     modifier = Modifier.fillMaxWidth(),
@@ -119,10 +117,10 @@ fun CreateReportsPreviewScreen(
                     textAlign = TextAlign.Center
                 )
 
-                for(i in 0..<viewModel.uiState.value.listTripExpenses.size) {
+                for(i in 0..<viewModel.uiState.value.listDataCreateExpensesTrip.size) {
                     TripExpensesItem(
-                        item = viewModel.uiState.value.listTripExpenses[i].tripExpensesDetails,
-                        size = viewModel.uiState.value.listTripExpenses.size,
+                        item = viewModel.uiState.value.listDataCreateExpensesTrip[i],
+                        size = viewModel.uiState.value.listDataCreateExpensesTrip.size,
                         current = i
                     )
                 }
@@ -161,7 +159,7 @@ fun LinePreviewText(@StringRes textName: Int, previewText: String) {
 }
 
 @Composable
-fun ProgressReportItem(item: ProgressDetails, size: Int, current: Int) {
+fun ProgressReportItem(item: CreateProgressReportsDetailingUiState, size: Int, current: Int) {
     Column {
         RowProgressAndExpenses(title = R.string.date, text = item.date)
         RowProgressAndExpenses(title = R.string.country, text = item.country)
@@ -174,7 +172,7 @@ fun ProgressReportItem(item: ProgressDetails, size: Int, current: Int) {
 }
 
 @Composable
-fun TripExpensesItem(item: TripExpensesDetails, size: Int, current: Int) {
+fun TripExpensesItem(item: CreateExpensesTripDetailingUiState, size: Int, current: Int) {
     Column {
         RowProgressAndExpenses(title = R.string.date, text = item.date)
         RowProgressAndExpenses(title = R.string.document_number, text = item.documentNumber)
@@ -189,7 +187,7 @@ fun TripExpensesItem(item: TripExpensesDetails, size: Int, current: Int) {
 @Composable
 fun ProgressReportItemPreview() {
     ProgressReportItem(
-        item = ProgressDetails("BY", "Minsk-Kazan", "1500", "15", "10.02"),
+        item = CreateProgressReportsDetailingUiState("BY", "Minsk-Kazan", "1500", "15", "10.02"),
         size = 1,
         current = 1
     )

@@ -25,11 +25,11 @@ import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreatePersonalInfoViewModel
 
 @Composable
 fun CreateReportsDataPersonalInfoScreen(
-    viewModel: CreateReportsViewModel = hiltViewModel(),
+    viewModel: CreatePersonalInfoViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     BackHandler {
@@ -55,8 +55,8 @@ fun CreateReportsDataPersonalInfoScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.last_name,
-                value = viewModel.uiState.value.dataPersonalInfo.lastName,
-                onValueChange = viewModel::updateDataPersonalInfoLastName,
+                value = viewModel.uiStateCreatePersonalInfo.value.lastName,
+                onValueChange = viewModel::updateDataCreatePersonalInfoLastName,
                 tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_LAST_NAME,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
@@ -64,8 +64,8 @@ fun CreateReportsDataPersonalInfoScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.first_name,
-                value = viewModel.uiState.value.dataPersonalInfo.firstName,
-                onValueChange = viewModel::updateDataPersonalInfoFirstName,
+                value = viewModel.uiStateCreatePersonalInfo.value.firstName,
+                onValueChange = viewModel::updateDataCreatePersonalInfoFirstName,
                 tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_FIRST_NAME,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
@@ -73,8 +73,8 @@ fun CreateReportsDataPersonalInfoScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.patronymic,
-                value = viewModel.uiState.value.dataPersonalInfo.patronymic,
-                onValueChange = viewModel::updateDataPersonalInfoPatronymic,
+                value = viewModel.uiStateCreatePersonalInfo.value.patronymic,
+                onValueChange = viewModel::updateDataCreatePersonalInfoPatronymic,
                 tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_PATRONYMIC,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
@@ -84,7 +84,7 @@ fun CreateReportsDataPersonalInfoScreen(
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) },
             onBack = { navController.navigateUp() },
-            enabled = viewModel.isValidateDataPersonalInfo()
+            enabled = viewModel.isValidateDataCreatePersonalInfo()
         )
     }
 }
@@ -92,7 +92,7 @@ fun CreateReportsDataPersonalInfoScreen(
 @Composable
 private fun TabRowDataPersonalInfo(
     navController: NavHostController,
-    viewModel: CreateReportsViewModel
+    viewModel: CreatePersonalInfoViewModel
 ) {
     TabRow(selectedTabIndex = 1) {
         Tab(
@@ -110,31 +110,31 @@ private fun TabRowDataPersonalInfo(
             text = { Text("3") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) },
-            enabled = viewModel.isValidateDataPersonalInfo()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo
         )
         Tab(
             text = { Text("4") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
-            enabled = viewModel.isValidateDataPersonalInfo() &&
-                    viewModel.isValidateDataVehicleInfo()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer
         )
         Tab(
             text = { Text("5") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-            enabled = viewModel.isValidateDataPersonalInfo() &&
-                    viewModel.isValidateDataVehicleInfo() &&
-                    viewModel.isNextDataFillingTwoValidate()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateRoute
         )
         Tab(
             text = { Text("6") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            enabled = viewModel.isValidateDataPersonalInfo() &&
-                    viewModel.isValidateDataVehicleInfo() &&
-                    viewModel.isNextDataFillingTwoValidate() &&
-                    viewModel.isValidateNextProgressReports()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreatePersonalInfo &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateRoute &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
         )
     }
 }

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.ObjectVehicle
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateObjectVehicleOrTrailer
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -314,7 +315,7 @@ fun AlertDialogAddVehicle(
     @StringRes headText: Int,
     @StringRes labelMake: Int,
     @StringRes labelRn: Int,
-    saveInDB: (ObjectVehicle) -> Unit,
+    saveInDB: (CreateObjectVehicleOrTrailer) -> Unit,
     type: String
 ) {
     val uiStateVehicleObject = remember { mutableStateOf(ObjectVehicle(type = type)) }
@@ -325,7 +326,7 @@ fun AlertDialogAddVehicle(
             TextButton(
                 onClick = {
                     saveInDB(
-                        ObjectVehicle(
+                        CreateObjectVehicleOrTrailer(
                             type = uiStateVehicleObject.value.type,
                             make = uiStateVehicleObject.value.make,
                             rn = uiStateVehicleObject.value.rn

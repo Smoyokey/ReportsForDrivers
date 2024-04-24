@@ -32,4 +32,28 @@ object DataStoreName {
     val THEME_APP = stringPreferencesKey(
         name = "themeApp"
     )
+
+    val IS_VALIDATE_CREATE_REPORT_INFO = booleanPreferencesKey(
+        name = "is_validate_create_report_info"
+    )
+
+    val IS_VALIDATE_CREATE_PERSONAL_INFO = booleanPreferencesKey(
+        name = "is_validate_create_personal_info"
+    )
+
+    val IS_VALIDATE_CREATE_VEHICLE_TRAILER = booleanPreferencesKey(
+        name = "is_validate_create_vehicle_trailer"
+    )
+
+    val IS_VALIDATE_CREATE_ROUTE = booleanPreferencesKey(
+        name = "is_validate_create_route"
+    )
+
+    val IS_VALIDATE_CREATE_PROGRESS_REPORTS = booleanPreferencesKey(
+        name = "is_validate_create_progress_reports"
+    )
+
+    val CREATE_SELECTED_PAGE = intPreferencesKey(
+        name = "create_selected_page"
+    )
 }

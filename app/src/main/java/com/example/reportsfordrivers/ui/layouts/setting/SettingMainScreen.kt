@@ -28,8 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
+import com.example.reportsfordrivers.viewmodel.setting.CountriesAndCitiesViewModel
 
 @Composable
 fun SettingMainScreen(onPersonalData: () -> Unit,
@@ -39,7 +41,8 @@ fun SettingMainScreen(onPersonalData: () -> Unit,
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(top = 10.dp, bottom = 10.dp, end = 20.dp, start = 20.dp)
     ) {
         ButtonRowSetting(
@@ -107,7 +110,8 @@ fun ButtonRowSetting(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(top = 10.dp, bottom = 10.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),

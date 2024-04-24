@@ -22,7 +22,6 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject

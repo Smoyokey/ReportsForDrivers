@@ -12,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Tab
@@ -32,14 +31,13 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.ui.RowDateWithTextField
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateRouteViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.RouteElement
 
 @Composable
 fun CreateReportsDataFillingTwoScreen(
-    viewModel: CreateReportsViewModel = hiltViewModel(),
+    viewModel: CreateRouteViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     BackHandler {
@@ -56,9 +54,9 @@ fun CreateReportsDataFillingTwoScreen(
     Column {
         TabRowDataFillingTwo(navController = navController, viewModel = viewModel)
 
-        if(viewModel.uiState.value.dataFillingTwo.route.size == 0) {
-            viewModel.uiState.value.dataFillingTwo.route.add(RouteElement(0, ""))
-            viewModel.uiState.value.dataFillingTwo.route.add(RouteElement(1, ""))
+        if(viewModel.uiStateCreateRoute.value.route.size == 0) {
+            viewModel.uiStateCreateRoute.value.route.add(RouteElement(0, ""))
+            viewModel.uiStateCreateRoute.value.route.add(RouteElement(1, ""))
         }
 
         Column(
@@ -69,22 +67,22 @@ fun CreateReportsDataFillingTwoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            for(i in 0..<viewModel.uiState.value.dataFillingTwo.route.size) {
+            for(i in 0..<viewModel.uiStateCreateRoute.value.route.size) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     OutlinedTextFieldCustom(
                         label = R.string.route,
-                        value = viewModel.uiState.value.dataFillingTwo.route[i].text,
-                        onValueChange = { viewModel.updateDataFillingTwoRoute(it, i) },
+                        value = viewModel.uiStateCreateRoute.value.route[i].text,
+                        onValueChange = { viewModel.updateDataCreateRouteRoute(it, i) },
                         tag = "",
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(autoCorrect = true)
                     )
-                    if(i == viewModel.uiState.value.dataFillingTwo.route.size - 1) {
+                    if(i == viewModel.uiStateCreateRoute.value.route.size - 1) {
                         IconButton(
                             onClick = {
-                                viewModel.uiState.value.dataFillingTwo.route.add(
+                                viewModel.uiStateCreateRoute.value.route.add(
                                     RouteElement(i + 1, "")
                                 )
                             }
@@ -97,7 +95,7 @@ fun CreateReportsDataFillingTwoScreen(
                     } else if(i != 0){
                         IconButton(
                             onClick = {
-                                viewModel.uiState.value.dataFillingTwo.route.removeAt(i)
+                                viewModel.uiStateCreateRoute.value.route.removeAt(i)
                             }
                         ) {
                             Icon(
@@ -110,37 +108,37 @@ fun CreateReportsDataFillingTwoScreen(
             }
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogDataFillingTwoDateDeparture,
-                date = viewModel.uiState.value.dataFillingTwo.dateDeparture,
+                openDialog = viewModel.openDialogDateDepartureCreateRoute,
+                date = viewModel.uiStateCreateRoute.value.dateDeparture,
                 modifier = Modifier.weight(1f),
                 text = R.string.date_departure
             )
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogDataFillingTwoDateReturn,
-                date = viewModel.uiState.value.dataFillingTwo.dateReturn,
+                openDialog = viewModel.openDialogDateReturnCreateRoute,
+                date = viewModel.uiStateCreateRoute.value.dateReturn,
                 modifier = Modifier.weight(1f),
                 text = R.string.date_return
             )
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogDataFillingTwoDateCrossingDeparture,
-                date = viewModel.uiState.value.dataFillingTwo.dateCrossingDeparture,
+                openDialog = viewModel.openDialogDateCrossingDepartureCreateRoute,
+                date = viewModel.uiStateCreateRoute.value.dateCrossingDeparture,
                 modifier = Modifier.weight(1f),
                 text = R.string.date_border_crossing_departure
             )
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogDataFillingTwoDateCrossingReturn,
-                date = viewModel.uiState.value.dataFillingTwo.dateCrossingReturn,
+                openDialog = viewModel.openDialogDateCrossingReturnCreateRoute,
+                date = viewModel.uiStateCreateRoute.value.dateCrossingReturn,
                 modifier = Modifier.weight(1f),
                 text = R.string.date_border_crossing_return
             )
 
             OutlinedTextFieldCustom(
                 label = R.string.speedometer_reading_departure,
-                value = viewModel.uiState.value.dataFillingTwo.speedometerDeparture,
-                onValueChange = viewModel::updateDataFillingTwoSpeedometerDeparture,
+                value = viewModel.uiStateCreateRoute.value.speedometerDeparture,
+                onValueChange = viewModel::updateDataCreateRouteSpeedometerDeparture,
                 tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -148,8 +146,8 @@ fun CreateReportsDataFillingTwoScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.speedometer_reading_return,
-                value = viewModel.uiState.value.dataFillingTwo.speedometerReturn,
-                onValueChange = viewModel::updateDataFillingTwoSpeedometerReturn,
+                value = viewModel.uiStateCreateRoute.value.speedometerReturn,
+                onValueChange = viewModel::updateDataCreateRouteSpeedometerReturn,
                 tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -157,8 +155,8 @@ fun CreateReportsDataFillingTwoScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.fuelled,
-                value = viewModel.uiState.value.dataFillingTwo.fuelled,
-                onValueChange = viewModel::updateDataFillingTwoFuelled,
+                value = viewModel.uiStateCreateRoute.value.fuelled,
+                onValueChange = viewModel::updateDataCreateRouteFuelled,
                 tag = Tags.TAG_TEST_DATA_FILLING_TWO_FUELLED,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -168,31 +166,31 @@ fun CreateReportsDataFillingTwoScreen(
         BottomBarCustom(
             onNext = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
             onBack = { navController.navigateUp() },
-            enabled = viewModel.isNextDataFillingTwoValidate()
+            enabled = viewModel.isValidateDataCreateRoute()
         )
     }
     DatePickerDialogCustom(
-        viewModel.openDialogDataFillingTwoDateDeparture,
-        viewModel::updateDataFillingTwoDateDeparture
+        viewModel.openDialogDateDepartureCreateRoute,
+        viewModel::updateDataCreateRouteDateDeparture
     )
     DatePickerDialogCustom(
-        viewModel.openDialogDataFillingTwoDateReturn,
-        viewModel::updateDataFillingTwoDateReturn
+        viewModel.openDialogDateReturnCreateRoute,
+        viewModel::updateDataCreateRouteDateReturn
     )
     DatePickerDialogCustom(
-        viewModel.openDialogDataFillingTwoDateCrossingDeparture,
-        viewModel::updateDataFillingTwoDateCrossingDeparture
+        viewModel.openDialogDateCrossingDepartureCreateRoute,
+        viewModel::updateDataCreateRouteDateCrossingDeparture
     )
     DatePickerDialogCustom(
-        viewModel.openDialogDataFillingTwoDateCrossingReturn,
-        viewModel::updateDataFillingTwoDateCrossingReturn
+        viewModel.openDialogDateCrossingReturnCreateRoute,
+        viewModel::updateDataCreateRouteDateCrossingReturn
     )
 }
 
 @Composable
 private fun TabRowDataFillingTwo(
     navController: NavHostController,
-    viewModel: CreateReportsViewModel
+    viewModel: CreateRouteViewModel
 ) {
     TabRow(selectedTabIndex = 3) {
         Tab(
@@ -220,14 +218,14 @@ private fun TabRowDataFillingTwo(
             text = { Text("5") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-            enabled = viewModel.isNextDataFillingTwoValidate()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateRoute
         )
         Tab(
             text = { Text("6") },
             selected = false,
             onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            enabled = viewModel.isNextDataFillingTwoValidate() &&
-                    viewModel.isValidateNextProgressReports()
+            enabled = viewModel.uiStateIsValidate.value.isValidateCreateRoute &&
+                    viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
         )
     }
 }

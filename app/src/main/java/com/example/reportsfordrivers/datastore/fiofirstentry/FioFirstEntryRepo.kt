@@ -40,9 +40,7 @@ class FioFirstEntryRepo @Inject constructor(
     override suspend fun getFirstEntry(): Result<Boolean> {
         return Result.runCatching {
             val flow = dataStore.data
-                .catch { exception ->
-
-                }
+                .catch {}
                 .map { preferences ->
                     preferences[DataStoreName.IS_FIRST_ENTRY]
                 }
@@ -54,9 +52,7 @@ class FioFirstEntryRepo @Inject constructor(
     override suspend fun getFirstName(): Result<String> {
         return Result.runCatching {
             val flow = dataStore.data
-                .catch { exception ->
-
-                }
+                .catch {}
                 .map { preferences ->
                     preferences[DataStoreName.FIRST_NAME]
                 }
@@ -68,9 +64,7 @@ class FioFirstEntryRepo @Inject constructor(
     override suspend fun getLastName(): Result<String> {
         return Result.runCatching {
             val flow = dataStore.data
-                .catch { exception ->
-
-                }
+                .catch {}
                 .map { preferences ->
                     preferences[DataStoreName.LAST_NAME]
                 }
@@ -123,6 +117,114 @@ class FioFirstEntryRepo @Inject constructor(
                     preferences[DataStoreName.DEFAULT_CURRENCY]
                 }
             val value = flow.firstOrNull() ?: ""
+            value
+        }
+    }
+
+    override suspend fun setIsValidateCreateReportInfo(isValidateCreateReportInfo: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.IS_VALIDATE_CREATE_REPORT_INFO] = isValidateCreateReportInfo
+        }
+    }
+
+    override suspend fun getIsValidateCreateReportInfo(): Result<Boolean> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.IS_VALIDATE_CREATE_REPORT_INFO]
+                }
+            val value = flow.firstOrNull() ?: false
+            value
+        }
+    }
+
+    override suspend fun setIsValidateCreatePersonalInfo(isValidateCreatePersonalInfo: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.IS_VALIDATE_CREATE_PERSONAL_INFO] = isValidateCreatePersonalInfo
+        }
+    }
+
+    override suspend fun getIsValidateCreatePersonalInfo(): Result<Boolean> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.IS_VALIDATE_CREATE_PERSONAL_INFO]
+                }
+            val value = flow.firstOrNull() ?: false
+            value
+        }
+    }
+
+    override suspend fun setIsValidateCreateVehicleTrailer(isValidateCreateVehicleTrailer: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.IS_VALIDATE_CREATE_VEHICLE_TRAILER] = isValidateCreateVehicleTrailer
+        }
+    }
+
+    override suspend fun getIsValidateCreateVehicleTrailer(): Result<Boolean> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.IS_VALIDATE_CREATE_VEHICLE_TRAILER]
+                }
+            val value = flow.firstOrNull() ?: false
+            value
+        }
+    }
+
+    override suspend fun setIsValidateCreateRoute(isValidateCreateRoute: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.IS_VALIDATE_CREATE_ROUTE] = isValidateCreateRoute
+        }
+    }
+
+    override suspend fun getIsValidateCreateRoute(): Result<Boolean> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.IS_VALIDATE_CREATE_ROUTE]
+                }
+            val value = flow.firstOrNull() ?: false
+            value
+        }
+    }
+
+    override suspend fun setIsValidateCreateProgressReports(isValidateCreateProgressReports: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.IS_VALIDATE_CREATE_PROGRESS_REPORTS] = isValidateCreateProgressReports
+        }
+    }
+
+    override suspend fun getIsValidateCreateProgressReports(): Result<Boolean> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.IS_VALIDATE_CREATE_PROGRESS_REPORTS]
+                }
+            val value = flow.firstOrNull() ?: false
+            value
+        }
+    }
+
+    override suspend fun setCreateSelectedPage(createSelectedPage: Int) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.CREATE_SELECTED_PAGE] = createSelectedPage
+        }
+    }
+
+    override suspend fun getCreateSelectedPage(): Result<Int> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.CREATE_SELECTED_PAGE]
+                }
+            val value = flow.firstOrNull() ?: 0
             value
         }
     }

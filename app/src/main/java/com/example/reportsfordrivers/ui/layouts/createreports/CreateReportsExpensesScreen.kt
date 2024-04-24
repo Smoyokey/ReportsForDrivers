@@ -56,18 +56,18 @@ import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.RowDateWithTextField
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
 import com.example.reportsfordrivers.ui.theme.typography
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.TripExpensesReports
+import com.example.reportsfordrivers.viewmodel.createreports.CreateExpensesTripViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
 
 @Composable
 fun CreateReportsExpensesScreen(
-    viewModel: CreateReportsViewModel = hiltViewModel(),
+    viewModel: CreateExpensesTripViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
 
-    if (viewModel.listCurrency.value.isEmpty()) {
-        viewModel.startCurrency()
-    }
+//    if (viewModel.listCurrency.value.isEmpty()) {
+//        viewModel.startCurrency()
+//    }
 
     BackHandler {
         navController.navigate(
@@ -81,7 +81,8 @@ fun CreateReportsExpensesScreen(
     val scrollState = rememberScrollState()
 
     val source = remember { MutableInteractionSource() }
-    if (source.collectIsPressedAsState().value) viewModel.openDialogTripExpenseDate.value = true
+    if (source.collectIsPressedAsState().value)
+        viewModel.openDialogDateCreateExpensesTrip.value = true
 
     Column {
         TabRowExpenses(navController = navController)
@@ -95,16 +96,16 @@ fun CreateReportsExpensesScreen(
         ) {
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogTripExpenseDate,
-                date = viewModel.uiStateTripExpenses.value.tripExpensesDetails.date,
+                openDialog = viewModel.openDialogDateCreateExpensesTrip,
+                date = viewModel.uiStateCreateExpensesTripDetailing.value.date,
                 modifier = Modifier.weight(1f),
                 text = R.string.date
             )
 
             OutlinedTextFieldCustom(
                 label = R.string.document_number,
-                value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.documentNumber,
-                onValueChange = viewModel::updateTripExpensesDocumentNumber,
+                value = viewModel.uiStateCreateExpensesTripDetailing.value.documentNumber,
+                onValueChange = viewModel::updateCreateExpensesTripDocumentNumber,
                 tag = Tags.TAG_TEST_EXPENSES_DOCUMENT_NUMBER,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -115,8 +116,8 @@ fun CreateReportsExpensesScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.expense_item,
-                value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.expenseItem,
-                onValueChange = viewModel::updateTripExpensesExpenseItem,
+                value = viewModel.uiStateCreateExpensesTripDetailing.value.expenseItem,
+                onValueChange = viewModel::updateCreateExpensesTripExpenseItem,
                 tag = Tags.TAG_TEST_EXPENSES_EXPENSE_ITEM,
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -131,8 +132,8 @@ fun CreateReportsExpensesScreen(
             ) {
                 OutlinedTextFieldCustom(
                     label = R.string.sum,
-                    value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.sum,
-                    onValueChange = viewModel::updateTripExpensesSum,
+                    value = viewModel.uiStateCreateExpensesTripDetailing.value.sum,
+                    onValueChange = viewModel::updateCreateExpensesTripSum,
                     tag = Tags.TAG_TEST_EXPENSES_SUM,
                     modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
@@ -140,11 +141,13 @@ fun CreateReportsExpensesScreen(
 
                 OutlinedTextField(
                     label = { Text(text = stringResource(R.string.currency)) },
-                    value = viewModel.uiStateTripExpenses.value.tripExpensesDetails.currency,
+                    value = viewModel.uiStateCreateExpensesTripDetailing.value.currency,
                     onValueChange = {},
                     modifier = Modifier
                         .weight(1f)
-                        .clickable { viewModel.openMenuTripExpensesCurrency.value = true },
+                        .clickable {
+                            viewModel.openBottomSheetCurrencyCreateExpensesTrip.value = true
+                        },
                     readOnly = true,
                     enabled = false,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -157,7 +160,7 @@ fun CreateReportsExpensesScreen(
                     trailingIcon = {
                         IconButton(
                             onClick = {
-                                viewModel.openMenuTripExpensesCurrency.value = true
+                                viewModel.openBottomSheetCurrencyCreateExpensesTrip.value = true
                             }
                         ) {
                             Icon(
@@ -175,9 +178,9 @@ fun CreateReportsExpensesScreen(
             ) {
                 Button(
                     onClick = {
-                        viewModel.updateTripExpense()
+                        viewModel.updateExpensesTrip()
                     },
-                    enabled = viewModel.validateAddTripExpenses()
+                    enabled = viewModel.isValidateAddExpensesTrip()
                 ) {
                     Text(
                         text = stringResource(R.string.add)
@@ -186,13 +189,13 @@ fun CreateReportsExpensesScreen(
             }
 
             Column {
-                for (i in 0..<viewModel.uiState.value.listTripExpenses.size) {
+                for (i in 0..<viewModel.uiStateCreateExpensesTrip.value.createExpensesTripList.size) {
                     ColumnTripExpense(
-                        tripExpenses = viewModel.uiState.value.listTripExpenses[i],
-                        delete = viewModel::deletePositionTripExpense,
-                        isOpen = viewModel.openDialogTripExpensesDelete,
+                        tripExpenses = viewModel.uiStateCreateExpensesTrip.value.createExpensesTripList[i],
+                        delete = viewModel::deletePositionExpensesTrip,
+                        isOpen = viewModel.openDialogDeleteCreateExpensesTrip,
                         position = i,
-                        size = viewModel.uiState.value.listTripExpenses.size
+                        size = viewModel.uiStateCreateExpensesTrip.value.createExpensesTripList.size
                     )
                 }
             }
@@ -204,16 +207,16 @@ fun CreateReportsExpensesScreen(
         )
 
         DatePickerDialogCustom(
-            viewModel.openDialogTripExpenseDate,
-            viewModel::updateTripExpensesDate
+            viewModel.openDialogDateCreateExpensesTrip,
+            viewModel::updateCreateExpensesTripDate
         )
     }
 
-    if (viewModel.openMenuTripExpensesCurrency.value) {
+    if (viewModel.openBottomSheetCurrencyCreateExpensesTrip.value) {
         ModalBottomSheetCurrency(
-            openMenu = viewModel.openMenuTripExpensesCurrency,
+            openMenu = viewModel.openBottomSheetCurrencyCreateExpensesTrip,
             listCurrency = viewModel.listCurrency.value,
-            updateCurrency = viewModel::updateTripExpensesCurrency
+            updateCurrency = viewModel::updateCreateExpensesTripCurrency
         )
     }
 }
@@ -287,7 +290,7 @@ fun ModalBottomSheetCurrency(
 
 @Composable
 fun ColumnTripExpense(
-    tripExpenses: TripExpensesReports,
+    tripExpenses: CreateExpensesTripDetailingUiState,
     delete: (Int) -> Unit,
     isOpen: MutableState<Boolean>,
     position: Int,
@@ -297,23 +300,23 @@ fun ColumnTripExpense(
         Column(modifier = Modifier.weight(1f)) {
             RowProgressAndExpenses(
                 title = R.string.date,
-                text = tripExpenses.tripExpensesDetails.date
+                text = tripExpenses.date
             )
             RowProgressAndExpenses(
                 title = R.string.document_number,
-                text = tripExpenses.tripExpensesDetails.documentNumber
+                text = tripExpenses.documentNumber
             )
             RowProgressAndExpenses(
                 title = R.string.expense_item,
-                text = tripExpenses.tripExpensesDetails.expenseItem,
+                text = tripExpenses.expenseItem,
             )
             RowProgressAndExpenses(
                 title = R.string.sum,
-                text = tripExpenses.tripExpensesDetails.sum
+                text = tripExpenses.sum
             )
             RowProgressAndExpenses(
                 title = R.string.currency,
-                text = tripExpenses.tripExpensesDetails.currency
+                text = tripExpenses.currency
             )
             if (size - 1 != position) {
                 Divider(

@@ -52,6 +52,7 @@ data class CountryDetailing(
     var favorite: Int = 0
 )
 
+
 data class Townships(
     var listTownships: SnapshotStateList<TownshipDetailing> = SnapshotStateList()
 )

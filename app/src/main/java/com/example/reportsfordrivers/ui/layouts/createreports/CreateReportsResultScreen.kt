@@ -1,7 +1,5 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
-import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,17 +16,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreatePreviewAndResultViewModel
 
 private const val TAG = "CreateReportsResultScreen"
 
 @Composable
 fun CreateReportsResultScreen(
-    viewModel: CreateReportsViewModel = hiltViewModel<CreateReportsViewModel>()
+    viewModel: CreatePreviewAndResultViewModel = hiltViewModel<CreatePreviewAndResultViewModel>()
 ) {
     val context = LocalContext.current
     val permission = rememberLauncherForActivityResult(

@@ -15,6 +15,12 @@ import com.example.reportsfordrivers.data.dao.TrailerDao
 import com.example.reportsfordrivers.data.dao.TripExpensesDao
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.dao.VehicleDao
+import com.example.reportsfordrivers.data.dao.createReport.CreateExpensesTripDao
+import com.example.reportsfordrivers.data.dao.createReport.CreatePersonalInfoDao
+import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReportsDao
+import com.example.reportsfordrivers.data.dao.createReport.CreateReportInfoDao
+import com.example.reportsfordrivers.data.dao.createReport.CreateRouteDao
+import com.example.reportsfordrivers.data.dao.createReport.CreateVehicleTrailerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -85,6 +91,36 @@ object DatabaseModule {
     @Provides
     fun provideTripExpenses(database: AppDatabase): TripExpensesDao {
         return database.tripExpensesDao()
+    }
+
+    @Provides
+    fun provideCreateExpensesTrip(database: AppDatabase): CreateExpensesTripDao {
+        return database.createExpensesTripDao()
+    }
+
+    @Provides
+    fun provideCreatePersonalInfo(database: AppDatabase): CreatePersonalInfoDao {
+        return database.createPersonalInfoDao()
+    }
+
+    @Provides
+    fun provideCreateProgressReports(database: AppDatabase): CreateProgressReportsDao {
+        return database.createProgressReportsDao()
+    }
+
+    @Provides
+    fun provideCreateReportInfo(database: AppDatabase): CreateReportInfoDao {
+        return database.createReportInfoDao()
+    }
+
+    @Provides
+    fun provideCreateRoute(database: AppDatabase): CreateRouteDao {
+        return database.createRouteDao()
+    }
+
+    @Provides
+    fun provideCreateVehicleTrailer(database: AppDatabase): CreateVehicleTrailerDao {
+        return database.createVehicleTrailer()
     }
 
     @Provides

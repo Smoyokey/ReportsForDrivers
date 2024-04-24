@@ -40,15 +40,14 @@ import com.example.reportsfordrivers.ui.AlertDialogDeleteElement
 import com.example.reportsfordrivers.ui.BottomBarCustom
 import com.example.reportsfordrivers.ui.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.RowDate
 import com.example.reportsfordrivers.ui.RowDateWithTextField
 import com.example.reportsfordrivers.ui.RowProgressAndExpenses
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.ProgressReports
+import com.example.reportsfordrivers.viewmodel.createreports.CreateProgressReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgressReportsDetailingUiState
 
 @Composable
 fun CreateReportsProgressReportsScreen(
-    viewModel: CreateReportsViewModel = hiltViewModel(),
+    viewModel: CreateProgressReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     BackHandler {
@@ -63,7 +62,8 @@ fun CreateReportsProgressReportsScreen(
     val scrollState = rememberScrollState()
 
     val source = remember { MutableInteractionSource() }
-    if (source.collectIsPressedAsState().value) viewModel.openDialogProgressReportsDate.value = true
+    if (source.collectIsPressedAsState().value)
+        viewModel.openDialogDateCreateProgressReports.value = true
 
     Column {
         TabRowProgressReports(navController = navController, viewModel = viewModel)
@@ -77,15 +77,15 @@ fun CreateReportsProgressReportsScreen(
         ) {
 
             RowDateWithTextField(
-                openDialog = viewModel.openDialogProgressReportsDate,
-                date = viewModel.uiStateProgressReports.value.progressDetails.date,
+                openDialog = viewModel.openDialogDateCreateProgressReports,
+                date = viewModel.uiStateCreateProgressReportsDetailing.value.date,
                 modifier = Modifier.weight(1f),
                 text = R.string.date
             )
 
             OutlinedTextFieldCustom(
                 label = R.string.country,
-                value = viewModel.uiStateProgressReports.value.progressDetails.country,
+                value = viewModel.uiStateCreateProgressReportsDetailing.value.country,
                 onValueChange = viewModel::updateProgressReportsCountry,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY,
                 modifier = Modifier.fillMaxWidth(),
@@ -97,7 +97,7 @@ fun CreateReportsProgressReportsScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.township_one,
-                value = viewModel.uiStateProgressReports.value.progressDetails.townshipOne,
+                value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipOne,
                 onValueChange = viewModel::updateProgressReportsTownshipOne,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_ONE,
                 modifier = Modifier.fillMaxWidth(),
@@ -109,7 +109,7 @@ fun CreateReportsProgressReportsScreen(
 
             OutlinedTextFieldCustom(
                 label = R.string.township_two,
-                value = viewModel.uiStateProgressReports.value.progressDetails.townshipTwo,
+                value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipTwo,
                 onValueChange = viewModel::updateProgressReportsTownshipTwo,
                 tag = Tags.TAG_TEST_PROGRESS_REPORTS_TOWNSHIP_TWO,
                 modifier = Modifier.fillMaxWidth(),
@@ -124,7 +124,7 @@ fun CreateReportsProgressReportsScreen(
             ) {
                 OutlinedTextFieldCustom(
                     label = R.string.distance,
-                    value = viewModel.uiStateProgressReports.value.progressDetails.distance,
+                    value = viewModel.uiStateCreateProgressReportsDetailing.value.distance,
                     onValueChange = viewModel::updateProgressReportsDistance,
                     tag = Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE,
                     modifier = Modifier.weight(1f),
@@ -132,7 +132,7 @@ fun CreateReportsProgressReportsScreen(
                 )
                 OutlinedTextFieldCustom(
                     label = R.string.cargo_weight,
-                    value = viewModel.uiStateProgressReports.value.progressDetails.cargoWeight,
+                    value = viewModel.uiStateCreateProgressReportsDetailing.value.cargoWeight,
                     onValueChange = viewModel::updateProgressReportsCargoWeight,
                     tag = Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT,
                     modifier = Modifier.weight(1f),
@@ -146,9 +146,9 @@ fun CreateReportsProgressReportsScreen(
             ) {
                 Button(
                     onClick = {
-                        viewModel.updateProgressReports()
+                        viewModel.addListProgressReports()
                     },
-                    enabled = viewModel.validateAddProgressReports()
+                    enabled = viewModel.isValidateAddProgressReports()
                 ) {
                     Text(
                         text = stringResource(R.string.add)
@@ -157,20 +157,19 @@ fun CreateReportsProgressReportsScreen(
             }
 
             Column {
-                for (i in 0..<viewModel.uiState.value.listProgress.size) {
+                for (i in 0..<viewModel.uiStateCreateProgressReports.value.createProgressReportsList.size) {
                     ColumnProgressReports(
-                        viewModel.uiState.value.listProgress[i],
+                        viewModel.uiStateCreateProgressReports.value.createProgressReportsList[i],
                         viewModel::deletePositionProgressReports,
-                        viewModel.openDialogProgressReportsDelete,
+                        viewModel.openDialogDeleteCreateProgressReports,
                         i,
-                        viewModel.uiState.value.listProgress.size
+                        viewModel.uiStateCreateProgressReports.value.createProgressReportsList.size
                     )
-
                 }
             }
 
             DatePickerDialogCustom(
-                viewModel.openDialogProgressReportsDate,
+                viewModel.openDialogDateCreateProgressReports,
                 viewModel::updateProgressReportsDate
             )
         }
@@ -185,7 +184,7 @@ fun CreateReportsProgressReportsScreen(
 
 @Composable
 fun ColumnProgressReports(
-    progressReports: ProgressReports,
+    progressReportsDetailing: CreateProgressReportsDetailingUiState,
     delete: (Int) -> Unit,
     isOpen: MutableState<Boolean>,
     position: Int,
@@ -197,24 +196,24 @@ fun ColumnProgressReports(
         Column(modifier = Modifier.weight(1f)) {
             RowProgressAndExpenses(
                 title = R.string.date,
-                text = progressReports.progressDetails.date
+                text = progressReportsDetailing.date
             )
             RowProgressAndExpenses(
                 title = R.string.country,
-                text = progressReports.progressDetails.country
+                text = progressReportsDetailing.country
             )
             RowProgressAndExpenses(
                 title = R.string.township,
-                text = "${progressReports.progressDetails.townshipOne} " +
-                        "- ${progressReports.progressDetails.townshipTwo}"
+                text = "${progressReportsDetailing.townshipOne} " +
+                        "- ${progressReportsDetailing.townshipTwo}"
             )
             RowProgressAndExpenses(
                 title = R.string.distance,
-                text = progressReports.progressDetails.distance
+                text = progressReportsDetailing.distance
             )
             RowProgressAndExpenses(
                 title = R.string.cargo_weight,
-                text = progressReports.progressDetails.cargoWeight
+                text = progressReportsDetailing.cargoWeight
             )
             if(size - 1 != position) {
                 Divider(
@@ -243,7 +242,7 @@ fun ColumnProgressReports(
 @Composable
 fun TabRowProgressReports(
     navController: NavHostController,
-    viewModel: CreateReportsViewModel
+    viewModel: CreateProgressReportsViewModel
 ) {
     TabRow(selectedTabIndex = 4) {
         Tab(
@@ -279,4 +278,9 @@ fun TabRowProgressReports(
             enabled = viewModel.isValidateNextProgressReports()
         )
     }
+}
+
+@Composable
+fun SearchCountryProgress() {
+
 }

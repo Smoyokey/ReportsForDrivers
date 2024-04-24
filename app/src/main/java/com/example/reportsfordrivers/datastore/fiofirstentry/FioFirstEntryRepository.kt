@@ -25,4 +25,28 @@ interface FioFirstEntryRepository {
     suspend fun setDefaultCurrency(defaultCurrency: String)
 
     suspend fun getDefaultCurrency(): Result<String>
+
+    suspend fun setIsValidateCreateReportInfo(isValidateCreateReportInfo: Boolean)
+
+    suspend fun getIsValidateCreateReportInfo(): Result<Boolean>
+
+    suspend fun setIsValidateCreatePersonalInfo(isValidateCreatePersonalInfo: Boolean)
+
+    suspend fun getIsValidateCreatePersonalInfo(): Result<Boolean>
+
+    suspend fun setIsValidateCreateVehicleTrailer(isValidateCreateVehicleTrailer: Boolean)
+
+    suspend fun getIsValidateCreateVehicleTrailer(): Result<Boolean>
+
+    suspend fun setIsValidateCreateRoute(isValidateCreateRoute: Boolean)
+
+    suspend fun getIsValidateCreateRoute(): Result<Boolean>
+
+    suspend fun setIsValidateCreateProgressReports(isValidateCreateProgressReports: Boolean)
+
+    suspend fun getIsValidateCreateProgressReports(): Result<Boolean>
+
+    suspend fun setCreateSelectedPage(createSelectedPage: Int)
+
+    suspend fun getCreateSelectedPage(): Result<Int>
 }

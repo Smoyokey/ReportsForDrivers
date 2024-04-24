@@ -52,8 +52,8 @@
 3. Страна. Тип: String. Название: "country". NOT NULL.
 4. Населенный пункт 1. Тип: String. Название: "townshipOne". NOT NULL.
 5. Населенный пункт 2. Тип: String. Название: "townshipTwo". NOT NULL.
-5. Расстояние. Тип: Double. Название: "distance". NOT NULL.
-6. Вес груза. Тип: Double. Название: "weight". NOT NULL.
+5. Расстояние. Тип: String. Название: "distance". NOT NULL.
+6. Вес груза. Тип: String. Название: "weight". NOT NULL.
 7. Связь cо второй таблицей. Тип: Int. Название: "reportNameId". NOT NULL.
 
 Восьмая таблица ExpensesTrip (expenses_trip)
@@ -94,3 +94,56 @@
 4. К какой стране относится, связь с таблицей *СТРАН*. Тип: Int. Название: "countryId". NOT NULL
 5. Рейтинг городов. Тип: Int. Название: "rating". NOT NULL, DEFAULT = 0.
 6. Избранные страны. Тип: Int. Название: "favorite". NOT NULL, DEFAULT = 0. (1 = TRUE, 0 = FALSE)
+
+----------------------------------------------------
+
+Создание отчёта (Сохранение данных во время создания)
+
+1. Таблица CreateReportInfo(create_report_info)
+    1) Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT
+    2) Дата рейса. Тип: String. Название: "date". NOT NULL
+    3) Путевой лист №. Тип: Int. Название: "waybill". NOT NULL
+    4) Главный город. Тип: String. Название: "mainCity". NOT NULL
+    5) Название отчёта. Тип: String. Название: "reportName". NOT NULL
+    6) Начало отчёта. Тип: Int. Название: "isStart". NOT NULL //0 - не начинался, 1 - отчет в процессе
+
+2. Таблица CreatePersonalInfo(create_personal_info)
+    1) Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT
+    2) Фамилия. Тип: String. Название: "lastName". NOT NULL
+    3) Имя. Тип: String. Название: "firstName". NOT NULL
+    4) Отчество. Тип: String. Название: "patronymic". NOT NULL
+
+3. Таблица CreateVehicleTrailer(create_vehicle_trailer)
+    1) Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT
+    2) Марка авто. Тип: String. Название: "makeVehicle". NOT NULL
+    3) Гос номер авто. Тип: String. Название: "rnVehicle". NOT NULL
+    4) Марка прицепа. Тип: String. Название: "makeTrailer". NOT NULL
+    5) Гос номер прицепа. Тип: String. Название: "rnTrailer". NOT NULL
+
+4. Таблица CreateRoute(create_route)
+    1) Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT
+    2) Маршрут. Тип: String. Название: "route". NOT NULL
+    3) Дата выезда. Тип: String. Название: "dateDeparture". NOT NULL
+    4) Дата возврата. Тип: String. Название: "dateReturn". NOT NULL
+    5) Дата пересечения границы при отъезде. Тип: String. Название: "dateBorderCrossingDeparture". NOT NULL
+    6) Дата пересечения границы при возврате. Тип: String. Название: "dateBorderCrossingReturn". NOT NULL
+    7) Показания спидометра при выезде. Тип: String. Название: "speedometerReadingDeparture". NOT NULL
+    8) Показания спидометра при возврате. Тип: String. Название: "speedometerReadingReturn". NOT NULL
+    9) Заправлено. Тип: String. Название: "fuelled". NOT NULL
+
+5. Таблица CreateProgressReports(create_progress_reports)
+    1) Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT
+    2) Дата. Тип: String. Название: "date". NOT NULL
+    3) Страна. Тип: String. Название: "country". NOT NULL
+    4) Населенный пункт 1. Тип: String. Название: "townshipOne". NOT NULL
+    5) Населенный пункт 2. Тип: String. Название: "townshipTwo". NOT NULL
+    6) Расстояние. Тип: String. Название: "distance". NOT NULL
+    7) Вес груза. Тип: String. Название: "weight". NOT NULL
+
+6. Таблица CreateExpensesTrip(create_expenses_trip)
+    1) Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT
+    2) Дата. Тип: String. Название: "date". NOT NULL
+    3) Номер документа. Тип: String. Название: "documentNumber". NOT NULL
+    4) Статья расходов. Тип: String. Название: "expenseItem". NOT NULL
+    5) Сумма. Тип: String. Название: "sum". NOT NULL
+    6) Валюты. Тип: String. Название: "currency". NOT NULL

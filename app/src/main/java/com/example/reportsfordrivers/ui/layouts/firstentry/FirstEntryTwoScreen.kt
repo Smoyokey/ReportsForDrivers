@@ -643,7 +643,7 @@ fun RowSearchCountry(name: String, viewModel: FirstEntryViewModel) {
         )
         IconButton(
             onClick = {
-                viewModel.state.value = 0
+                viewModel.state.intValue = 0
                 viewModel.selectedCountrySearch.value = ""
             }
         ) {

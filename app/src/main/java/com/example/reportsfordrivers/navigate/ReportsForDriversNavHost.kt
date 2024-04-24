@@ -21,12 +21,18 @@ import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryTwoScreen
 import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingCountriesCitiesScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrailersScreen
-import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingPersonalDataScreen
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
-import com.example.reportsfordrivers.viewmodel.createreports.CreateReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateExpensesTripViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreatePersonalInfoViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreatePreviewAndResultViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateProgressReportsViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportInfoViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateRouteViewModel
+import com.example.reportsfordrivers.viewmodel.createreports.CreateVehicleTrailerViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
+import com.example.reportsfordrivers.viewmodel.setting.CountriesAndCitiesViewModel
 
 @Composable
 fun ReportsForDriversNavHost(
@@ -36,8 +42,22 @@ fun ReportsForDriversNavHost(
 ) {
     val viewModelFirst: FirstEntryViewModel = hiltViewModel<FirstEntryViewModel>()
     val viewModelMain: MainMenuViewModel = hiltViewModel<MainMenuViewModel>()
-    val viewModelCreateReports: CreateReportsViewModel = hiltViewModel<CreateReportsViewModel>()
-    viewModelCreateReports.activity = activity
+    val viewModelCountriesAndCities: CountriesAndCitiesViewModel =
+        hiltViewModel<CountriesAndCitiesViewModel>()
+    val viewModelCreateReportInfo: CreateReportInfoViewModel =
+        hiltViewModel<CreateReportInfoViewModel>()
+    val viewModelCreatePersonalInfo: CreatePersonalInfoViewModel =
+        hiltViewModel<CreatePersonalInfoViewModel>()
+    val viewModelCreateVehicleTrailer: CreateVehicleTrailerViewModel =
+        hiltViewModel<CreateVehicleTrailerViewModel>()
+    val viewModelCreateRoute: CreateRouteViewModel = hiltViewModel<CreateRouteViewModel>()
+    val viewModelCreateProgressReports: CreateProgressReportsViewModel =
+        hiltViewModel<CreateProgressReportsViewModel>()
+    val viewModelCreateExpensesTrip: CreateExpensesTripViewModel =
+        hiltViewModel<CreateExpensesTripViewModel>()
+    val viewModelCreatePreviewAndResult: CreatePreviewAndResultViewModel =
+        hiltViewModel<CreatePreviewAndResultViewModel>()
+    viewModelCreatePreviewAndResult.activity = activity
 
     NavHost(
         navController = navController,
@@ -72,37 +92,37 @@ fun ReportsForDriversNavHost(
 
         composable(route = ReportsForDriversSchema.ReportInfo.name) {
             CreateReportsDataReportInfoScreen(
-                viewModel = viewModelCreateReports,
+                viewModel = viewModelCreateReportInfo,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInfo.name) {
             CreateReportsDataPersonalInfoScreen(
-                viewModel = viewModelCreateReports,
+                viewModel = viewModelCreatePersonalInfo,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.VehicleInfo.name) {
             CreateReportsDataVehicleInfoScreen(
-                viewModel = viewModelCreateReports,
+                viewModel = viewModelCreateVehicleTrailer,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
             CreateReportsDataFillingTwoScreen(
-                viewModel = viewModelCreateReports,
+                viewModel = viewModelCreateRoute,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.ProgressReport.name) {
             CreateReportsProgressReportsScreen(
-                viewModel = viewModelCreateReports,
+                viewModel = viewModelCreateProgressReports,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.TripExpenses.name) {
             CreateReportsExpensesScreen(
-                viewModel = viewModelCreateReports,
+                viewModel = viewModelCreateExpensesTrip,
                 navController = navController
             )
         }
@@ -114,12 +134,12 @@ fun ReportsForDriversNavHost(
                 onBack = {
                     navController.navigateUp()
                 },
-                viewModel = viewModelCreateReports
+                viewModel = viewModelCreatePreviewAndResult
             )
         }
         composable(route = ReportsForDriversSchema.Result.name) {
             CreateReportsResultScreen(
-                viewModel = viewModelCreateReports
+                viewModel = viewModelCreatePreviewAndResult
             )
         }
 
@@ -137,6 +157,8 @@ fun ReportsForDriversNavHost(
                 },
                 onCountriesCities = {
                     navController.navigate(ReportsForDriversSchema.CountriesCities.name)
+                    viewModelCountriesAndCities.openSelectedCountry()
+
                 },
             )
         }
@@ -147,7 +169,7 @@ fun ReportsForDriversNavHost(
             SettingDataVehiclesTrailersScreen()
         }
         composable(route = ReportsForDriversSchema.CountriesCities.name) {
-            SettingCountriesCitiesScreen()
+            SettingCountriesCitiesScreen( viewModel = viewModelCountriesAndCities )
         }
 
 
