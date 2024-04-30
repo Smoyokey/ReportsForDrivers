@@ -6,10 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -25,9 +29,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
-import com.example.reportsfordrivers.ui.AlertDialogAddVehicle
-import com.example.reportsfordrivers.ui.BottomBarCustom
-import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.layouts.custom.AlertDialogAddVehicle
+import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
+import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.viewmodel.createreports.CreateVehicleTrailerViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
 
@@ -73,6 +77,7 @@ fun CreateReportsDataVehicleInfoScreen(
                         .fillMaxWidth()
                         .menuAnchor(),
                     trailingIcon = {
+
                         ExposedDropdownMenuDefaults.TrailingIcon(
                             expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value
                         )
@@ -130,9 +135,23 @@ fun CreateReportsDataVehicleInfoScreen(
                         .fillMaxWidth()
                         .menuAnchor(),
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value
-                        )
+                        if(viewModel.uiStateCreateVehicleTrailer.value.makeTrailer.isEmpty()) {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value
+                            )
+                        } else {
+                            IconButton(
+                                onClick = {
+                                    viewModel.updateDataCreateVehicleTrailerMakeTrailer("")
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+
                     }
                 )
                 ExposedDropdownMenu(

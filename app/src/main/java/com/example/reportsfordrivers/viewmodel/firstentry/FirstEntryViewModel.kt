@@ -94,6 +94,7 @@ class FirstEntryViewModel @Inject constructor(
      */
     private fun updateFio(itemDetails: FioItemDetails) {
         uiState.value = uiState.value.copy(fioItemDetails = itemDetails)
+        Log.i(TAG, uiState.value.fioItemDetails.lastName)
     }
 
     fun updateLastName(lastName: String) {
@@ -528,6 +529,7 @@ class FirstEntryViewModel @Inject constructor(
     private fun saveFirstName() = runBlocking {
         if (uiState.value.fioItemDetails.firstName.isNotEmpty()) {
             fioFirstEntryPreferencesRepository.setFirstName(uiState.value.fioItemDetails.firstName)
+            Log.i(TAG, "It's ok? " + uiState.value.fioItemDetails.firstName)
         }
     }
 

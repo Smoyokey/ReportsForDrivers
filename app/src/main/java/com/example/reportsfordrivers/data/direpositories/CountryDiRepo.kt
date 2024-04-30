@@ -67,4 +67,6 @@ class CountryDiRepo @Inject constructor(private val countryDao: CountryDao): Cou
 
     override suspend fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): List<CountryEng> =
         countryDao.getNameCountryFavoriteSortRatingEng(fullNameCountryEng)
+
+    override suspend fun updateRatingForId(id: Int, rating: Int) = countryDao.updateRatingForId(id, rating)
 }

@@ -14,4 +14,12 @@ interface CreatePersonalInfoRepository {
     suspend fun deleteItem(item: CreatePersonalInfo)
 
     suspend fun updateItem(item: CreatePersonalInfo)
+
+    suspend fun updateOneElementForIdLastName(id: Int, lastName: String)
+
+    suspend fun updateOneElementForIdFirstName(id: Int, firstName: String)
+
+    suspend fun updateOneElementForIdPatronymic(id: Int, patronymic: String)
+
+    suspend fun deleteAllElements()
 }

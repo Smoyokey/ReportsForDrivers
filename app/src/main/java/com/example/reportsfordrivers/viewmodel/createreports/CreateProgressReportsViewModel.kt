@@ -62,6 +62,7 @@ class CreateProgressReportsViewModel @Inject constructor(
         for(i in createProgressReports) {
             uiStateCreateProgressReports.value.createProgressReportsList.add(
                 CreateProgressReportsDetailingUiState(
+                    id = i.id,
                     country = i.country,
                     townshipOne = i.townshipOne,
                     townshipTwo = i.townshipTwo,
@@ -71,6 +72,7 @@ class CreateProgressReportsViewModel @Inject constructor(
                 )
             )
         }
+        fioPreferencesRepository.setCreateSelectedPage(5)
     }
 
     fun updateProgressReportsDate(date: String) {
@@ -79,6 +81,12 @@ class CreateProgressReportsViewModel @Inject constructor(
             uiStateCreateProgressReportsDetailing.value.copy(
                 date = parseDate
             )
+        runBlocking {
+            createProgressReportsDb.updateOneElementForIdDate(
+                id = uiStateCreateProgressReportsDetailing.value.id,
+                date = uiStateCreateProgressReportsDetailing.value.date
+            )
+        }
     }
 
     fun updateProgressReportsCountry(country: String) {
@@ -86,6 +94,12 @@ class CreateProgressReportsViewModel @Inject constructor(
             uiStateCreateProgressReportsDetailing.value.copy(
                 country = country
             )
+        runBlocking {
+            createProgressReportsDb.updateOneElementForIdCountry(
+                id = uiStateCreateProgressReportsDetailing.value.id,
+                country = uiStateCreateProgressReportsDetailing.value.country
+            )
+        }
     }
 
     fun updateProgressReportsTownshipOne(townshipOne: String) {
@@ -93,6 +107,12 @@ class CreateProgressReportsViewModel @Inject constructor(
             uiStateCreateProgressReportsDetailing.value.copy(
                 townshipOne = townshipOne
             )
+        runBlocking {
+            createProgressReportsDb.updateOneElementForIdTownshipOne(
+                id = uiStateCreateProgressReportsDetailing.value.id,
+                townshipOne = uiStateCreateProgressReportsDetailing.value.townshipOne
+            )
+        }
     }
 
     fun updateProgressReportsTownshipTwo(townshipTwo: String) {
@@ -100,6 +120,12 @@ class CreateProgressReportsViewModel @Inject constructor(
             uiStateCreateProgressReportsDetailing.value.copy(
                 townshipTwo = townshipTwo
             )
+        runBlocking {
+            createProgressReportsDb.updateOneElementForIdTownshipTwo(
+                id = uiStateCreateProgressReportsDetailing.value.id,
+                townshipTwo = uiStateCreateProgressReportsDetailing.value.townshipTwo
+            )
+        }
     }
 
     fun updateProgressReportsDistance(distance: String) {
@@ -107,6 +133,12 @@ class CreateProgressReportsViewModel @Inject constructor(
             uiStateCreateProgressReportsDetailing.value.copy(
                 distance = distance
             )
+        runBlocking {
+            createProgressReportsDb.updateOneElementForIdDistance(
+                id = uiStateCreateProgressReportsDetailing.value.id,
+                distance = uiStateCreateProgressReportsDetailing.value.distance
+            )
+        }
     }
 
     fun updateProgressReportsCargoWeight(cargoWeight: String) {
@@ -114,6 +146,12 @@ class CreateProgressReportsViewModel @Inject constructor(
             uiStateCreateProgressReportsDetailing.value.copy(
                 cargoWeight = cargoWeight
             )
+        runBlocking {
+            createProgressReportsDb.updateOneElementForIdWeight(
+                id = uiStateCreateProgressReportsDetailing.value.id,
+                weight = uiStateCreateProgressReportsDetailing.value.cargoWeight
+            )
+        }
     }
 
     fun isValidateAddProgressReports(): Boolean {

@@ -22,4 +22,18 @@ class CreateVehicleTrailerDiRepo @Inject constructor(private val createVehicleTr
     override suspend fun deleteItem(item: CreateVehicleTrailer) = createVehicleTrailerDao.delete(item)
 
     override suspend fun updateItem(item: CreateVehicleTrailer) = createVehicleTrailerDao.update(item)
+
+    override suspend fun updateOneElementForIdMakeVehicle(id: Int, makeVehicle: String) =
+        createVehicleTrailerDao.updateOneElementForIdMakeVehicle(id, makeVehicle)
+
+    override suspend fun updateOneElementForIdRnVehicle(id: Int, rnVehicle: String) =
+        createVehicleTrailerDao.updateOneElementForIdRnVehicle(id, rnVehicle)
+
+    override suspend fun updateOneElementForIdMakeTrailer(id: Int, makeTrailer: String) =
+        createVehicleTrailerDao.updateOneElementForIdMakeTrailer(id, makeTrailer)
+
+    override suspend fun updateOneElementForIdRnTrailer(id: Int, rnTrailer: String) =
+        createVehicleTrailerDao.updateOneElementForIdRnTrailer(id, rnTrailer)
+
+    override suspend fun deleteAllElements() = createVehicleTrailerDao.deleteAllElements()
 }

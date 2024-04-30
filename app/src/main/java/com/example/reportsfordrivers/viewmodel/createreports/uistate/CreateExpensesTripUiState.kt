@@ -8,6 +8,7 @@ data class CreateExpensesTripUiState (
 )
 
 data class CreateExpensesTripDetailingUiState(
+    val id: Int = 0,
     val date: String = "",
     val documentNumber: String = "",
     val expenseItem: String = "",

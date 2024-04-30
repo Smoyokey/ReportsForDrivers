@@ -75,12 +75,6 @@ data class AddCity(
     val country: CountryDetailing = CountryDetailing()
 )
 
-data class SearchField(
-    val country: String,
-    val township: String,
-    val countryAdd: String
-)
-
 enum class VehicleOrTrailer(title: String) {
     VEHICLE("Vehicle"),
     TRAILER("Trailer")

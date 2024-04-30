@@ -3,6 +3,7 @@ package com.example.reportsfordrivers.viewmodel.createreports.uistate
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class CreateRouteUiState (
+    val id: Int = 0,
     val route: SnapshotStateList<RouteElement> = SnapshotStateList(),
     val dateDeparture: String = "",
     val dateReturn: String = "",
@@ -40,4 +41,10 @@ data class TownshipDetailingRoute(
     val countryId: Int = 0,
     val rating: Int = 0,
     val favorite: Int = 0
+)
+
+data class AddCityCreateRoute(
+    val nameCity: String = "",
+    val nameCountry: String = "",
+    val country: CountryDetailingRoute = CountryDetailingRoute()
 )

@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.viewmodel.createreports
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.data.dao.createReport.CreatePersonalInfoDao
@@ -25,49 +26,73 @@ class CreatePersonalInfoViewModel @Inject constructor(
         private set
     var uiStateIsValidate = mutableStateOf(SelectedNavigationUiState())
 
-    private var firstOpenPersonalScreen = mutableStateOf(false)
-
-    fun startLoadCreatePersonalInfo() = runBlocking {
-        val createPersonalInfo = createPersonalInfoDb.getAllItem().first()
-        uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
-            lastName = createPersonalInfo[0].lastName.ifEmpty { "" },
-            firstName = createPersonalInfo[0].firstName.ifEmpty { "" },
-            patronymic = createPersonalInfo[0].patronymic.ifEmpty { "" }
-        )
-    }
+    var firstOpenPersonalScreen = mutableStateOf(false)
 
     fun startFio() = runBlocking {
-        if (!firstOpenPersonalScreen.value) {
-            uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
-                lastName = fioPreferencesRepository.getLastName().getOrDefault(""),
-                firstName = fioPreferencesRepository.getFirstName().getOrDefault(""),
-                patronymic = fioPreferencesRepository.getPatronymic().getOrDefault("")
-            )
-            firstOpenPersonalScreen.value = true
-        }
+        startLoadCreatePersonalInfo()
+        uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
+            lastName = fioPreferencesRepository.getLastName()
+                .getOrDefault(uiStateCreatePersonalInfo.value.lastName),
+            firstName = fioPreferencesRepository.getFirstName()
+                .getOrDefault(uiStateCreatePersonalInfo.value.firstName),
+            patronymic = fioPreferencesRepository.getPatronymic()
+                .getOrDefault(uiStateCreatePersonalInfo.value.patronymic)
+        )
+        firstOpenPersonalScreen.value = true
+        Log.i(TAG, fioPreferencesRepository.getFirstName().getOrDefault("EMPTY"))
     }
+
 
     fun updateDataCreatePersonalInfoLastName(lastName: String) {
         uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
             lastName = lastName
         )
+        runBlocking {
+            createPersonalInfoDb.updateOneElementForIdFirstName(
+                id = uiStateCreatePersonalInfo.value.id,
+                firstName = uiStateCreatePersonalInfo.value.firstName
+            )
+        }
     }
 
     fun updateDataCreatePersonalInfoFirstName(firstName: String) {
         uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
             firstName = firstName
         )
+        runBlocking {
+            createPersonalInfoDb.updateOneElementForIdLastName(
+                id = uiStateCreatePersonalInfo.value.id,
+                lastName = uiStateCreatePersonalInfo.value.firstName
+            )
+        }
     }
 
     fun updateDataCreatePersonalInfoPatronymic(patronymic: String) {
         uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
             patronymic = patronymic
         )
+        runBlocking {
+            createPersonalInfoDb.updateOneElementForIdPatronymic(
+                id = uiStateCreatePersonalInfo.value.id,
+                patronymic = uiStateCreatePersonalInfo.value.patronymic
+            )
+        }
     }
 
     fun isValidateDataCreatePersonalInfo(): Boolean {
         return uiStateCreatePersonalInfo.value.lastName != "" &&
                 uiStateCreatePersonalInfo.value.firstName != "" &&
                 uiStateCreatePersonalInfo.value.patronymic != ""
+    }
+
+    private fun startLoadCreatePersonalInfo() = runBlocking {
+        val createPersonalInfo = createPersonalInfoDb.getAllItem().first()
+        uiStateCreatePersonalInfo.value = uiStateCreatePersonalInfo.value.copy(
+            id = createPersonalInfo[0].id,
+            lastName = createPersonalInfo[0].lastName.ifEmpty { "" },
+            firstName = createPersonalInfo[0].firstName.ifEmpty { "" },
+            patronymic = createPersonalInfo[0].patronymic.ifEmpty { "" }
+        )
+        fioPreferencesRepository.setCreateSelectedPage(2)
     }
 }

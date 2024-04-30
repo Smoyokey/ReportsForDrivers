@@ -85,4 +85,6 @@ interface TownshipRepository {
     suspend fun getCountryIdNameTownshipFavoriteSortRatingRus(countryId: Int, townshipRus: String): List<TownshipRus>
 
     suspend fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipRus: String): List<TownshipEng>
+
+    suspend fun updateRatingForId(id: Int, rating: Int)
 }

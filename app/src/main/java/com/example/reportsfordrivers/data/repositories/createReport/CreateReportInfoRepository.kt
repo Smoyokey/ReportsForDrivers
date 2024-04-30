@@ -14,4 +14,16 @@ interface CreateReportInfoRepository {
     suspend fun deleteItem(item: CreateReportInfo)
 
     suspend fun updateItem(item: CreateReportInfo)
+
+    suspend fun updateOneElementForIdDate(id: Int, date: String)
+
+    suspend fun updateOneElementForIdWaybill(id: Int, date: String)
+
+    suspend fun updateOneElementForIdMainCity(id: Int, mainCity: String)
+
+    suspend fun updateOneElementForIdReportName(id: Int, reportName: String)
+
+    suspend fun updateOneElementForIdIsStart(id: Int, isStart: Int)
+
+    suspend fun deleteAllElements()
 }

@@ -19,6 +19,7 @@ import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReports
 import com.example.reportsfordrivers.data.dao.createReport.CreateReportInfoDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateRouteDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateVehicleTrailerDao
+import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreatePersonalInfoUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgressReportsDetailingUiState
@@ -41,7 +42,9 @@ import javax.inject.Inject
 private const val TAG = "CreateReportsViewModel"
 
 @HiltViewModel
-class CreatePreviewAndResultViewModel @Inject constructor() : ViewModel() {
+class CreatePreviewAndResultViewModel @Inject constructor(
+    private val fioPreferencesRepository: FioFirstEntryRepository
+) : ViewModel() {
 
     @Inject
     lateinit var createReportInfoDb: CreateReportInfoDao
@@ -76,6 +79,7 @@ class CreatePreviewAndResultViewModel @Inject constructor() : ViewModel() {
         loadCreateRoute()
         loadCreateProgressReports()
         loadCreateExpensesTrip()
+        fioPreferencesRepository.setCreateSelectedPage(7)
     }
 
     private fun loadCreateReportInfo() =

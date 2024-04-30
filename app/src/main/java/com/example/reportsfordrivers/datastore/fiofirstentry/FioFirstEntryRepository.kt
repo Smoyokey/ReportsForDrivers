@@ -49,4 +49,8 @@ interface FioFirstEntryRepository {
     suspend fun setCreateSelectedPage(createSelectedPage: Int)
 
     suspend fun getCreateSelectedPage(): Result<Int>
+
+    suspend fun setStartCreateReport(startCreateReport: Boolean)
+
+    suspend fun getStartCreateReport(): Result<Boolean>
 }

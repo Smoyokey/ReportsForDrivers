@@ -303,7 +303,7 @@ fun SearchCountry(
                     IconButton(
                         onClick = {
                             viewModel.searchTownship(countriesList[element].id)
-                            viewModel.state.value = 1
+                            viewModel.state.intValue = 1
                             viewModel.selectedCountrySearch.value = countriesList[element].country
                         }
                     ) {
@@ -559,14 +559,16 @@ fun BottomSheetAddCity(
                 textStyle = typography.bodyLarge,
                 trailingIcon = {
                     if (viewModel.addCityUiState.value.nameCity.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear),
-                            modifier = Modifier
-                                .clickable {
-                                    viewModel.updateAddCityNameCity(nameCity = "")
-                                },
-                        )
+                        IconButton(
+                            onClick = {
+                                viewModel.updateAddCityNameCity("")
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()

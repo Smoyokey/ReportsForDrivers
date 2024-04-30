@@ -8,6 +8,7 @@ data class CreateProgressReportsUiState (
 )
 
 data class CreateProgressReportsDetailingUiState(
+    val id: Int = 0,
     val country: String = "",
     val townshipOne: String = "",
     val townshipTwo: String = "",

@@ -20,4 +20,21 @@ class CreateReportInfoDiRepo @Inject constructor(private val createReportInfoDao
     override suspend fun deleteItem(item: CreateReportInfo) = createReportInfoDao.delete(item)
 
     override suspend fun updateItem(item: CreateReportInfo) = createReportInfoDao.update(item)
+
+    override suspend fun updateOneElementForIdDate(id: Int, date: String) =
+        createReportInfoDao.updateOneElementForIdDate(id, date)
+
+    override suspend fun updateOneElementForIdWaybill(id: Int, waybill: String) =
+        createReportInfoDao.updateOneElementForIdWaybill(id, waybill)
+
+    override suspend fun updateOneElementForIdMainCity(id: Int, mainCity: String) =
+        createReportInfoDao.updateOneElementForIdMainCity(id, mainCity)
+
+    override suspend fun updateOneElementForIdReportName(id: Int, reportName: String) =
+        createReportInfoDao.updateOneElementForIdReportName(id, reportName)
+
+    override suspend fun updateOneElementForIdIsStart(id: Int, isStart: Int) =
+        createReportInfoDao.updateOneElementForIdIsStart(id, isStart)
+
+    override suspend fun deleteAllElements() = createReportInfoDao.deleteAllElements()
 }

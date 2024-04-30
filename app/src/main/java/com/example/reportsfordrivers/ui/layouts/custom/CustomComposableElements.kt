@@ -1,4 +1,4 @@
-package com.example.reportsfordrivers.ui
+package com.example.reportsfordrivers.ui.layouts.custom
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
@@ -12,10 +12,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.sharp.DateRange
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -49,13 +48,14 @@ import kotlinx.coroutines.launch
 import java.util.Date
 
 @Composable
-fun OutlinedTextFieldCustom(
+fun OutlinedTextFieldCustomSearch(
     @StringRes label: Int,
     value: String,
     onValueChange: (String) -> Unit,
     tag: String,
     modifier: Modifier = Modifier,
-    keyboardOptions: KeyboardOptions = KeyboardOptions()
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    isOpenSearch: MutableState<Boolean>
 ) {
     OutlinedTextField(
         value = value,
@@ -63,6 +63,50 @@ fun OutlinedTextFieldCustom(
         label = { Text(stringResource(label)) },
         modifier = modifier,
         singleLine = true,
+        textStyle = typography.bodyLarge,
+        keyboardOptions = keyboardOptions,
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                IconButton(
+                    onClick = { onValueChange("") }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = null
+                    )
+                }
+            } else {
+                IconButton(
+                    onClick = {
+                        isOpenSearch.value = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun OutlinedTextFieldCustom(
+    @StringRes label: Int,
+    value: String,
+    onValueChange: (String) -> Unit,
+    tag: String,
+    modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    isError: Boolean = false
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { onValueChange(it) },
+        label = { Text(stringResource(label)) },
+        modifier = modifier,
+//        singleLine = true,
         textStyle = typography.bodyLarge,
         keyboardOptions = keyboardOptions,
         trailingIcon = {
@@ -75,7 +119,8 @@ fun OutlinedTextFieldCustom(
                         .testTag(tag)
                 )
             }
-        }
+        },
+        isError = isError
     )
 }
 
@@ -376,7 +421,8 @@ fun AlertDialogAddVehicle(
 fun OutlinedTextFieldDateCustom(
     openDialog: MutableState<Boolean>,
     modifier: Modifier = Modifier,
-    date: String
+    date: String,
+    isError: Boolean = false
 ) {
     OutlinedTextField(
         label = { Text(text = stringResource(R.string.date)) },
@@ -399,7 +445,8 @@ fun OutlinedTextFieldDateCustom(
                 contentDescription = stringResource(R.string.calendar),
                 modifier = Modifier.clickable { openDialog.value = true }
             )
-        }
+        },
+        isError = isError
     )
 }
 
@@ -409,6 +456,7 @@ fun RowDateWithTextField(
     date: String,
     modifier: Modifier = Modifier,
     @StringRes text: Int,
+    isError: Boolean = false
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -423,11 +471,11 @@ fun RowDateWithTextField(
         OutlinedTextFieldDateCustom(
             openDialog = openDialog,
             date = date,
-            modifier = modifier
+            modifier = modifier,
+            isError = isError
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -25,4 +25,19 @@ interface CreateVehicleTrailerDao {
 
     @Query("SELECT * FROM create_vehicle_trailer WHERE id = :id")
     fun getOneItem(id: Int): Flow<CreateVehicleTrailer>
+
+    @Query("UPDATE create_vehicle_trailer SET make_vehicle = :makeVehicle WHERE id = :id")
+    suspend fun updateOneElementForIdMakeVehicle(id: Int, makeVehicle: String)
+
+    @Query("UPDATE create_vehicle_trailer SET rn_vehicle = :rnVehicle WHERE id = :id")
+    suspend fun updateOneElementForIdRnVehicle(id: Int, rnVehicle: String)
+
+    @Query("UPDATE create_vehicle_trailer SET make_trailer = :makeTrailer WHERE id = :id")
+    suspend fun updateOneElementForIdMakeTrailer(id: Int, makeTrailer: String)
+
+    @Query("UPDATE create_vehicle_trailer SET rn_trailer = :rnTrailer WHERE id = :id")
+    suspend fun updateOneElementForIdRnTrailer(id: Int, rnTrailer: String)
+
+    @Query("DELETE FROM create_vehicle_trailer")
+    suspend fun deleteAllElements()
 }

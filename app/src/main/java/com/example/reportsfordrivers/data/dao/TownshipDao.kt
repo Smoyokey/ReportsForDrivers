@@ -176,4 +176,7 @@ interface TownshipDao {
             "ORDER BY rating DESC")
     suspend fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipEng: String): List<TownshipEng>
 
+    @Query("UPDATE township SET rating = :rating WHERE id = :id")
+    suspend fun updateRatingForId(id: Int, rating: Int)
+
 }

@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers.viewmodel
 
-import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,9 +15,18 @@ class MainMenuViewModel @Inject constructor(
     private val firstEntryPreferencesRepository: FioFirstEntryRepository
 ): ViewModel() {
 
+    val isToBeContinued = mutableStateOf(isToBeContinued())
+
     fun isFirstEntry(): Boolean = runBlocking {
         return@runBlocking firstEntryPreferencesRepository.getFirstEntry().getOrNull() ?: false
     }
 
+    private fun isToBeContinued(): Boolean = runBlocking {
+        return@runBlocking firstEntryPreferencesRepository.getStartCreateReport().getOrNull() ?: false
+    }
+
+    fun selectedPage(): Int = runBlocking {
+        return@runBlocking firstEntryPreferencesRepository.getCreateSelectedPage().getOrNull() ?: 0
+    }
 
 }

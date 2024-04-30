@@ -36,12 +36,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
-import com.example.reportsfordrivers.ui.AlertDialogDeleteElement
-import com.example.reportsfordrivers.ui.BottomBarCustom
-import com.example.reportsfordrivers.ui.DatePickerDialogCustom
-import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.RowDateWithTextField
-import com.example.reportsfordrivers.ui.RowProgressAndExpenses
+import com.example.reportsfordrivers.ui.layouts.custom.AlertDialogDeleteElement
+import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
+import com.example.reportsfordrivers.ui.layouts.custom.DatePickerDialogCustom
+import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.layouts.custom.RowDateWithTextField
+import com.example.reportsfordrivers.ui.layouts.custom.RowProgressAndExpenses
 import com.example.reportsfordrivers.viewmodel.createreports.CreateProgressReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgressReportsDetailingUiState
 

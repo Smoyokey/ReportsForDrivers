@@ -17,5 +17,5 @@ data class CreateReportInfo (
     @ColumnInfo(name = "report_name")
     val reportName: String,
     @ColumnInfo(name = "is_start")
-    val isStart: String
+    val isStart: Int
 )

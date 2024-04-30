@@ -99,4 +99,7 @@ interface CountryDao {
             "WHERE favorite = 1 AND full_name_country_eng LIKE :fullNameCountryEng || '%' " +
             "ORDER BY rating DESC")
     suspend fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): List<CountryEng>
+
+    @Query("UPDATE country SET rating = :rating WHERE id = :id")
+    suspend fun updateRatingForId(id: Int, rating: Int)
 }

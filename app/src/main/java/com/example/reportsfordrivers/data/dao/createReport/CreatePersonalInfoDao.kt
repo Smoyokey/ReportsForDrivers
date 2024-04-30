@@ -25,4 +25,16 @@ interface CreatePersonalInfoDao {
 
     @Query("SELECT * FROM create_personal_info WHERE id = :id")
     fun getOneItem(id: Int): Flow<CreatePersonalInfo>
+
+    @Query("UPDATE create_personal_info SET last_name = :lastName WHERE id = :id")
+    suspend fun updateOneElementForIdLastName(id: Int, lastName: String)
+
+    @Query("UPDATE create_personal_info SET first_name = :firstName WHERE id = :id")
+    suspend fun updateOneElementForIdFirstName(id: Int, firstName: String)
+
+    @Query("UPDATE create_personal_info SET patronymic = :patronymic WHERE id = :id")
+    suspend fun updateOneElementForIdPatronymic(id: Int, patronymic: String)
+
+    @Query("DELETE FROM create_personal_info")
+    suspend fun deleteAllElements()
 }

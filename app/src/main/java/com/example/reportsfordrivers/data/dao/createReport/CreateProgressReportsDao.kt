@@ -25,4 +25,25 @@ interface CreateProgressReportsDao {
 
     @Query("SELECT * FROM create_progress_reports WHERE id = :id")
     fun getOneItem(id: Int): Flow<CreateProgressReports>
+
+    @Query("UPDATE create_progress_reports SET date = :date WHERE id = :id")
+    suspend fun updateOneElementForIdDate(id: Int, date: String)
+
+    @Query("UPDATE create_progress_reports SET country = :country WHERE id = :id")
+    suspend fun updateOneElementForIdCountry(id: Int, country: String)
+
+    @Query("UPDATE create_progress_reports SET township_one = :townshipOne WHERE id = :id")
+    suspend fun updateOneElementForIdTownshipOne(id: Int, townshipOne: String)
+
+    @Query("UPDATE create_progress_reports SET township_two = :townshipTwo WHERE id = :id")
+    suspend fun updateOneElementForIdTownshipTwo(id: Int, townshipTwo: String)
+
+    @Query("UPDATE create_progress_reports SET distance = :distance WHERE id = :id")
+    suspend fun updateOneElementForIdDistance(id: Int, distance: String)
+
+    @Query("UPDATE create_progress_reports SET weight = :weight WHERE id = :id")
+    suspend fun updateOneElementForIdWeight(id: Int, weight: String)
+
+    @Query("DELETE FROM create_progress_reports")
+    suspend fun deleteAllElements()
 }

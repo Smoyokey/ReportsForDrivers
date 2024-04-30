@@ -20,4 +20,30 @@ class CreateRouteDiRepo @Inject constructor(private val createRouteDao: CreateRo
     override suspend fun deleteItem(item: CreateRoute) = createRouteDao.delete(item)
 
     override suspend fun updateItem(item: CreateRoute) = createRouteDao.update(item)
+
+    override suspend fun updateOneElementForIdRoute(id: Int, route: String) =
+        createRouteDao.updateOneElementForIdRoute(id, route)
+
+    override suspend fun updateOneElementForIdDateDeparture(id: Int, dateDeparture: String) =
+        createRouteDao.updateOneElementForIdDateDeparture(id, dateDeparture)
+
+    override suspend fun updateOneElementForIdDateReturn(id: Int, dateReturn: String) =
+        createRouteDao.updateOneElementForIdDateReturn(id, dateReturn)
+
+    override suspend fun updateOneElementForIdDateBorderCrossingDeparture(id: Int, dateBorderCrossingDeparture: String) =
+        createRouteDao.updateOneElementForIdDateBorderCrossingDeparture(id, dateBorderCrossingDeparture)
+
+    override suspend fun updateOneElementForIdDateBorderCrossingReturn(id: Int, dateBorderCrossingReturn: String) =
+        createRouteDao.updateOneElementForIdDateBorderCrossingReturn(id, dateBorderCrossingReturn)
+
+    override suspend fun updateOneElementForIdSpeedometerReadingDeparture(id: Int, speedometerReadingDeparture: String) =
+        createRouteDao.updateOneElementForIdSpeedometerReadingDeparture(id, speedometerReadingDeparture)
+
+    override suspend fun updateOneElementForIdSpeedometerReadingReturn(id: Int, speedometerReadingReturn: String) =
+        createRouteDao.updateOneElementForIdSpeedometerReadingReturn(id, speedometerReadingReturn)
+
+    override suspend fun updateOneElementForIdFuelled(id: Int, fuelled: String) =
+        createRouteDao.updateOneElementForIdFuelled(id, fuelled)
+
+    override suspend fun deleteAllElements() = createRouteDao.deleteAllElements()
 }

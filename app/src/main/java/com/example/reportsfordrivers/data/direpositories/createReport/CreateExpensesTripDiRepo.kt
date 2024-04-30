@@ -22,4 +22,21 @@ class CreateExpensesTripDiRepo @Inject constructor(private val createExpensesTri
     override suspend fun deleteItem(item: CreateExpensesTrip) = createExpensesTripDao.delete(item)
 
     override suspend fun updateItem(item: CreateExpensesTrip) = createExpensesTripDao.update(item)
+
+    override suspend fun updateOneElementForIdDate(id: Int, date: String) =
+        createExpensesTripDao.updateOneElementForIdDate(id, date)
+
+    override suspend fun updateOneElementForIdDocumentNumber(id: Int, documentNumber: String) =
+        createExpensesTripDao.updateOneElementForIdDocumentNumber(id, documentNumber)
+
+    override suspend fun updateOneElementForIdExpenseItem(id: Int, expenseItem: String) =
+        createExpensesTripDao.updateOneElementForIdExpenseItem(id, expenseItem)
+
+    override suspend fun updateOneElementForIdSum(id: Int, sum: String) =
+        createExpensesTripDao.updateOneElementForIdSum(id, sum)
+
+    override suspend fun updateOneElementForIdCurrency(id: Int, currency: String) =
+        createExpensesTripDao.updateOneElementForIdCurrency(id, currency)
+
+    override suspend fun deleteAllItems() = createExpensesTripDao.deleteAllElements()
 }

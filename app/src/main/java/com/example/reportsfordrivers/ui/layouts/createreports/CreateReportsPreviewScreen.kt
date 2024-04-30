@@ -14,14 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.ui.BottomBarCustom
-import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.RowProgressAndExpenses
+import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
+import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.layouts.custom.RowProgressAndExpenses
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreatePreviewAndResultViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
@@ -181,14 +180,4 @@ fun TripExpensesItem(item: CreateExpensesTripDetailingUiState, size: Int, curren
         RowProgressAndExpenses(title = R.string.currency, text = item.currency)
         if(size - 1 != current) Divider()
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProgressReportItemPreview() {
-    ProgressReportItem(
-        item = CreateProgressReportsDetailingUiState("BY", "Minsk-Kazan", "1500", "15", "10.02"),
-        size = 1,
-        current = 1
-    )
 }

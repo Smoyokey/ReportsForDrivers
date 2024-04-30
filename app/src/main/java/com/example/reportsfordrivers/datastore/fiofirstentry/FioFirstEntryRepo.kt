@@ -228,4 +228,22 @@ class FioFirstEntryRepo @Inject constructor(
             value
         }
     }
+
+    override suspend fun setStartCreateReport(startCreateReport: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.START_CREATE_REPORT] = startCreateReport
+        }
+    }
+
+    override suspend fun getStartCreateReport(): Result<Boolean> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.START_CREATE_REPORT]
+                }
+            val value = flow.firstOrNull() ?: false
+            value
+        }
+    }
 }

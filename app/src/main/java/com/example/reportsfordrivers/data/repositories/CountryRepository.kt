@@ -50,4 +50,6 @@ interface CountryRepository {
     suspend fun getNameCountryFavoriteSortRatingRus(fullNameCountryRus: String): List<CountryRus>
 
     suspend fun getNameCountryFavoriteSortRatingEng(fullNameCountryEng: String): List<CountryEng>
+
+    suspend fun updateRatingForId(id: Int, rating: Int)
 }

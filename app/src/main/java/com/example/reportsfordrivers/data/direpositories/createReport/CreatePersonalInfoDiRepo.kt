@@ -23,4 +23,15 @@ class CreatePersonalInfoDiRepo @Inject constructor(private val createPersonalInf
 
     override suspend fun updateItem(item: CreatePersonalInfo) = createPersonalInfoDao.update(item)
 
+    override suspend fun updateOneElementForIdLastName(id: Int, lastName: String) =
+        createPersonalInfoDao.updateOneElementForIdLastName(id, lastName)
+
+    override suspend fun updateOneElementForIdFirstName(id: Int, firstName: String) =
+        createPersonalInfoDao.updateOneElementForIdFirstName(id, firstName)
+
+    override suspend fun updateOneElementForIdPatronymic(id: Int, patronymic: String) =
+        createPersonalInfoDao.updateOneElementForIdPatronymic(id, patronymic)
+
+    override suspend fun deleteAllElements() = createPersonalInfoDao.deleteAllElements()
+
 }

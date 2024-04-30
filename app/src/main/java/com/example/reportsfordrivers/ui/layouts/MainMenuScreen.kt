@@ -5,33 +5,29 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.theme.typography
-import com.example.reportsfordrivers.viewmodel.AppViewModelProvider
 import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ViewModelScoped
-import javax.inject.Inject
 
 
 @ViewModelScoped
 @Composable
 fun MainMenuScreen(
-    onCreateReport: () -> Unit,
-    onHistoryReports: () -> Unit,
+    onCreate: () -> Unit,
+    onContinued: () -> Unit,
+    onHistory: () -> Unit,
     onSetting: () -> Unit,
     viewModel: MainMenuViewModel = viewModel(),
 ) {
@@ -43,18 +39,17 @@ fun MainMenuScreen(
             .padding(30.dp)
     ) {
         OutlinedButton(
-            onClick = onCreateReport,
+            onClick = onCreate,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = stringResource(R.string.create_report),
                 style = typography.headlineMedium,
-//                modifier = Modifier.padding(start = 30.dp, end = 30.dp)
             )
         }
         OutlinedButton(
-            onClick = {},
-            enabled = false,
+            onClick = onContinued,
+            enabled = viewModel.isToBeContinued.value,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -63,7 +58,7 @@ fun MainMenuScreen(
             )
         }
         OutlinedButton(
-            onClick = onHistoryReports,
+            onClick = onHistory,
             enabled = true,
             modifier = Modifier.fillMaxWidth()
         ) {

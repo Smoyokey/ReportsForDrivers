@@ -3,6 +3,7 @@ package com.example.reportsfordrivers.viewmodel.createreports.uistate
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 data class CreateVehicleTrailerUiState (
+    val id: Int = 0,
     val makeVehicle: String = "",
     val rnVehicle: String = "",
     val makeTrailer: String = "",

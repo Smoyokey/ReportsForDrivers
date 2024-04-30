@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.ui.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.RowVehicleAndTrailerElement
+import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.layouts.custom.RowVehicleAndTrailerElement
 import com.example.reportsfordrivers.viewmodel.setting.DataVehiclesTrailersViewModel
 
 @Composable

@@ -76,10 +76,39 @@ fun ReportsForDriversNavHost(
                 )
             } else {
                 MainMenuScreen(
-                    onCreateReport = {
+                    onCreate = {
+                        viewModelCreateReportInfo.startCreateReport()
                         navController.navigate(ReportsForDriversSchema.ReportInfo.name)
                     },
-                    onHistoryReports = {
+                    onContinued = {
+                        when (viewModelMain.selectedPage()) {
+                            1 -> {
+                                navController.navigate(ReportsForDriversSchema.ReportInfo.name)
+                            }
+                            2 -> {
+                                navController.navigate(ReportsForDriversSchema.PersonalInfo.name)
+                            }
+                            3 -> {
+                                navController.navigate(ReportsForDriversSchema.VehicleInfo.name)
+                            }
+                            4 -> {
+                                navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
+                            }
+                            5 -> {
+                                navController.navigate(ReportsForDriversSchema.ProgressReport.name)
+                            }
+                            6 -> {
+                                navController.navigate(ReportsForDriversSchema.TripExpenses.name)
+                            }
+                            7 -> {
+                                navController.navigate(ReportsForDriversSchema.Preview.name)
+                            }
+                            else -> {
+                                navController.navigate(ReportsForDriversSchema.ReportInfo.name)
+                            }
+                        }
+                    },
+                    onHistory = {
                         navController.navigate(ReportsForDriversSchema.ListHistory.name)
                     },
                     onSetting = {
@@ -91,24 +120,39 @@ fun ReportsForDriversNavHost(
         }
 
         composable(route = ReportsForDriversSchema.ReportInfo.name) {
+            if(!viewModelCreateReportInfo.firstOpenReport.value) {
+                viewModelCreateReportInfo.startLoadCreateReportInfo()
+                viewModelCreateReportInfo.firstOpenReport.value = true
+            }
             CreateReportsDataReportInfoScreen(
                 viewModel = viewModelCreateReportInfo,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.PersonalInfo.name) {
+            if(!viewModelCreatePersonalInfo.firstOpenPersonalScreen.value) {
+                viewModelCreatePersonalInfo.startFio()
+            }
+
             CreateReportsDataPersonalInfoScreen(
                 viewModel = viewModelCreatePersonalInfo,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.VehicleInfo.name) {
+            if(!viewModelCreateVehicleTrailer.firstOpenCreateVehicleTrailer.value) {
+                viewModelCreateVehicleTrailer.startLoadCreateVehicleTrailer()
+            }
             CreateReportsDataVehicleInfoScreen(
                 viewModel = viewModelCreateVehicleTrailer,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
+            if(!viewModelCreateRoute.firstOpenCreateRoute.value) {
+                viewModelCreateRoute.startLoadCreateRoute()
+
+            }
             CreateReportsDataFillingTwoScreen(
                 viewModel = viewModelCreateRoute,
                 navController = navController
@@ -187,7 +231,8 @@ fun ReportsForDriversNavHost(
                 },
                 onFirstEntryOneScreen = {
                     navController.navigate(ReportsForDriversSchema.FirstEntryOne.name)
-                }
+                },
+                viewModel = viewModelFirst
             )
         }
     }

@@ -23,4 +23,23 @@ class CreateProgressReportsDiRepo @Inject constructor(private val createProgress
 
     override suspend fun updateItem(item: CreateProgressReports) = createProgressReportsDao.update(item)
 
+    override suspend fun updateOneElementForIdDate(id: Int, date: String) =
+        createProgressReportsDao.updateOneElementForIdDate(id, date)
+
+    override suspend fun updateOneElementForIdCountry(id: Int, country: String) =
+        createProgressReportsDao.updateOneElementForIdCountry(id, country)
+
+    override suspend fun updateOneElementForIdTownshipOne(id: Int, townshipOne: String) =
+        createProgressReportsDao.updateOneElementForIdTownshipOne(id, townshipOne)
+
+    override suspend fun updateOneElementForIdTownshipTwo(id: Int, townshipTwo: String) =
+        createProgressReportsDao.updateOneElementForIdTownshipTwo(id, townshipTwo)
+
+    override suspend fun updateOneElementForIdDistance(id: Int, distance: String) =
+        createProgressReportsDao.updateOneElementForIdDistance(id, distance)
+
+    override suspend fun updateOneElementForIdWeight(id: Int, weight: String) =
+        createProgressReportsDao.updateOneElementForIdWeight(id, weight)
+
+    override suspend fun deleteAllElements() = createProgressReportsDao.deleteAllElements()
 }

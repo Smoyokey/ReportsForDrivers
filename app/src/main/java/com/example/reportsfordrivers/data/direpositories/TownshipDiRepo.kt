@@ -120,5 +120,5 @@ class TownshipDiRepo @Inject constructor(private val townshipDao: TownshipDao): 
     override suspend fun getCountryIdNameTownshipFavoriteSortRatingEng(countryId: Int, townshipEng: String): List<TownshipEng> =
         townshipDao.getCountryIdNameTownshipFavoriteSortRatingEng(countryId, townshipEng)
 
-
+    override suspend fun updateRatingForId(id: Int, rating: Int) = townshipDao.updateRatingForId(id, rating)
 }
