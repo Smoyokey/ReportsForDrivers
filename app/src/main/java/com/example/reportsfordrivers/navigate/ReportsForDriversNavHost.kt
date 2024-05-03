@@ -92,7 +92,7 @@ fun ReportsForDriversNavHost(
                                 navController.navigate(ReportsForDriversSchema.VehicleInfo.name)
                             }
                             4 -> {
-                                navController.navigate(ReportsForDriversSchema.FillingDataTwo.name)
+                                navController.navigate(ReportsForDriversSchema.Route.name)
                             }
                             5 -> {
                                 navController.navigate(ReportsForDriversSchema.ProgressReport.name)
@@ -148,7 +148,7 @@ fun ReportsForDriversNavHost(
                 navController = navController
             )
         }
-        composable(route = ReportsForDriversSchema.FillingDataTwo.name) {
+        composable(route = ReportsForDriversSchema.Route.name) {
             if(!viewModelCreateRoute.firstOpenCreateRoute.value) {
                 viewModelCreateRoute.startLoadCreateRoute()
 

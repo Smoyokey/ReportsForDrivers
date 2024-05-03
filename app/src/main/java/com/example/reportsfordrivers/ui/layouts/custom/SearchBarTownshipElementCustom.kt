@@ -20,10 +20,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,27 +33,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
+import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
 import com.example.reportsfordrivers.viewmodel.firstentry.TownshipDetailing
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ColumnSearchTownship(
+fun ColumnSearchTownshipCustom(
     searchText: StateFlow<String>,
     townshipsList: StateFlow<List<TownshipDetailing>>,
     onSearchTextChangeTownship: (String) -> Unit,
     onToogleSearchTownship: () -> Unit,
     openAddCity: () -> Unit,
     modifier: Modifier = Modifier,
-    sortTownship: MutableStateFlow<Int>,
+    sortTownship: MutableState<Int>,
     loadTownships: (Int) -> Unit,
-    selectedCountryIdInSearch: MutableStateFlow<Int>,
+    selectedCountryIdInSearch: MutableState<Int>,
     isCheckedFavoriteTownship: MutableState<Boolean>,
     listIsEmpty: Boolean,
     isOpenAddCity: () -> Unit,
-    updateData: (String) -> Unit,
+    updateData: (String, Int) -> Unit,
     updateRating: (Int) -> Unit,
     closeBottom: () -> Unit
 ) {
@@ -92,8 +92,8 @@ fun ColumnSearchTownship(
 
         RowSortingAndFavoriteTownship(
             sortTownship = sortTownship,
-            loadTownships = loadTownships,
-            selectedCountryIdInSearch = selectedCountryIdInSearch,
+            loadTownship = loadTownships,
+            selectedCountryIdInSearchTownship = selectedCountryIdInSearch,
             modifier = Modifier.fillMaxWidth(),
             isCheckedFavoriteTownship = isCheckedFavoriteTownship
         )
@@ -119,9 +119,9 @@ fun ColumnSearchTownship(
 
 @Composable
 fun RowSortingAndFavoriteTownship(
-    sortTownship: MutableStateFlow<Int>,
-    loadTownships: (Int) -> Unit,
-    selectedCountryIdInSearch: MutableStateFlow<Int>,
+    sortTownship: MutableState<Int>,
+    loadTownship: (Int) -> Unit,
+    selectedCountryIdInSearchTownship: MutableState<Int> = mutableIntStateOf(0),
     modifier: Modifier = Modifier,
     isCheckedFavoriteTownship: MutableState<Boolean>
 ) {
@@ -130,16 +130,16 @@ fun RowSortingAndFavoriteTownship(
     ) {
         RowSortingTownship(
             sortTownship = sortTownship,
-            clickableMethod = {
+            clickableMethodTownship = {
                 sortTownship.value = if(sortTownship.value == 0) 1 else 0
-                loadTownships(selectedCountryIdInSearch.value)
+                loadTownship(selectedCountryIdInSearchTownship.value)
             }
         )
         RowFavoriteTownship(
             modifier = Modifier.weight(1f),
             isCheckedFavoriteTownship = isCheckedFavoriteTownship,
-            clickableMethod = {
-                loadTownships(selectedCountryIdInSearch.value)
+            clickableMethodTownship = {
+                loadTownship(selectedCountryIdInSearchTownship.value)
             }
         )
     }
@@ -148,13 +148,13 @@ fun RowSortingAndFavoriteTownship(
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun RowSortingTownship(
-    sortTownship: MutableStateFlow<Int>,
-    clickableMethod: () -> Unit,
+    sortTownship: MutableState<Int>,
+    clickableMethodTownship: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
-            .clickable { clickableMethod() }
+            .clickable { clickableMethodTownship() }
     ) {
         Icon(
             painter = painterResource(R.drawable.sort_24px),
@@ -174,7 +174,7 @@ fun RowSortingTownship(
 fun RowFavoriteTownship(
     modifier: Modifier = Modifier,
     isCheckedFavoriteTownship: MutableState<Boolean>,
-    clickableMethod: () -> Unit,
+    clickableMethodTownship: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -190,7 +190,7 @@ fun RowFavoriteTownship(
             checked = isCheckedFavoriteTownship.value,
             onCheckedChange = {
                 isCheckedFavoriteTownship.value = it
-                clickableMethod()
+                clickableMethodTownship()
             }
         )
         Text(
@@ -202,10 +202,11 @@ fun RowFavoriteTownship(
 @Composable
 fun LazyColumnTownship(
     listTownship: List<TownshipDetailing>,
-    updateData: (String) -> Unit,
+    updateData: (String, Int) -> Unit,
     updateRating: (Int) -> Unit,
     closeBottom: () -> Unit
 ) {
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -214,7 +215,7 @@ fun LazyColumnTownship(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        updateData(listTownship[element].township)
+                        updateData(listTownship[element].township, 0)
                         updateRating(listTownship[element].id)
                         closeBottom()
                     },

@@ -10,6 +10,8 @@ import com.example.reportsfordrivers.data.dao.CountryDao
 import com.example.reportsfordrivers.data.dao.TownshipDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReportsDao
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
+import com.example.reportsfordrivers.interfaces.search.SearchCountry
+import com.example.reportsfordrivers.interfaces.search.SearchTownship
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CountriesProgressReports
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CountryDetailingProgressReports
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgressReportsDetailingUiState
@@ -17,6 +19,10 @@ import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgr
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.SelectedNavigationUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TownshipDetailingProgressReports
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.TownshipsProgressReports
+import com.example.reportsfordrivers.viewmodel.firstentry.Countries
+import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
+import com.example.reportsfordrivers.viewmodel.firstentry.TownshipDetailing
+import com.example.reportsfordrivers.viewmodel.firstentry.Townships
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +40,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateProgressReportsViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository
-) : ViewModel() {
+) : ViewModel(), SearchCountry, SearchTownship {
 
     @Inject
     lateinit var createProgressReportsDb: CreateProgressReportsDao
@@ -51,6 +57,8 @@ class CreateProgressReportsViewModel @Inject constructor(
     var uiStateCreateProgressReportsDetailing =
         mutableStateOf(CreateProgressReportsDetailingUiState())
         private set
+
+    var uiStateIsValidate = mutableStateOf(SelectedNavigationUiState())
 
     var openBottomSheetCountryCreateProgressReports = mutableStateOf(false)
     var openBottomSheetTownshipCreateProgressReports = mutableStateOf(false)
@@ -179,21 +187,19 @@ class CreateProgressReportsViewModel @Inject constructor(
     }
 
     //SearchCountry ProgressReports
-    val uiStateCountryCreateProgressReports = mutableStateOf(CountriesProgressReports())
-    val isCheckedFavoriteCountryCreateProgressReports = mutableStateOf(false)
-    val sortCountryCreateProgressReports = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
+    override val uiStateCountry = mutableStateOf(Countries())
+    override val isCheckedFavoriteCountry = mutableStateOf(false)
+    override val sortCountry = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
 
-    private val _isSearchingCountryCreateProgressReports = MutableStateFlow(false)
-    private val _searchTextCountryCreateProgressReports = MutableStateFlow("")
-    val searchTextCountryCreateProgressReports = _searchTextCountryCreateProgressReports.asStateFlow()
-    private var _countriesListCountryCreateProgressReports = MutableStateFlow(
-        uiStateCountryCreateProgressReports.value.listCountries
-    )
-    var countriesListCountryCreateProgressReports = countriesFilterCreateProgressReports()
+    override val _isSearchingCountry = MutableStateFlow(false)
+    override val _searchTextCountry = MutableStateFlow("")
+    override val searchTextCountry = _searchTextCountry.asStateFlow()
+    override var _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+    override var countriesListCountry = filterCountry()
 
-    private fun countriesFilterCreateProgressReports(): StateFlow<List<CountryDetailingProgressReports>> {
-        return searchTextCountryCreateProgressReports
-            .combine(_countriesListCountryCreateProgressReports) { text, countries ->
+    override fun filterCountry(): StateFlow<List<CountryDetailing>> {
+        return searchTextCountry
+            .combine(_countriesListCountry) { text, countries ->
                 if(text.isBlank()) {
                     countries
                 }
@@ -203,33 +209,31 @@ class CreateProgressReportsViewModel @Inject constructor(
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(2000),
-                initialValue = _countriesListCountryCreateProgressReports.value
+                initialValue = _countriesListCountry.value
             )
     }
 
-    fun onSearchTextChangeCountryCreateProgressReports(text: String) {
-        _searchTextCountryCreateProgressReports.value = text
+    override fun onSearchTextChangeCountry(text: String) {
+        _searchTextCountry.value = text
     }
 
-    fun onToogleSearchCountryCreateProgressReports() {
-        _isSearchingCountryCreateProgressReports.value = !_isSearchingCountryCreateProgressReports.value
-        if(_isSearchingCountryCreateProgressReports.value) {
-            onSearchTextChangeCountryCreateProgressReports("")
-        }
+    override fun onToogleSearchCountry() {
+        _isSearchingCountry.value = !_isSearchingCountry.value
+        if(_isSearchingCountry.value) onSearchTextChangeCountry("")
     }
 
-    fun loadCountriesCreateProgressReports() = runBlocking {
-        uiStateCountryCreateProgressReports.value.listCountries = SnapshotStateList()
+    override fun loadCountries() = runBlocking {
+        uiStateCountry.value.listCountries = SnapshotStateList()
 
         if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteCountryCreateProgressReports.value) {
-                if(sortCountryCreateProgressReports.intValue == 0) {
+            val a = if(isCheckedFavoriteCountry.value) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameRus()
                 } else {
                     countryDb.getFavoriteSortRatingRus()
                 }
             } else {
-                if(sortCountryCreateProgressReports.intValue == 0) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getSortNameRus()
                 } else {
                     countryDb.getSortRatingRus()
@@ -237,8 +241,8 @@ class CreateProgressReportsViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateCountryCreateProgressReports.value.listCountries.add(
-                    CountryDetailingProgressReports(
+                uiStateCountry.value.listCountries.add(
+                    CountryDetailing(
                         id = it.id,
                         country = it.fullNameCountryRus,
                         shortCountry = it.shortNameCountry,
@@ -248,14 +252,14 @@ class CreateProgressReportsViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteCountryCreateProgressReports.value) {
-                if(sortCountryCreateProgressReports.intValue == 0) {
+            val a = if(isCheckedFavoriteCountry.value) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameEng()
                 } else {
                     countryDb.getFavoriteSortRatingEng()
                 }
             } else {
-                if(sortCountryCreateProgressReports.intValue == 0) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getSortNameEng()
                 } else {
                     countryDb.getSortRatingEng()
@@ -263,8 +267,8 @@ class CreateProgressReportsViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateCountryCreateProgressReports.value.listCountries.add(
-                    CountryDetailingProgressReports(
+                uiStateCountry.value.listCountries.add(
+                    CountryDetailing(
                         id = it.id,
                         country = it.fullNameCountryEng,
                         shortCountry = it.shortNameCountry,
@@ -273,29 +277,25 @@ class CreateProgressReportsViewModel @Inject constructor(
                     )
                 )
             }
-            _countriesListCountryCreateProgressReports = MutableStateFlow(
-                uiStateCountryCreateProgressReports.value.listCountries
-            )
-            countriesListCountryCreateProgressReports = countriesFilterCreateProgressReports()
+            _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+            countriesListCountry = filterCountry()
         }
     }
 
     //Search Township ProgressReports
-    val uiStateTownshipsCreateProgressReports = mutableStateOf(TownshipsProgressReports())
-    val isCheckedFavoriteTownshipCreateProgressReports = mutableStateOf(false)
-    val sortTownshipCreateProgressReports = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
+    override val uiStateTownship = mutableStateOf(Townships())
+    override val isCheckedFavoriteTownship = mutableStateOf(false)
+    override val sortTownship = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
 
-    private val _isSearchingTownshipCreateProgressReports = MutableStateFlow(false)
-    private val _searchTextTownshipCreateProgressReports = MutableStateFlow("")
-    val searchTextTownshipCreateProgressReports = _searchTextCountryCreateProgressReports.asStateFlow()
-    private var _townshipsListTownshipCreateProgressReports = MutableStateFlow(
-        uiStateTownshipsCreateProgressReports.value.listTownships
-    )
-    var townshipsListTownshipCreateProgressReports = townshipsFilterCreateProgressReports()
+    override val _isSearchingTownship = MutableStateFlow(false)
+    override val _searchTextTownship = MutableStateFlow("")
+    override val searchTextTownship = _searchTextTownship.asStateFlow()
+    override var _townshipsListTownship = MutableStateFlow(uiStateTownship.value.listTownships)
+    override var townshipsListTownship = filterTownship()
 
-    private fun townshipsFilterCreateProgressReports(): StateFlow<List<TownshipDetailingProgressReports>> {
-        return searchTextTownshipCreateProgressReports
-            .combine(_townshipsListTownshipCreateProgressReports) { text, townships ->
+    override fun filterTownship(): StateFlow<List<TownshipDetailing>> {
+        return searchTextTownship
+            .combine(_townshipsListTownship) { text, townships ->
                 if(text.isBlank()) {
                     townships
                 }
@@ -305,34 +305,34 @@ class CreateProgressReportsViewModel @Inject constructor(
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(2000),
-                initialValue = _townshipsListTownshipCreateProgressReports.value
+                initialValue = _townshipsListTownship.value
             )
     }
 
-    fun onSearchTextChangeTownshipCreateProgressReports(text: String) {
-        _searchTextTownshipCreateProgressReports.value = text
+    override fun onSearchTextChangeTownship(text: String) {
+        _searchTextTownship.value = text
     }
 
-    fun onToogleSearchTownshipCreateProgressReports() {
-        _isSearchingTownshipCreateProgressReports.value = !_isSearchingTownshipCreateProgressReports.value
-        if(_isSearchingTownshipCreateProgressReports.value) {
-            onSearchTextChangeTownshipCreateProgressReports("")
+    override fun onToogleSearchTownship() {
+        _isSearchingTownship.value = !_isSearchingTownship.value
+        if(_isSearchingTownship.value) {
+            onSearchTextChangeTownship("")
         }
     }
 
-    fun loadTownshipsCreateProgressReports(countryId: Int) = runBlocking {
-        uiStateTownshipsCreateProgressReports.value.listTownships = SnapshotStateList()
+    override fun loadTownships(countryId: Int) = runBlocking {
+        uiStateTownship.value.listTownships = SnapshotStateList()
 
         if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteTownshipCreateProgressReports.value) {
+            val a = if(isCheckedFavoriteTownship.value) {
                 if(countryId != 0) {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameRus()
                     } else {
                         townshipDb.getFavoriteSortRatingRus()
@@ -340,13 +340,13 @@ class CreateProgressReportsViewModel @Inject constructor(
                 }
             } else {
                 if(countryId != 0) {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getSortNameRus()
                     } else {
                         townshipDb.getSortRatingRus()
@@ -355,8 +355,8 @@ class CreateProgressReportsViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateTownshipsCreateProgressReports.value.listTownships.add(
-                    TownshipDetailingProgressReports(
+                uiStateTownship.value.listTownships.add(
+                    TownshipDetailing(
                         id = it.id,
                         township = it.townshipRus,
                         countryId = it.countryId,
@@ -366,15 +366,15 @@ class CreateProgressReportsViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteTownshipCreateProgressReports.value) {
+            val a = if(isCheckedFavoriteTownship.value) {
                 if(countryId != 0) {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameEng()
                     } else {
                         townshipDb.getFavoriteSortRatingEng()
@@ -382,13 +382,13 @@ class CreateProgressReportsViewModel @Inject constructor(
                 }
             } else {
                 if(countryId != 0) {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateProgressReports.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getSortNameEng()
                     } else {
                         townshipDb.getSortRatingEng()
@@ -397,8 +397,8 @@ class CreateProgressReportsViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateTownshipsCreateProgressReports.value.listTownships.add(
-                    TownshipDetailingProgressReports(
+                uiStateTownship.value.listTownships.add(
+                    TownshipDetailing(
                         id = it.id,
                         township = it.townshipEng,
                         countryId = it.countryId,
@@ -408,10 +408,18 @@ class CreateProgressReportsViewModel @Inject constructor(
                 )
             }
         }
-        _townshipsListTownshipCreateProgressReports = MutableStateFlow(
-            uiStateTownshipsCreateProgressReports.value.listTownships
-        )
-        townshipsListTownshipCreateProgressReports = townshipsFilterCreateProgressReports()
+        _townshipsListTownship = MutableStateFlow(uiStateTownship.value.listTownships)
+        townshipsListTownship = filterTownship()
+    }
+
+    override fun updateRatingCountry(id: Int) = runBlocking {
+        val a = countryDb.getOneItem(id).first()
+        countryDb.updateRatingForId(a.id, a.rating + 1)
+    }
+
+    override fun updateRatingTownship(id: Int) = runBlocking {
+        val a = townshipDb.getOneItem(id).first()
+        townshipDb.updateRatingForId(a.id, a.rating + 1)
     }
 
     @SuppressLint("SimpleDateFormat")

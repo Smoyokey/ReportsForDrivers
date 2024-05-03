@@ -55,6 +55,7 @@ import com.example.reportsfordrivers.ui.layouts.custom.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.RowDateWithTextField
 import com.example.reportsfordrivers.ui.layouts.custom.RowProgressAndExpenses
+import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateExpensesTripViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
@@ -85,7 +86,7 @@ fun CreateReportsExpensesScreen(
         viewModel.openDialogDateCreateExpensesTrip.value = true
 
     Column {
-        TabRowExpenses(navController = navController)
+        TabRowCustom( index = 5, navController = navController, isEnabledSix = false)
 
         Column(
             modifier = Modifier
@@ -345,43 +346,4 @@ fun ColumnTripExpense(
         delete = delete,
         position = position
     )
-}
-
-@Composable
-private fun TabRowExpenses(
-    navController: NavHostController
-) {
-    TabRow(selectedTabIndex = 5) {
-        Tab(
-            text = { Text("1") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
-        )
-        Tab(
-            text = { Text("2") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
-        )
-        Tab(
-            text = { Text("3") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
-        )
-        Tab(
-            text = { Text("4") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) }
-        )
-        Tab(
-            text = { Text("5") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) }
-        )
-        Tab(
-            text = { Text("6") },
-            selected = false,
-            onClick = { },
-            enabled = false
-        )
-    }
 }

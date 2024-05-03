@@ -32,6 +32,7 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.custom.AlertDialogAddVehicle
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
+import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.viewmodel.createreports.CreateVehicleTrailerViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
 
@@ -51,9 +52,15 @@ fun CreateReportsDataVehicleInfoScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-//        viewModel.startLoadDB()
 
-        TabRowDataVehicleInfo(navController = navController, viewModel = viewModel)
+        TabRowCustom(
+            index = 2,
+            navController = navController,
+            isEnabledThree = false,
+            isEnabledFour = viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer,
+            isEnabledFive = viewModel.uiStateIsValidate.value.isValidateCreateRoute,
+            isEnabledSix = viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
+        )
 
         Column(
             modifier = Modifier
@@ -192,7 +199,7 @@ fun CreateReportsDataVehicleInfoScreen(
         }
 
         BottomBarCustom(
-            onNext = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
+            onNext = { navController.navigate(ReportsForDriversSchema.Route.name) },
             onBack = { navController.navigateUp() },
             enabled = viewModel.isValidateDataCreateVehicleTrailer()
         )
@@ -220,50 +227,4 @@ fun CreateReportsDataVehicleInfoScreen(
             type = VehicleOrTrailer.TRAILER.name
         )
     }
-}
-
-@Composable
-private fun TabRowDataVehicleInfo(
-    navController: NavHostController,
-    viewModel: CreateVehicleTrailerViewModel
-) {
-    TabRow(selectedTabIndex = 2) {
-        Tab(
-            text = { Text("1") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
-        )
-        Tab(
-            text = { Text("2") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
-        )
-        Tab(
-            text = { Text("3") },
-            selected = false,
-            onClick = { }
-        )
-        Tab(
-            text = { Text("4") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.FillingDataTwo.name) },
-            enabled = viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer
-        )
-        Tab(
-            text = { Text("5") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-            enabled = viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer &&
-                    viewModel.uiStateIsValidate.value.isValidateCreateRoute
-        )
-        Tab(
-            text = { Text("6") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            enabled = viewModel.uiStateIsValidate.value.isValidateCreateVehicleTrailer &&
-                    viewModel.uiStateIsValidate.value.isValidateCreateRoute &&
-                    viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
-        )
-    }
-
 }

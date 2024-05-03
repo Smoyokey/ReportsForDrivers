@@ -50,10 +50,14 @@ import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
+import com.example.reportsfordrivers.ui.layouts.custom.BottomSheetAddCityCustom
+import com.example.reportsfordrivers.ui.layouts.custom.ColumnSearchCountryCustom
+import com.example.reportsfordrivers.ui.layouts.custom.ColumnSearchTownshipCustom
 import com.example.reportsfordrivers.ui.layouts.custom.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustomSearch
 import com.example.reportsfordrivers.ui.layouts.custom.RowDateWithTextField
+import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateRouteViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.RouteElement
@@ -75,7 +79,12 @@ fun CreateReportsDataFillingTwoScreen(
     val scrollState = rememberScrollState()
 
     Column {
-        TabRowDataFillingTwo(navController = navController, viewModel = viewModel)
+        TabRowCustom(
+            index = 3,
+            navController = navController,
+            isEnabledFive = viewModel.uiStateIsValidate.value.isValidateCreateRoute,
+            isEnabledSix = viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
+        )
 
         if(viewModel.uiStateCreateRoute.value.route.size == 0) {
             viewModel.uiStateCreateRoute.value.route.add(RouteElement(0, ""))
@@ -222,7 +231,24 @@ fun CreateReportsDataFillingTwoScreen(
     )
 
     if(viewModel.openBottomAddCityCreateRoute.value) {
-        BottomSheetAddCity(viewModel = viewModel)
+        BottomSheetAddCityCustom(
+            searchText = viewModel.searchTextCountryAddCityCreateRoute,
+            countriesList = viewModel.countriesListCountryAddCityCreateRoute,
+            openBottom = viewModel.openBottomAddCityCreateRoute,
+            modifier = Modifier.fillMaxHeight(0.75f),
+            nameCity = viewModel.uiStateAddCity.value.nameCity,
+            updateNameCity = viewModel::updateNameCityAddCityCreateRoute,
+            onSearchTextChange = viewModel::onSearchTextChangeCountryAddCityCreateRoute,
+            onToogleSearch = viewModel::onToogleSearchCountryAddCityCreateRoute,
+            sortCountry = viewModel.sortCountryAddCityCreateRoute,
+            loadCountries = viewModel::loadCountriesAddCityCreateRoute,
+            isCheckedFavorite = viewModel.isCheckedFavoriteCountryAddCityCreateRoute,
+            country = viewModel.uiStateAddCity.value.country,
+            updateCountry = viewModel::updateNameCountryAddCityCreateRoute,
+            closeAddCity = viewModel::closeAddCity,
+            saveAddCityInBd = viewModel::saveAddCityInBd,
+            validateAddCity = viewModel::validateAddCity
+        )
     }
 }
 
@@ -246,15 +272,38 @@ fun BottomSheetSearchRoute(
             Column(
                 modifier = Modifier.fillMaxHeight()
             ) {
-                if (viewModel.openListSearchCreateReportInfo.intValue == 0) {
-                    ColumnSearchCountry(
-                        viewModel = viewModel,
-                        modifier = Modifier.weight(1f)
+                if (viewModel.openListSearchCreateRoute.intValue == 0) {
+                    ColumnSearchCountryCustom(
+                        searchText = viewModel.searchTextCountry,
+                        countriesList = viewModel.countriesListCountry,
+                        onSearchTextChangeCountry = viewModel::onSearchTextChangeCountry,
+                        onToogleSearchCountry = viewModel::onToogleSearchCountry,
+                        sortCountry = viewModel.sortCountry,
+                        loadCountry = viewModel::loadCountries,
+                        isCheckedFavoriteCountry = viewModel.isCheckedFavoriteCountry,
+                        openListSearch = viewModel.openListSearchCreateRoute,
+                        selectedCountryIdInSearch = viewModel.selectedCountryIdInSearch,
+                        selectedCountryNameInSearch = viewModel.selectedCountryNameInSearch,
+                        updateRating = viewModel::updateRatingCountry,
+                        loadTownships = viewModel::loadTownships
                     )
                 } else {
-                    ColumnSearchTownship(
-                        viewModel = viewModel,
-                        modifier = Modifier.weight(1f)
+                    ColumnSearchTownshipCustom(
+                        searchText = viewModel.searchTextTownship,
+                        townshipsList = viewModel.townshipsListTownship,
+                        onSearchTextChangeTownship = viewModel::onSearchTextChangeTownship,
+                        onToogleSearchTownship = viewModel::onToogleSearchTownship,
+                        openAddCity = viewModel::openAddCity,
+                        modifier = Modifier,
+                        sortTownship = viewModel.sortTownship,
+                        loadTownships = viewModel::loadTownships,
+                        selectedCountryIdInSearch = viewModel.selectedCountryIdInSearch,
+                        isCheckedFavoriteTownship = viewModel.isCheckedFavoriteTownship,
+                        listIsEmpty = false,
+                        isOpenAddCity = viewModel::openAddCity,
+                        updateData = viewModel::updateDataCreateRouteRoute,
+                        updateRating = viewModel::updateRatingTownship,
+                        closeBottom = viewModel::closeBottomSheetSearch
                     )
                 }
                 Button(
@@ -267,494 +316,6 @@ fun BottomSheetSearchRoute(
                 }
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ColumnSearchCountry(
-    viewModel: CreateRouteViewModel,
-    modifier: Modifier = Modifier
-) {
-    val searchTextCountry by viewModel.searchTextCountryCreateRoute.collectAsState()
-    val countriesListCountry by viewModel.countriesListCountryCreateRoute.collectAsState()
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        DockedSearchBar(
-            query = searchTextCountry,
-            onQueryChange = viewModel::onSearchTextChangeCountryCreateRoute,
-            onSearch = viewModel::onSearchTextChangeCountryCreateRoute,
-            active = false,
-            onActiveChange = {
-                viewModel.onToogleSearchCountryCreateRoute()
-            },
-            placeholder = {
-                Text(text = stringResource(R.string.countries))
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {}
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        viewModel.sortCountryCreateRoute.intValue =
-                            if(viewModel.sortCountryCreateRoute.intValue == 0) 1 else 0
-                        viewModel.loadCountriesCreateRoute()
-                    }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.sort_24px),
-                    contentDescription = null
-                )
-                Text(
-                    text = if (viewModel.sortCountryCreateRoute.intValue == 0) {
-                        stringResource(R.string.alphabetically)
-                    } else {
-                        stringResource(R.string.by_popularity)
-                    }
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .toggleable(
-                        value = viewModel.isCheckedFavoriteCountryCreateRoute.value,
-                        onValueChange = {
-                            viewModel.isCheckedFavoriteCountryCreateRoute.value =
-                                !viewModel.isCheckedFavoriteCountryCreateRoute.value
-                        },
-                        role = Role.Checkbox
-                    )
-            ) {
-                Checkbox(
-                    checked = viewModel.isCheckedFavoriteCountryCreateRoute.value,
-                    onCheckedChange = {
-                        viewModel.isCheckedFavoriteCountryCreateRoute.value = it
-                        viewModel.loadCountriesCreateRoute()
-                    }
-                )
-                Text(
-                    text = stringResource(R.string.favorite)
-                )
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            items(countriesListCountry.size) { element ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (countriesListCountry[element].favorite == 1) {
-                        Icon(
-                            imageVector = Icons.Outlined.Star,
-                            contentDescription = null
-                        )
-                    }
-
-                    Text(
-                        text = countriesListCountry[element].country,
-                        style = typography.bodyLarge,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    IconButton(
-                        onClick = {
-                            viewModel.openListSearchCreateReportInfo.intValue =1
-                            viewModel.loadTownshipsCreateRoute(countriesListCountry[element].id)
-                            viewModel.selectedCountryIdInSearch.intValue =
-                                countriesListCountry[element].id
-                            viewModel.selectedCountryNameInSearch.value =
-                                countriesListCountry[element].country
-                            viewModel.updateRatingCountry(countriesListCountry[element].id)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ColumnSearchTownship(
-    viewModel: CreateRouteViewModel,
-    modifier: Modifier = Modifier
-) {
-
-    val searchTextTownship by viewModel.searchTextTownshipCreateRoute.collectAsState()
-    val townshipsListTownship by viewModel.townshipsListTownshipCreateRoute.collectAsState()
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        DockedSearchBar(
-            query = searchTextTownship,
-            onQueryChange = viewModel::onSearchTextChangeTownshipCreateRoute,
-            onSearch = viewModel::onSearchTextChangeTownshipCreateRoute,
-            active = false,
-            onActiveChange = {
-                viewModel.onToogleSearchTownshipCreateRoute()
-            },
-            placeholder = {
-                Text(text = stringResource(R.string.cities))
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null
-                )
-            },
-            trailingIcon = {
-                IconButton(
-                    onClick = { viewModel.openAddCity() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Add,
-                        contentDescription = stringResource(R.string.add)
-                    )
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {}
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        viewModel.sortTownshipCreateRoute.intValue =
-                            if (viewModel.sortTownshipCreateRoute.intValue == 0) 1 else 0
-                        viewModel.loadTownshipsCreateRoute(
-                            viewModel.selectedCountryIdInSearch.intValue
-                        )
-                    }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.sort_24px),
-                    contentDescription = null
-                )
-                Text(
-                    text = if (viewModel.sortTownshipCreateRoute.intValue == 0) {
-                        stringResource(R.string.alphabetically)
-                    } else {
-                        stringResource(R.string.by_popularity)
-                    }
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .toggleable(
-                        value = viewModel.isCheckedFavoriteTownshipCreateRoute.value,
-                        onValueChange = {
-                            viewModel.isCheckedFavoriteTownshipCreateRoute.value =
-                                !viewModel.isCheckedFavoriteTownshipCreateRoute.value
-                        },
-                        role = Role.Checkbox
-                    )
-            ) {
-                Checkbox(
-                    checked = viewModel.isCheckedFavoriteTownshipCreateRoute.value,
-                    onCheckedChange = {
-                        viewModel.isCheckedFavoriteTownshipCreateRoute.value = it
-                        viewModel.loadTownshipsCreateRoute(
-                            viewModel.selectedCountryIdInSearch.intValue
-                        )
-                    }
-                )
-                Text(
-                    text = stringResource(R.string.favorite)
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = viewModel.selectedCountryNameInSearch.value
-            )
-            IconButton(
-                onClick = {
-                    viewModel.openListSearchCreateReportInfo.intValue = 0
-                    viewModel.loadCountriesCreateRoute()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Clear,
-                    contentDescription = null
-                )
-            }
-        }
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(townshipsListTownship.size) { element ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            viewModel.updateDataCreateRouteRoute(
-                                townshipsListTownship[element].township,
-                                viewModel.selectedRouteWrite.intValue
-                            )
-                            viewModel.updateRatingTownship(townshipsListTownship[element].id)
-                            viewModel.closeBottomSheetSearch()
-                        },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (townshipsListTownship[element].favorite == 1) {
-                        Icon(
-                            imageVector = Icons.Outlined.Star,
-                            contentDescription = null
-                        )
-                    }
-                    Text(
-                        text = townshipsListTownship[element].township,
-                        style = typography.bodyLarge
-                    )
-
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomSheetAddCity(
-    viewModel: CreateRouteViewModel
-) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-    val searchTextAddCity by viewModel.searchTextCountryAddCityCreateRoute.collectAsState()
-    val countriesListAddCity by viewModel.countriesListCountryAddCityCreateRoute.collectAsState()
-
-    ModalBottomSheet(
-        onDismissRequest = { viewModel.openBottomAddCityCreateRoute.value = false },
-        sheetState = sheetState,
-        modifier = Modifier.fillMaxHeight(0.75f)
-    ) {
-        Text(
-            text = stringResource(R.string.add_city),
-            style = typography.headlineSmall
-        )
-
-        OutlinedTextField(
-            value = viewModel.uiStateAddCity.value.nameCity,
-            onValueChange = {
-                viewModel.updateNameCityAddCityCreateRoute(name = it)
-            },
-            label = { Text(stringResource(R.string.name_city)) },
-            singleLine = true,
-            textStyle = typography.bodyLarge,
-            trailingIcon = {
-                if(viewModel.uiStateAddCity.value.nameCity.isNotEmpty()) {
-                    IconButton(
-                        onClick = {
-                            viewModel.updateNameCityAddCityCreateRoute("")
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Clear,
-                            contentDescription = stringResource(R.string.clear)
-                        )
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        DockedSearchBar(
-            query = searchTextAddCity,
-            onQueryChange = viewModel::onSearchTextChangeCountryAddCityCreateRoute,
-            onSearch = viewModel::onSearchTextChangeCountryAddCityCreateRoute,
-            active = false,
-            onActiveChange = {
-                viewModel.onToogleSearchCountryAddCityCreateRoute()
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.country),
-                    style = typography.bodyLarge
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {}
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        viewModel.sortCountryAddCityCreateRoute.intValue =
-                            if(viewModel.sortCountryAddCityCreateRoute.intValue == 0) 1 else 0
-                        viewModel.loadCountriesAddCityCreateRoute()
-                    }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.sort_24px),
-                    contentDescription = null
-                )
-                Text(
-                    text = if(viewModel.sortCountryAddCityCreateRoute.intValue == 0) {
-                        stringResource(R.string.alphabetically)
-                    } else {
-                        stringResource(R.string.by_popularity)
-                    }
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .toggleable(
-                        value = viewModel.isCheckedFavoriteCountryAddCityCreateRoute.value,
-                        onValueChange = {
-                            viewModel.isCheckedFavoriteCountryAddCityCreateRoute.value =
-                                !viewModel.isCheckedFavoriteCountryAddCityCreateRoute.value
-                        },
-                        role = Role.Checkbox
-                    )
-            ) {
-                Checkbox(
-                    checked = viewModel.isCheckedFavoriteCountryAddCityCreateRoute.value,
-                    onCheckedChange = {
-                        viewModel.isCheckedFavoriteCountryAddCityCreateRoute.value = it
-                        viewModel.loadCountriesAddCityCreateRoute()
-                    }
-                )
-                Text(
-                    text = stringResource(R.string.favorite)
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = viewModel.uiStateAddCity.value.country.country
-            )
-            IconButton(
-                onClick = {}
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Clear,
-                    contentDescription = stringResource(R.string.clear)
-                )
-            }
-        }
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            items(countriesListAddCity.size) { element ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            viewModel.updateNameCountryAddCityCreateRoute(countriesListAddCity[element])
-                        }
-                ) {
-                    Text(
-                        text = countriesListAddCity[element].country,
-                        modifier = Modifier.weight(1f),
-                        style = typography.titleLarge
-                    )
-                }
-            }
-        }
-
-        Button(
-            onClick = {
-                viewModel.closeAddCity()
-                viewModel.saveAddCityInBd()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = viewModel.validateAddCity()
-        ) {
-            Text(
-                text = stringResource(R.string.save)
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun TabRowDataFillingTwo(
-    navController: NavHostController,
-    viewModel: CreateRouteViewModel
-) {
-    TabRow(selectedTabIndex = 3) {
-        Tab(
-            text = { Text("1") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
-        )
-        Tab(
-            text = { Text("2") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
-        )
-        Tab(
-            text = { Text("3") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
-        )
-        Tab(
-            text = { Text("4") },
-            selected = false,
-            onClick = { },
-            enabled = false
-        )
-        Tab(
-            text = { Text("5") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) },
-            enabled = viewModel.uiStateIsValidate.value.isValidateCreateRoute
-        )
-        Tab(
-            text = { Text("6") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            enabled = viewModel.uiStateIsValidate.value.isValidateCreateRoute &&
-                    viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
-        )
     }
 }
 

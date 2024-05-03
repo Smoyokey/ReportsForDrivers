@@ -25,6 +25,8 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -40,7 +42,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.ObjectVehicle
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateObjectVehicleOrTrailer
@@ -195,10 +199,10 @@ fun BottomBarCustom(
             selected = false,
             onClick = onNext,
             icon = {
-                   Icon(
-                       imageVector = Icons.Outlined.ArrowForward,
-                       contentDescription = stringResource(R.string.next)
-                   )
+                Icon(
+                    imageVector = Icons.Outlined.ArrowForward,
+                    contentDescription = stringResource(R.string.next)
+                )
             },
             label = {
                 Text(
@@ -473,6 +477,75 @@ fun RowDateWithTextField(
             date = date,
             modifier = modifier,
             isError = isError
+        )
+    }
+}
+
+@Composable
+fun TabRowCustom(
+    index: Int,
+    navController: NavHostController,
+    isEnabledOne: Boolean = true,
+    isEnabledTwo: Boolean = true,
+    isEnabledThree: Boolean = true,
+    isEnabledFour: Boolean = true,
+    isEnabledFive: Boolean = true,
+    isEnabledSix: Boolean = true
+) {
+    TabRow(selectedTabIndex = index) {
+        Tab(
+            text = { Text("1") },
+            selected = index == 0,
+            onClick = {
+                if (index != 0)
+                    navController.navigate(ReportsForDriversSchema.ReportInfo.name)
+            },
+            enabled = isEnabledOne
+        )
+        Tab(
+            text = { Text("2") },
+            selected = index == 1,
+            onClick = {
+                if (index != 1)
+                    navController.navigate(ReportsForDriversSchema.PersonalInfo.name)
+            },
+            enabled = isEnabledTwo
+        )
+        Tab(
+            text = { Text("3") },
+            selected = index == 2,
+            onClick = {
+                if (index != 2)
+                    navController.navigate(ReportsForDriversSchema.VehicleInfo.name)
+            },
+            enabled = isEnabledThree
+        )
+        Tab(
+            text = { Text("4") },
+            selected = index == 3,
+            onClick = {
+                if (index != 3)
+                    navController.navigate(ReportsForDriversSchema.Route.name)
+            },
+            enabled = isEnabledFour
+        )
+        Tab(
+            text = { Text("5") },
+            selected = index == 4,
+            onClick = {
+                if (index != 4)
+                    navController.navigate(ReportsForDriversSchema.ProgressReport.name)
+            },
+            enabled = isEnabledFive
+        )
+        Tab(
+            text = { Text("6") },
+            selected = index == 5,
+            onClick = {
+                if (index != 5)
+                    navController.navigate(ReportsForDriversSchema.TripExpenses.name)
+            },
+            enabled = isEnabledSix
         )
     }
 }

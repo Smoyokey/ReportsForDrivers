@@ -11,7 +11,7 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
     ReportInfo(title = R.string.report_information),
     PersonalInfo(title = R.string.personal_information),
     VehicleInfo(title = R.string.vehicle_trailer_information),
-    FillingDataTwo(title = R.string.data),
+    Route(title = R.string.route),
     ProgressReport(title = R.string.stages_movement),
     TripExpenses(title = R.string.business_trip_expenses),
     Preview(title = R.string.preview),

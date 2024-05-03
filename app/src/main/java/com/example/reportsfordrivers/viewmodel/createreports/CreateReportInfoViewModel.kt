@@ -23,14 +23,15 @@ import com.example.reportsfordrivers.data.structure.createReport.CreateReportInf
 import com.example.reportsfordrivers.data.structure.createReport.CreateRoute
 import com.example.reportsfordrivers.data.structure.createReport.CreateVehicleTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.AddCityCreateReportInfo
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.CountriesCreateReportInfo
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.CountryDetailingCreateReportInfo
+import com.example.reportsfordrivers.interfaces.search.SearchCountry
+import com.example.reportsfordrivers.interfaces.search.SearchTownship
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateReportInfoUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.SelectedNavigationUiState
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.TownshipDetailingCreateReportInfo
-import com.example.reportsfordrivers.viewmodel.createreports.uistate.TownshipsCreateReportInfo
 import com.example.reportsfordrivers.viewmodel.firstentry.AddCity
+import com.example.reportsfordrivers.viewmodel.firstentry.Countries
+import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
+import com.example.reportsfordrivers.viewmodel.firstentry.TownshipDetailing
+import com.example.reportsfordrivers.viewmodel.firstentry.Townships
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -51,7 +52,7 @@ private const val TAG = "CrateReportInfoViewModel"
 @HiltViewModel
 class CreateReportInfoViewModel @Inject constructor(
     private val fioPreferencesRepository: FioFirstEntryRepository
-) : ViewModel() {
+) : ViewModel(), SearchCountry, SearchTownship {
 
     /**
      * Объект для запросов к БД с сохранившимся данными, для выгрузки и сохранения данных в БД.
@@ -139,8 +140,8 @@ class CreateReportInfoViewModel @Inject constructor(
             mainCity = createReportInfo[0].mainCity.ifEmpty { "" }
         )
 
-        loadCountriesCreateReportInfo()
-        Log.i(TAG, uiStateCountryCreateReportInfo.value.listCountries.size.toString())
+        loadCountries()
+        Log.i(TAG, uiStateCountry.value.listCountries.size.toString())
     }
 
     fun startCreateReport() = runBlocking {
@@ -166,7 +167,7 @@ class CreateReportInfoViewModel @Inject constructor(
         }
     }
 
-    fun updateDataCreateReportInfoMainCity(mainCity: String) {
+    fun updateDataCreateReportInfoMainCity(mainCity: String, id: Int = 0) {
         uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy( mainCity = mainCity )
         Log.i(TAG, uiStateCreateReportInfo.value.mainCity)
         runBlocking {
@@ -193,20 +194,19 @@ class CreateReportInfoViewModel @Inject constructor(
                 uiStateCreateReportInfo.value.waybill != ""
     }
 
-    val uiStateCountryCreateReportInfo = mutableStateOf(CountriesCreateReportInfo())
-    val isCheckedFavoriteCountryCreateReportInfo = mutableStateOf(false)
-    val sortCountryCreateReportInfo = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
+    override val uiStateCountry = mutableStateOf(Countries())
+    override val isCheckedFavoriteCountry = mutableStateOf(false)
+    override val sortCountry = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
 
-    private val _isSearchingCountryCreateReportInfo = MutableStateFlow(false)
-    private val _searchTextCountryCreateReportInfo = MutableStateFlow("")
-    val searchTextCountryCreateReportInfo = _searchTextCountryCreateReportInfo.asStateFlow()
-    private var _countriesListCountryCreateReportInfo =
-        MutableStateFlow(uiStateCountryCreateReportInfo.value.listCountries)
-    var countriesListCountryCreateReportInfo = countriesFilterCreateReportInfo()
+    override val _isSearchingCountry = MutableStateFlow(false)
+    override val _searchTextCountry = MutableStateFlow("")
+    override val searchTextCountry = _searchTextCountry.asStateFlow()
+    override var _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+    override var countriesListCountry = filterCountry()
 
-    private fun countriesFilterCreateReportInfo(): StateFlow<List<CountryDetailingCreateReportInfo>> {
-        return searchTextCountryCreateReportInfo
-            .combine(_countriesListCountryCreateReportInfo) { text, countries ->
+    override fun filterCountry(): StateFlow<List<CountryDetailing>> {
+        return searchTextCountry
+            .combine(_countriesListCountry) { text, countries ->
                 if(text.isBlank()) {
                     countries
                 }
@@ -216,33 +216,33 @@ class CreateReportInfoViewModel @Inject constructor(
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(2000),
-                initialValue = _countriesListCountryCreateReportInfo.value
+                initialValue = _countriesListCountry.value
             )
     }
 
-    fun onSearchTextChangeCountryCreateReportInfo(text: String) {
-        _searchTextCountryCreateReportInfo.value = text
+    override fun onSearchTextChangeCountry(text: String) {
+        _searchTextCountry.value = text
     }
 
-    fun onToogleSearchCountryCreateReportInfo() {
-        _isSearchingCountryCreateReportInfo.value = !_isSearchingCountryCreateReportInfo.value
-        if(_isSearchingCountryCreateReportInfo.value) {
-            onSearchTextChangeCountryCreateReportInfo("")
+    override fun onToogleSearchCountry() {
+        _isSearchingCountry.value = !_isSearchingCountry.value
+        if(_isSearchingCountry.value) {
+            onSearchTextChangeCountry("")
         }
     }
 
-    fun loadCountriesCreateReportInfo() = runBlocking {
-        uiStateCountryCreateReportInfo.value.listCountries = SnapshotStateList()
+    override fun loadCountries() = runBlocking {
+        uiStateCountry.value.listCountries = SnapshotStateList()
 
         if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteCountryCreateReportInfo.value) {
-                if(sortCountryCreateReportInfo.intValue == 0) {
+            val a = if(isCheckedFavoriteCountry.value) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameRus()
                 } else {
                     countryDb.getFavoriteSortRatingRus()
                 }
             } else {
-                if(sortCountryCreateReportInfo.intValue == 0) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getSortNameRus()
                 } else {
                     countryDb.getSortRatingRus()
@@ -250,8 +250,8 @@ class CreateReportInfoViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateCountryCreateReportInfo.value.listCountries.add(
-                    CountryDetailingCreateReportInfo(
+                uiStateCountry.value.listCountries.add(
+                    CountryDetailing(
                         id = it.id,
                         country = it.fullNameCountryRus,
                         shortCountry = it.shortNameCountry,
@@ -261,14 +261,14 @@ class CreateReportInfoViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteCountryCreateReportInfo.value) {
-                if(sortCountryCreateReportInfo.intValue == 0) {
+            val a = if(isCheckedFavoriteCountry.value) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameEng()
                 } else {
                     countryDb.getFavoriteSortRatingEng()
                 }
             } else {
-                if(sortCountryCreateReportInfo.intValue == 0) {
+                if(sortCountry.intValue == 0) {
                     countryDb.getSortNameEng()
                 } else {
                     countryDb.getSortRatingEng()
@@ -276,8 +276,8 @@ class CreateReportInfoViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateCountryCreateReportInfo.value.listCountries.add(
-                    CountryDetailingCreateReportInfo(
+                uiStateCountry.value.listCountries.add(
+                    CountryDetailing(
                         id = it.id,
                         country = it.fullNameCountryEng,
                         shortCountry = it.shortNameCountry,
@@ -286,25 +286,25 @@ class CreateReportInfoViewModel @Inject constructor(
                     )
                 )
             }
-            _countriesListCountryCreateReportInfo = MutableStateFlow(uiStateCountryCreateReportInfo.value.listCountries)
-            countriesListCountryCreateReportInfo = countriesFilterCreateReportInfo()
+            _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+            countriesListCountry = filterCountry()
         }
     }
 
-    val uiStateTownshipsCreateReportInfo = mutableStateOf(TownshipsCreateReportInfo())
-    val isCheckedFavoriteTownshipsCreateReportInfo = mutableStateOf(false)
-    val sortTownshipCreateReportInfo = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
+    override val uiStateTownship = mutableStateOf(Townships())
+    override val isCheckedFavoriteTownship = mutableStateOf(false)
+    override val sortTownship = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
 
-    private val _isSearchingTownshipCreateReportInfo = MutableStateFlow(false)
-    private val _searchTextTownshipCreateReportInfo = MutableStateFlow("")
-    val searchTextTownshipCreateReportInfo = _searchTextTownshipCreateReportInfo.asStateFlow()
-    private var _townshipsListTownshipCreateReportInfo =
-        MutableStateFlow(uiStateTownshipsCreateReportInfo.value.listTownships)
-    var townshipsListTownshipCreateReportInfo = townshipsFilterCreateReportInfo()
+    override val _isSearchingTownship = MutableStateFlow(false)
+    override val _searchTextTownship = MutableStateFlow("")
+    override val searchTextTownship = _searchTextTownship.asStateFlow()
+    override var _townshipsListTownship =
+        MutableStateFlow(uiStateTownship.value.listTownships)
+    override var townshipsListTownship = filterTownship()
 
-    private fun townshipsFilterCreateReportInfo(): StateFlow<List<TownshipDetailingCreateReportInfo>> {
-        return searchTextTownshipCreateReportInfo
-            .combine(_townshipsListTownshipCreateReportInfo) { text, townships ->
+    override fun filterTownship(): StateFlow<List<TownshipDetailing>> {
+        return searchTextTownship
+            .combine(_townshipsListTownship) { text, townships ->
                 if(text.isBlank()) {
                     townships
                 }
@@ -314,34 +314,34 @@ class CreateReportInfoViewModel @Inject constructor(
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(2000),
-                initialValue = _townshipsListTownshipCreateReportInfo.value
+                initialValue = _townshipsListTownship.value
             )
     }
 
-    fun onSearchTextChangeTownshipCreateReportInfo(text: String) {
-        _searchTextTownshipCreateReportInfo.value = text
+    override fun onSearchTextChangeTownship(text: String) {
+        _searchTextTownship.value = text
     }
 
-    fun onToogleSearchTownshipCreateReportInfo() {
-        _isSearchingTownshipCreateReportInfo.value = !_isSearchingTownshipCreateReportInfo.value
-        if(_isSearchingTownshipCreateReportInfo.value) {
-            onSearchTextChangeTownshipCreateReportInfo("")
+    override fun onToogleSearchTownship() {
+        _isSearchingTownship.value = !_isSearchingTownship.value
+        if(_isSearchingTownship.value) {
+            onSearchTextChangeTownship("")
         }
     }
 
-    fun loadTownshipsCreateReportInfo(countryId: Int) = runBlocking {
-        uiStateTownshipsCreateReportInfo.value.listTownships = SnapshotStateList()
+    override fun loadTownships(countryId: Int) = runBlocking {
+        uiStateTownship.value.listTownships = SnapshotStateList()
 
         if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteTownshipsCreateReportInfo.value) {
+            val a = if(isCheckedFavoriteTownship.value) {
                 if(countryId != 0) {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameRus()
                     } else {
                         townshipDb.getFavoriteSortRatingRus()
@@ -349,13 +349,13 @@ class CreateReportInfoViewModel @Inject constructor(
                 }
             } else {
                 if(countryId != 0) {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getSortNameRus()
                     } else {
                         townshipDb.getSortRatingRus()
@@ -364,8 +364,8 @@ class CreateReportInfoViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateTownshipsCreateReportInfo.value.listTownships.add(
-                    TownshipDetailingCreateReportInfo(
+                uiStateTownship.value.listTownships.add(
+                    TownshipDetailing(
                         id = it.id,
                         township = it.townshipRus,
                         countryId = it.countryId,
@@ -375,15 +375,15 @@ class CreateReportInfoViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteTownshipsCreateReportInfo.value) {
+            val a = if(isCheckedFavoriteTownship.value) {
                 if(countryId != 0) {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameEng()
                     } else {
                         townshipDb.getFavoriteSortRatingEng()
@@ -391,13 +391,13 @@ class CreateReportInfoViewModel @Inject constructor(
                 }
             } else {
                 if(countryId != 0) {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownshipCreateReportInfo.intValue == 0) {
+                    if(sortTownship.intValue == 0) {
                         townshipDb.getSortNameEng()
                     } else {
                         townshipDb.getSortRatingEng()
@@ -406,8 +406,8 @@ class CreateReportInfoViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateTownshipsCreateReportInfo.value.listTownships.add(
-                    TownshipDetailingCreateReportInfo(
+                uiStateTownship.value.listTownships.add(
+                    TownshipDetailing(
                         id = it.id,
                         township = it.townshipEng,
                         countryId = it.countryId,
@@ -418,44 +418,44 @@ class CreateReportInfoViewModel @Inject constructor(
             }
         }
 
-        _townshipsListTownshipCreateReportInfo = MutableStateFlow(uiStateTownshipsCreateReportInfo.value.listTownships)
-        townshipsListTownshipCreateReportInfo = townshipsFilterCreateReportInfo()
+        _townshipsListTownship = MutableStateFlow(uiStateTownship.value.listTownships)
+        townshipsListTownship = filterTownship()
     }
 
-    fun updateRatingCountry(id: Int) = runBlocking {
+    override fun updateRatingCountry(id: Int) = runBlocking {
         val a = countryDb.getOneItem(id).first()
         countryDb.updateRatingForId(a.id, a.rating + 1)
     }
 
-    fun updateRatingTownship(id: Int) = runBlocking {
+    override fun updateRatingTownship(id: Int) = runBlocking {
         val a = townshipDb.getOneItem(id).first()
         townshipDb.updateRatingForId(a.id, a.rating + 1)
     }
 
     fun closeBottomSheetSearch() {
-        isCheckedFavoriteCountryCreateReportInfo.value = false
-        isCheckedFavoriteTownshipsCreateReportInfo.value = false
+        isCheckedFavoriteCountry.value = false
+        isCheckedFavoriteTownship.value = false
         openListSearchCreateReportInfo.intValue = 0
-        sortCountryCreateReportInfo.intValue = 0
-        sortTownshipCreateReportInfo.intValue = 0
+        sortCountry.intValue = 0
+        sortTownship.intValue = 0
         selectedCountryIdInSearch.intValue = 0
         selectedCountryNameInSearch.value = ""
         openBottomSearchCreateReportInfo.value = false
     }
 
-    var uiStateAddCity = mutableStateOf(AddCityCreateReportInfo())
+    var uiStateAddCity = mutableStateOf(AddCity())
 
     private val _isSearchingCountryAddCityCreateReportInfo = MutableStateFlow(false)
     private val _searchTextCountryAddCityCreateReportInfo = MutableStateFlow("")
     val searchTextCountryAddCityCreateReportInfo = _searchTextCountryAddCityCreateReportInfo.asStateFlow()
     private var _countriesListCountryAddCityCreateReportInfo =
-        MutableStateFlow(uiStateCountryCreateReportInfo.value.listCountries)
+        MutableStateFlow(uiStateCountry.value.listCountries)
     var countriesListCountryAddCityCreateReportInfo = countryAddCityCreateReportInfoFilter()
 
     val isCheckedFavoriteCountryAddCityCreateReportInfo = mutableStateOf(false)
     val sortCountryAddCityCreateReportInfo = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
 
-    private fun countryAddCityCreateReportInfoFilter(): StateFlow<List<CountryDetailingCreateReportInfo>> {
+    private fun countryAddCityCreateReportInfoFilter(): StateFlow<List<CountryDetailing>> {
         return searchTextCountryAddCityCreateReportInfo
             .combine(_countriesListCountryAddCityCreateReportInfo) { text, countries ->
                 if(text.isBlank()) {
@@ -483,7 +483,7 @@ class CreateReportInfoViewModel @Inject constructor(
     }
 
     fun loadCountriesAddCityCreateRoute() = runBlocking {
-        uiStateCountryCreateReportInfo.value.listCountries = SnapshotStateList()
+        uiStateCountry.value.listCountries = SnapshotStateList()
 
         if(Locale.getDefault().language == "ru") {
             val a = if(isCheckedFavoriteCountryAddCityCreateReportInfo.value) {
@@ -501,8 +501,8 @@ class CreateReportInfoViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateCountryCreateReportInfo.value.listCountries.add(
-                    CountryDetailingCreateReportInfo(
+                uiStateCountry.value.listCountries.add(
+                    CountryDetailing(
                         id = it.id,
                         country = it.fullNameCountryRus,
                         shortCountry = it.shortNameCountry,
@@ -527,8 +527,8 @@ class CreateReportInfoViewModel @Inject constructor(
             }
 
             a.forEach {
-                uiStateCountryCreateReportInfo.value.listCountries.add(
-                    CountryDetailingCreateReportInfo(
+                uiStateCountry.value.listCountries.add(
+                    CountryDetailing(
                         id = it.id,
                         country = it.fullNameCountryEng,
                         shortCountry = it.shortNameCountry,
@@ -538,7 +538,7 @@ class CreateReportInfoViewModel @Inject constructor(
                 )
             }
             _countriesListCountryAddCityCreateReportInfo =
-                MutableStateFlow(uiStateCountryCreateReportInfo.value.listCountries)
+                MutableStateFlow(uiStateCountry.value.listCountries)
             countriesListCountryAddCityCreateReportInfo = countryAddCityCreateReportInfoFilter()
         }
     }
@@ -547,15 +547,15 @@ class CreateReportInfoViewModel @Inject constructor(
         uiStateAddCity.value = uiStateAddCity.value.copy(nameCity = name)
     }
 
-    fun updateNameCountryAddCityCreateReportInfo(element: CountryDetailingCreateReportInfo) {
+    fun updateNameCountryAddCityCreateReportInfo(element: CountryDetailing) {
         uiStateAddCity.value = uiStateAddCity.value.copy(nameCountry = element.country, country = element)
     }
 
     fun openAddCity() {
         loadCountriesAddCityCreateRoute()
         uiStateAddCity.value = uiStateAddCity.value.copy(
-            nameCity = searchTextTownshipCreateReportInfo.value,
-            country = countriesListCountryCreateReportInfo.value[getPositionInCountry(
+            nameCity = searchTextTownship.value,
+            country = countriesListCountry.value[getPositionInCountry(
                 selectedCountryIdInSearch.intValue)]
         )
         openBottomAddCityCreateReportInfo.value = true
@@ -587,8 +587,8 @@ class CreateReportInfoViewModel @Inject constructor(
                 favorite = 0
             )
         )
-        uiStateAddCity = mutableStateOf(AddCityCreateReportInfo())
-        loadTownshipsCreateReportInfo(selectedCountryIdInSearch.intValue)
+        uiStateAddCity = mutableStateOf(AddCity())
+        loadTownships(selectedCountryIdInSearch.intValue)
         closeAddCity()
     }
 

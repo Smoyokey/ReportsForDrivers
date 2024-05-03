@@ -42,6 +42,7 @@ import com.example.reportsfordrivers.ui.layouts.custom.DatePickerDialogCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.RowDateWithTextField
 import com.example.reportsfordrivers.ui.layouts.custom.RowProgressAndExpenses
+import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.viewmodel.createreports.CreateProgressReportsViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateProgressReportsDetailingUiState
 
@@ -52,9 +53,9 @@ fun CreateReportsProgressReportsScreen(
 ) {
     BackHandler {
         navController.navigate(
-            ReportsForDriversSchema.FillingDataTwo.name,
+            ReportsForDriversSchema.Route.name,
             navOptions = NavOptions.Builder()
-                .setPopUpTo(ReportsForDriversSchema.FillingDataTwo.name, true)
+                .setPopUpTo(ReportsForDriversSchema.Route.name, true)
                 .build()
         )
     }
@@ -66,7 +67,12 @@ fun CreateReportsProgressReportsScreen(
         viewModel.openDialogDateCreateProgressReports.value = true
 
     Column {
-        TabRowProgressReports(navController = navController, viewModel = viewModel)
+        TabRowCustom(
+            index = 4,
+            navController = navController,
+            isEnabledFive = false,
+            isEnabledSix = viewModel.uiStateIsValidate.value.isValidateCreateProgressReports
+        )
 
         Column(
             modifier = Modifier
@@ -237,50 +243,4 @@ fun ColumnProgressReports(
         delete = delete,
         position = position
     )
-}
-
-@Composable
-fun TabRowProgressReports(
-    navController: NavHostController,
-    viewModel: CreateProgressReportsViewModel
-) {
-    TabRow(selectedTabIndex = 4) {
-        Tab(
-            text = { Text("1") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ReportInfo.name) }
-        )
-        Tab(
-            text = { Text("2") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.PersonalInfo.name) }
-        )
-        Tab(
-            text = { Text("3") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.VehicleInfo.name) }
-        )
-        Tab(
-            text = { Text("4") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.ProgressReport.name) }
-        )
-        Tab(
-            text = { Text("5") },
-            selected = false,
-            onClick = { },
-            enabled = false
-        )
-        Tab(
-            text = { Text("6") },
-            selected = false,
-            onClick = { navController.navigate(ReportsForDriversSchema.TripExpenses.name) },
-            enabled = viewModel.isValidateNextProgressReports()
-        )
-    }
-}
-
-@Composable
-fun SearchCountryProgress() {
-
 }
