@@ -39,4 +39,10 @@ class CreateExpensesTripDiRepo @Inject constructor(private val createExpensesTri
         createExpensesTripDao.updateOneElementForIdCurrency(id, currency)
 
     override suspend fun deleteAllItems() = createExpensesTripDao.deleteAllElements()
+
+    override suspend fun deleteOneElementForId(id: Int) =
+        createExpensesTripDao.deleteOneElementForId(id)
+
+    override suspend fun updateOneElementForIdIsAdd(id: Int, isAdd: Int) =
+        createExpensesTripDao.updateOneElementForIdIsAdd(id, isAdd)
 }

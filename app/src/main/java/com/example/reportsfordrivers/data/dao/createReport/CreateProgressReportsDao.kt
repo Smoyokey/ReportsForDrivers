@@ -44,6 +44,12 @@ interface CreateProgressReportsDao {
     @Query("UPDATE create_progress_reports SET weight = :weight WHERE id = :id")
     suspend fun updateOneElementForIdWeight(id: Int, weight: String)
 
+    @Query("UPDATE create_progress_reports SET is_add = :isAdd WHERE id = :id")
+    suspend fun updateOneElementForIdIsAdd(id: Int, isAdd: Int)
+
     @Query("DELETE FROM create_progress_reports")
     suspend fun deleteAllElements()
+
+    @Query("DELETE FROM create_progress_reports WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
 }

@@ -2,6 +2,7 @@ package com.example.reportsfordrivers.viewmodel.createreports
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -32,6 +33,7 @@ import com.example.reportsfordrivers.viewmodel.firstentry.Countries
 import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
 import com.example.reportsfordrivers.viewmodel.firstentry.TownshipDetailing
 import com.example.reportsfordrivers.viewmodel.firstentry.Townships
+import com.example.reportsfordrivers.viewmodel.functions.CreateNewReport
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -60,27 +62,32 @@ class CreateReportInfoViewModel @Inject constructor(
      */
     @Inject
     lateinit var createReportInfoDb: CreateReportInfoDao
+
     /**
      * Объект для обновления данных в БД при первом входе, пустые данные для последующего
      * заполнения
      */
     @Inject
     lateinit var createPersonalInfoDb: CreatePersonalInfoDao
+
     /**
      * Объект для обновления данных в БД при первом входе, пустые данные для последующего заполнения
      */
     @Inject
     lateinit var createVehicleTrailerDb: CreateVehicleTrailerDao
+
     /**
      * Объект для обновления данных в БД при первом входе, пустые данные для последующего заполнения
      */
     @Inject
     lateinit var createRouteDb: CreateRouteDao
+
     /**
      * Объект для обновления данных в БД при первом входе, пустые данные для последующего заполнения
      */
     @Inject
     lateinit var createProgressReportsDb: CreateProgressReportsDao
+
     /**
      * Объект для обновления данных в БД при первом входе, пустые данные для последующего заполнения
      */
@@ -93,6 +100,7 @@ class CreateReportInfoViewModel @Inject constructor(
      */
     @Inject
     lateinit var countryDb: CountryDao
+
     /**
      * Объект для запросов к БД *ГОРОДА*
      */
@@ -108,6 +116,7 @@ class CreateReportInfoViewModel @Inject constructor(
      * @param CreateReportInfoUiState.isStart - Показывает состояние начала создания отчёта
      */
     var uiStateCreateReportInfo = mutableStateOf(CreateReportInfoUiState())
+
     /**
      * Объект состояния, который хранит состояние перехода по вкладкам
      */
@@ -139,26 +148,38 @@ class CreateReportInfoViewModel @Inject constructor(
             waybill = createReportInfo[0].waybill.ifEmpty { "" },
             mainCity = createReportInfo[0].mainCity.ifEmpty { "" }
         )
-
         loadCountries()
-        Log.i(TAG, uiStateCountry.value.listCountries.size.toString())
     }
 
     fun startCreateReport() = runBlocking {
-        deleteAllElements()
+        CreateNewReport.deleteAllElements(
+            createReportInfoDb,
+            createPersonalInfoDb,
+            createVehicleTrailerDb,
+            createRouteDb,
+            createProgressReportsDb,
+            createExpensesTripDb
+        )
         uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy(
             date = "",
             mainCity = "",
             waybill = ""
         )
-        createNewReport()
+        CreateNewReport.createNewReport(
+            createReportInfoDb,
+            createPersonalInfoDb,
+            createVehicleTrailerDb,
+            createRouteDb,
+            createProgressReportsDb,
+            createExpensesTripDb
+        )
         fioPreferencesRepository.setCreateSelectedPage(1)
         fioPreferencesRepository.setStartCreateReport(true)
     }
 
     fun updateDataCreateReportInfoDate(date: String) {
         val parseDate = if (date.isNotEmpty()) parseDate(date) else date
-        uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy( date = parseDate )
+        uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy(date = parseDate)
         runBlocking {
             createReportInfoDb.updateOneElementForIdDate(
                 id = uiStateCreateReportInfo.value.id,
@@ -168,7 +189,7 @@ class CreateReportInfoViewModel @Inject constructor(
     }
 
     fun updateDataCreateReportInfoMainCity(mainCity: String, id: Int = 0) {
-        uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy( mainCity = mainCity )
+        uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy(mainCity = mainCity)
         Log.i(TAG, uiStateCreateReportInfo.value.mainCity)
         runBlocking {
             createReportInfoDb.updateOneElementForIdMainCity(
@@ -179,7 +200,7 @@ class CreateReportInfoViewModel @Inject constructor(
     }
 
     fun updateDataCreateReportInfoWaybill(waybill: String) {
-        uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy( waybill = waybill )
+        uiStateCreateReportInfo.value = uiStateCreateReportInfo.value.copy(waybill = waybill)
         runBlocking {
             createReportInfoDb.updateOneElementForIdWaybill(
                 id = uiStateCreateReportInfo.value.id,
@@ -207,7 +228,7 @@ class CreateReportInfoViewModel @Inject constructor(
     override fun filterCountry(): StateFlow<List<CountryDetailing>> {
         return searchTextCountry
             .combine(_countriesListCountry) { text, countries ->
-                if(text.isBlank()) {
+                if (text.isBlank()) {
                     countries
                 }
                 countries.filter { country ->
@@ -226,23 +247,23 @@ class CreateReportInfoViewModel @Inject constructor(
 
     override fun onToogleSearchCountry() {
         _isSearchingCountry.value = !_isSearchingCountry.value
-        if(_isSearchingCountry.value) {
+        if (_isSearchingCountry.value) {
             onSearchTextChangeCountry("")
         }
     }
 
-    override fun loadCountries() = runBlocking {
+    override fun loadCountries(): Unit = runBlocking {
         uiStateCountry.value.listCountries = SnapshotStateList()
-
-        if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteCountry.value) {
-                if(sortCountry.intValue == 0) {
+        Log.i(TAG, sortCountry.intValue.toString() + " sortCountry")
+        if (Locale.getDefault().language == "ru") {
+            val a = if (isCheckedFavoriteCountry.value) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameRus()
                 } else {
                     countryDb.getFavoriteSortRatingRus()
                 }
             } else {
-                if(sortCountry.intValue == 0) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getSortNameRus()
                 } else {
                     countryDb.getSortRatingRus()
@@ -261,14 +282,14 @@ class CreateReportInfoViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteCountry.value) {
-                if(sortCountry.intValue == 0) {
+            val a = if (isCheckedFavoriteCountry.value) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameEng()
                 } else {
                     countryDb.getFavoriteSortRatingEng()
                 }
             } else {
-                if(sortCountry.intValue == 0) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getSortNameEng()
                 } else {
                     countryDb.getSortRatingEng()
@@ -287,7 +308,11 @@ class CreateReportInfoViewModel @Inject constructor(
                 )
             }
             _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+            Log.i(TAG, _countriesListCountry.value.joinToString("**"))
+
             countriesListCountry = filterCountry()
+
+            Log.i(TAG, countriesListCountry.value.joinToString("::"))
         }
     }
 
@@ -305,7 +330,7 @@ class CreateReportInfoViewModel @Inject constructor(
     override fun filterTownship(): StateFlow<List<TownshipDetailing>> {
         return searchTextTownship
             .combine(_townshipsListTownship) { text, townships ->
-                if(text.isBlank()) {
+                if (text.isBlank()) {
                     townships
                 }
                 townships.filter { township ->
@@ -324,7 +349,7 @@ class CreateReportInfoViewModel @Inject constructor(
 
     override fun onToogleSearchTownship() {
         _isSearchingTownship.value = !_isSearchingTownship.value
-        if(_isSearchingTownship.value) {
+        if (_isSearchingTownship.value) {
             onSearchTextChangeTownship("")
         }
     }
@@ -332,30 +357,30 @@ class CreateReportInfoViewModel @Inject constructor(
     override fun loadTownships(countryId: Int) = runBlocking {
         uiStateTownship.value.listTownships = SnapshotStateList()
 
-        if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteTownship.value) {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+        if (Locale.getDefault().language == "ru") {
+            val a = if (isCheckedFavoriteTownship.value) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameRus()
                     } else {
                         townshipDb.getFavoriteSortRatingRus()
                     }
                 }
             } else {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getSortNameRus()
                     } else {
                         townshipDb.getSortRatingRus()
@@ -375,29 +400,29 @@ class CreateReportInfoViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteTownship.value) {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+            val a = if (isCheckedFavoriteTownship.value) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameEng()
                     } else {
                         townshipDb.getFavoriteSortRatingEng()
                     }
                 }
             } else {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getSortNameEng()
                     } else {
                         townshipDb.getSortRatingEng()
@@ -432,7 +457,7 @@ class CreateReportInfoViewModel @Inject constructor(
         townshipDb.updateRatingForId(a.id, a.rating + 1)
     }
 
-    fun closeBottomSheetSearch() {
+    fun closeBottomSheetSearch(openBottom: MutableState<Boolean> = openBottomSearchCreateReportInfo) {
         isCheckedFavoriteCountry.value = false
         isCheckedFavoriteTownship.value = false
         openListSearchCreateReportInfo.intValue = 0
@@ -445,124 +470,28 @@ class CreateReportInfoViewModel @Inject constructor(
 
     var uiStateAddCity = mutableStateOf(AddCity())
 
-    private val _isSearchingCountryAddCityCreateReportInfo = MutableStateFlow(false)
-    private val _searchTextCountryAddCityCreateReportInfo = MutableStateFlow("")
-    val searchTextCountryAddCityCreateReportInfo = _searchTextCountryAddCityCreateReportInfo.asStateFlow()
-    private var _countriesListCountryAddCityCreateReportInfo =
-        MutableStateFlow(uiStateCountry.value.listCountries)
-    var countriesListCountryAddCityCreateReportInfo = countryAddCityCreateReportInfoFilter()
-
-    val isCheckedFavoriteCountryAddCityCreateReportInfo = mutableStateOf(false)
-    val sortCountryAddCityCreateReportInfo = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
-
-    private fun countryAddCityCreateReportInfoFilter(): StateFlow<List<CountryDetailing>> {
-        return searchTextCountryAddCityCreateReportInfo
-            .combine(_countriesListCountryAddCityCreateReportInfo) { text, countries ->
-                if(text.isBlank()) {
-                    countries
-                }
-                countries.filter { country ->
-                    country.country.uppercase().contains(text.trim().uppercase())
-                }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(2000),
-                initialValue = _countriesListCountryAddCityCreateReportInfo.value
-            )
-    }
-
-    fun onSearchTextChangeCountryAddCityCreateReportInfo(text: String) {
-        _searchTextCountryAddCityCreateReportInfo.value = text
-    }
-
-    fun onToogleSearchCountryAddCityCreateReportInfo() {
-        _isSearchingCountryAddCityCreateReportInfo.value = !_isSearchingCountryAddCityCreateReportInfo.value
-        if(!_isSearchingCountryAddCityCreateReportInfo.value) {
-            onSearchTextChangeCountryAddCityCreateReportInfo("")
-        }
-    }
-
-    fun loadCountriesAddCityCreateRoute() = runBlocking {
-        uiStateCountry.value.listCountries = SnapshotStateList()
-
-        if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteCountryAddCityCreateReportInfo.value) {
-                if(sortCountryAddCityCreateReportInfo.intValue == 0) {
-                    countryDb.getFavoriteSortNameRus()
-                } else {
-                    countryDb.getFavoriteSortRatingRus()
-                }
-            } else {
-                if(sortCountryAddCityCreateReportInfo.intValue == 0) {
-                    countryDb.getSortNameRus()
-                } else {
-                    countryDb.getSortRatingRus()
-                }
-            }
-
-            a.forEach {
-                uiStateCountry.value.listCountries.add(
-                    CountryDetailing(
-                        id = it.id,
-                        country = it.fullNameCountryRus,
-                        shortCountry = it.shortNameCountry,
-                        rating = it.rating,
-                        favorite = it.favorite
-                    )
-                )
-            }
-        } else {
-            val a = if(isCheckedFavoriteCountryAddCityCreateReportInfo.value) {
-                if(sortCountryAddCityCreateReportInfo.intValue == 0) {
-                    countryDb.getFavoriteSortNameEng()
-                } else {
-                    countryDb.getFavoriteSortRatingEng()
-                }
-            } else {
-                if(sortCountryAddCityCreateReportInfo.intValue == 0) {
-                    countryDb.getSortNameEng()
-                } else {
-                    countryDb.getSortRatingEng()
-                }
-            }
-
-            a.forEach {
-                uiStateCountry.value.listCountries.add(
-                    CountryDetailing(
-                        id = it.id,
-                        country = it.fullNameCountryEng,
-                        shortCountry = it.shortNameCountry,
-                        rating = it.rating,
-                        favorite = it.favorite
-                    )
-                )
-            }
-            _countriesListCountryAddCityCreateReportInfo =
-                MutableStateFlow(uiStateCountry.value.listCountries)
-            countriesListCountryAddCityCreateReportInfo = countryAddCityCreateReportInfoFilter()
-        }
-    }
-
     fun updateNameCityAddCityCreateReportInfo(name: String) {
         uiStateAddCity.value = uiStateAddCity.value.copy(nameCity = name)
     }
 
     fun updateNameCountryAddCityCreateReportInfo(element: CountryDetailing) {
-        uiStateAddCity.value = uiStateAddCity.value.copy(nameCountry = element.country, country = element)
+        uiStateAddCity.value =
+            uiStateAddCity.value.copy(nameCountry = element.country, country = element)
     }
 
-    fun openAddCity() {
-        loadCountriesAddCityCreateRoute()
+    fun openAddCity(openBottom: MutableState<Boolean> = openBottomSearchCreateReportInfo) {
+        loadCountries()
         uiStateAddCity.value = uiStateAddCity.value.copy(
             nameCity = searchTextTownship.value,
             country = countriesListCountry.value[getPositionInCountry(
-                selectedCountryIdInSearch.intValue)]
+                selectedCountryIdInSearch.intValue
+            )]
         )
         openBottomAddCityCreateReportInfo.value = true
         openBottomSearchCreateReportInfo.value = false
     }
 
-    fun closeAddCity() {
+    fun closeAddCity(openBottom: MutableState<Boolean> = openBottomSearchCreateReportInfo) {
         openBottomSearchCreateReportInfo.value = true
         openBottomAddCityCreateReportInfo.value = false
     }
@@ -577,19 +506,26 @@ class CreateReportInfoViewModel @Inject constructor(
 
     }
 
-    fun saveAddCityInBd() = runBlocking {
-        townshipDb.insert(
-            Township(
-                townshipRus = uiStateAddCity.value.nameCity,
-                townshipEng = uiStateAddCity.value.nameCity,
-                countryId = uiStateAddCity.value.country.id,
-                rating = 0,
-                favorite = 0
+    fun saveAddCityInBd(openBottom: MutableState<Boolean> = openBottomSearchCreateReportInfo) =
+        runBlocking {
+            townshipDb.insert(
+                Township(
+                    townshipRus = uiStateAddCity.value.nameCity,
+                    townshipEng = uiStateAddCity.value.nameCity,
+                    countryId = uiStateAddCity.value.country.id,
+                    rating = 0,
+                    favorite = 0
+                )
             )
-        )
-        uiStateAddCity = mutableStateOf(AddCity())
-        loadTownships(selectedCountryIdInSearch.intValue)
-        closeAddCity()
+            uiStateAddCity = mutableStateOf(AddCity())
+            loadTownships(selectedCountryIdInSearch.intValue)
+            closeAddCity()
+        }
+
+    fun openListSearch() {
+        openListSearchCreateReportInfo.intValue = 0
+        selectedCountryIdInSearch.intValue = 0
+        selectedCountryNameInSearch.value = ""
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -598,124 +534,9 @@ class CreateReportInfoViewModel @Inject constructor(
         return format.format(Date(date.toLong()))
     }
 
-    private fun createNewReport() {
-        createNewReportCreateReportInfo()
-        createNewReportCreatePersonalInfo()
-        createNewReportCreateVehicleTrailer()
-        createNewReportCreateRoute()
-        createNewReportCreateProgressReports()
-        createNewReportCreateExpensesTrip()
-    }
-
-    private fun createNewReportCreateReportInfo() = runBlocking {
-        createReportInfoDb.insert(
-            CreateReportInfo(
-                date = "",
-                waybill = "",
-                mainCity = "",
-                reportName = "",
-                isStart = 1
-            )
-        )
-    }
-
-    private fun createNewReportCreatePersonalInfo() = runBlocking {
-        createPersonalInfoDb.insert(
-            CreatePersonalInfo(
-                lastName = "",
-                firstName = "",
-                patronymic = ""
-            )
-        )
-    }
-
-    private fun createNewReportCreateVehicleTrailer() = runBlocking {
-        createVehicleTrailerDb.insert(
-            CreateVehicleTrailer(
-                makeVehicle = "",
-                rnVehicle = "",
-                makeTrailer = "",
-                rnTrailer = ""
-            )
-        )
-    }
-
-    private fun createNewReportCreateRoute() = runBlocking {
-        createRouteDb.insert(
-            CreateRoute(
-                route = "",
-                dateDeparture = "",
-                dateReturn = "",
-                dateBorderCrossingDeparture = "",
-                dateBorderCrossingReturn = "",
-                speedometerReadingDeparture = "",
-                speedometerReadingReturn = "",
-                fuelled = ""
-            )
-        )
-    }
-
-    private fun createNewReportCreateProgressReports() = runBlocking {
-        createProgressReportsDb.insert(
-            CreateProgressReports(
-                date = "",
-                country = "",
-                townshipOne = "",
-                townshipTwo = "",
-                distance = "",
-                weight = ""
-            )
-        )
-    }
-
-    private fun createNewReportCreateExpensesTrip() = runBlocking {
-        createExpensesTripDb.insert(
-            CreateExpensesTrip(
-                date = "",
-                documentNumber = "",
-                expenseItem = "",
-                sum = "",
-                currency = ""
-            )
-        )
-    }
-
-    private fun deleteAllElements() {
-        deleteAllElementsCreateReportInfo()
-        deleteAllElementsCreatePersonalInfo()
-        deleteAllElementsCreateVehicleTrailer()
-        deleteAllElementsCreateRoute()
-        deleteAllElementsCreateProgressReports()
-        deleteAllElementsCreateExpensesTrip()
-    }
-
-    private fun deleteAllElementsCreateReportInfo() = runBlocking {
-        createReportInfoDb.deleteAllElements()
-    }
-
-    private fun deleteAllElementsCreatePersonalInfo() = runBlocking {
-        createPersonalInfoDb.deleteAllElements()
-    }
-
-    private fun deleteAllElementsCreateVehicleTrailer() = runBlocking {
-        createVehicleTrailerDb.deleteAllElements()
-    }
-
-    private fun deleteAllElementsCreateRoute() = runBlocking {
-        createRouteDb.deleteAllElements()
-    }
-
-    private fun deleteAllElementsCreateProgressReports() = runBlocking {
-        createProgressReportsDb.deleteAllElements()
-    }
-
-    private fun deleteAllElementsCreateExpensesTrip() = runBlocking {
-        createExpensesTripDb.deleteAllElements()
-    }
-
     private fun getPositionInCountry(id: Int): Int {
-        for(i in 0..<countriesListCountryAddCityCreateReportInfo.value.size) {
-            if(id == countriesListCountryAddCityCreateReportInfo.value[i].id) return i
+        for (i in 0..<countriesListCountry.value.size) {
+            if (id == countriesListCountry.value[i].id) return i
         }
         return 0
     }

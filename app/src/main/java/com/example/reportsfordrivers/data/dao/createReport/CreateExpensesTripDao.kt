@@ -43,4 +43,10 @@ interface CreateExpensesTripDao {
 
     @Query("DELETE FROM create_expenses_trip")
     suspend fun deleteAllElements()
+
+    @Query("DELETE FROM create_expenses_trip WHERE id = :id")
+    suspend fun deleteOneElementForId(id: Int)
+
+    @Query("UPDATE create_expenses_trip SET is_add = :isAdd WHERE id = :id")
+    suspend fun updateOneElementForIdIsAdd(id: Int, isAdd: Int)
 }

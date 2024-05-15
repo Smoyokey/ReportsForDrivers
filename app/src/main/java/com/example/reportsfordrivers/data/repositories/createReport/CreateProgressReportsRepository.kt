@@ -27,5 +27,9 @@ interface CreateProgressReportsRepository {
 
     suspend fun updateOneElementForIdWeight(id: Int, weight: String)
 
+    suspend fun updateOneElementForIdIsAdd(id: Int, isAdd: Int)
+
     suspend fun deleteAllElements()
+
+    suspend fun deleteOneElementForId(id: Int)
 }

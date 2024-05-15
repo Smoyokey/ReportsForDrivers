@@ -26,4 +26,8 @@ interface CreateExpensesTripRepository {
     suspend fun updateOneElementForIdCurrency(id: Int, currency: String)
 
     suspend fun deleteAllItems()
+
+    suspend fun deleteOneElementForId(id: Int)
+
+    suspend fun updateOneElementForIdIsAdd(id: Int, isAdd: Int)
 }

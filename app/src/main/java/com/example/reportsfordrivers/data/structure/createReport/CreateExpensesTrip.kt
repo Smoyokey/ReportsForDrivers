@@ -17,5 +17,7 @@ data class CreateExpensesTrip (
     @ColumnInfo(name = "sum")
     val sum: String,
     @ColumnInfo(name = "currency")
-    val currency: String
+    val currency: String,
+    @ColumnInfo(name = "is_add")
+    val isAdd: Int
 )

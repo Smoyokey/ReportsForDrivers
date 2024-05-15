@@ -19,5 +19,7 @@ data class CreateProgressReports (
     @ColumnInfo(name = "distance")
     val distance: String,
     @ColumnInfo(name = "weight")
-    val weight: String
+    val weight: String,
+    @ColumnInfo(name = "is_add")
+    val isAdd: Int
 )

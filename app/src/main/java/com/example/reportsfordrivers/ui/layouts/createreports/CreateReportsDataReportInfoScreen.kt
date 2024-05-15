@@ -27,8 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -61,6 +59,7 @@ import com.example.reportsfordrivers.ui.layouts.custom.RowDateWithTextField
 import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportInfoViewModel
+import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
 
 private const val TAG = "CreateReportsDataReportInfoScreen"
 
@@ -169,27 +168,17 @@ fun CreateReportsDataReportInfoScreen(
         viewModel = viewModel
     )
 
-    if(viewModel.openBottomAddCityCreateReportInfo.value) {
-        BottomSheetAddCityCustom(
-            searchText = viewModel.searchTextCountryAddCityCreateReportInfo,
-            countriesList = viewModel.countriesListCountryAddCityCreateReportInfo,
-            openBottom = viewModel.openBottomAddCityCreateReportInfo,
-            modifier = Modifier.fillMaxHeight(0.75f),
-            nameCity = viewModel.uiStateAddCity.value.nameCity,
-            updateNameCity = viewModel::updateNameCityAddCityCreateReportInfo,
-            onSearchTextChange = viewModel::onSearchTextChangeCountryAddCityCreateReportInfo,
-            onToogleSearch = viewModel::onToogleSearchCountryAddCityCreateReportInfo,
-            sortCountry = viewModel.sortCountryAddCityCreateReportInfo,
-            loadCountries = viewModel::loadCountriesAddCityCreateRoute,
-            isCheckedFavorite = viewModel.isCheckedFavoriteCountryAddCityCreateReportInfo,
-            country = viewModel.uiStateAddCity.value.country,
-            updateCountry = viewModel::updateNameCountryAddCityCreateReportInfo,
-            closeAddCity = viewModel::closeAddCity,
-            saveAddCityInBd = viewModel::saveAddCityInBd,
-            validateAddCity = viewModel::validateAddCity
-        )
-    }
+    BottomSheetAddCity(
+        viewModel = viewModel
+    )
 }
+
+
+
+
+/**
+ * Поисковик!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -199,7 +188,7 @@ private fun BottomSheetSearch(
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    if (viewModel.openBottomSearchCreateReportInfo.value) {
+    if(viewModel.openBottomSearchCreateReportInfo.value) {
         ModalBottomSheet(
             onDismissRequest = {
                 viewModel.closeBottomSheetSearch()
@@ -210,49 +199,446 @@ private fun BottomSheetSearch(
             Column(
                 modifier = Modifier.fillMaxHeight()
             ) {
-                if (viewModel.openListSearchCreateReportInfo.intValue == 0) {
-                    ColumnSearchCountryCustom(
-                        searchText = viewModel.searchTextCountry,
-                        countriesList = viewModel.countriesListCountry,
-                        onSearchTextChangeCountry = viewModel::onSearchTextChangeCountry,
-                        onToogleSearchCountry = viewModel::onToogleSearchCountry,
-                        sortCountry = viewModel.sortCountry,
-                        loadCountry = viewModel::loadCountries,
-                        isCheckedFavoriteCountry = viewModel.isCheckedFavoriteCountry,
-                        openListSearch = viewModel.openListSearchCreateReportInfo,
-                        selectedCountryIdInSearch = viewModel.selectedCountryIdInSearch,
-                        selectedCountryNameInSearch = viewModel.selectedCountryNameInSearch,
-                        updateRating = viewModel::updateRatingCountry,
-                        loadTownships = viewModel::loadTownships
+                if(viewModel.openListSearchCreateReportInfo.intValue == 0) {
+                    ColumnSearchCountry(
+                        viewModel = viewModel,
+                        modifier = Modifier.weight(1f)
                     )
                 } else {
-                    ColumnSearchTownshipCustom(
-                        searchText = viewModel.searchTextTownship,
-                        townshipsList = viewModel.townshipsListTownship,
-                        onSearchTextChangeTownship = viewModel::onSearchTextChangeTownship,
-                        onToogleSearchTownship = viewModel::onToogleSearchTownship,
-                        openAddCity = viewModel::openAddCity,
-                        modifier = Modifier,
-                        sortTownship = viewModel.sortTownship,
-                        loadTownships = viewModel::loadTownships,
-                        selectedCountryIdInSearch = viewModel.selectedCountryIdInSearch,
-                        isCheckedFavoriteTownship = viewModel.isCheckedFavoriteTownship,
-                        listIsEmpty = false,
-                        isOpenAddCity = viewModel::openAddCity,
-                        updateData = viewModel::updateDataCreateReportInfoMainCity,
-                        updateRating = viewModel::updateRatingTownship,
-                        closeBottom = viewModel::closeBottomSheetSearch
+                    ColumnSearchTownship(
+                        viewModel = viewModel,
+                        modifier = Modifier.weight(1f)
                     )
                 }
+
                 Button(
-                    onClick = {
-                        viewModel.closeBottomSheetSearch()
-                    },
+                    onClick = { viewModel.closeBottomSheetSearch() },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.cancel))
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ColumnSearchCountry(
+    viewModel: CreateReportInfoViewModel,
+    modifier: Modifier = Modifier
+) {
+    val searchTextCountry by viewModel.searchTextCountry.collectAsState()
+    val countriesListCountry by viewModel.countriesListCountry.collectAsState()
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        DockedSearchBar(
+            query = searchTextCountry,
+            onQueryChange = viewModel::onSearchTextChangeCountry,
+            onSearch = viewModel::onSearchTextChangeCountry,
+            active = false,
+            onActiveChange = { viewModel.onToogleSearchCountry() },
+            placeholder = { Text(text = stringResource(R.string.countries)) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Search,
+                    contentDescription = null
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {}
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        viewModel.sortCountry.intValue = if(viewModel.sortCountry.intValue == 0) 1 else 0
+                        viewModel.loadCountries()
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.sort_24px),
+                    contentDescription = null
+                )
+                Text(
+                    text = if(viewModel.sortCountry.intValue == 0) {
+                        stringResource(R.string.alphabetically)
+                    } else {
+                        stringResource(R.string.by_popularity)
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .toggleable(
+                        value = viewModel.isCheckedFavoriteCountry.value,
+                        onValueChange = {
+                            viewModel.isCheckedFavoriteCountry.value = !viewModel.isCheckedFavoriteCountry.value
+                        },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = viewModel.isCheckedFavoriteCountry.value,
+                    onCheckedChange = {
+                        viewModel.isCheckedFavoriteCountry.value = it
+                        viewModel.loadCountries()
+                    }
+                )
+                Text( text = stringResource(R.string.favorite) )
+            }
+        }
+
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
+            items(countriesListCountry.size) { element ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (countriesListCountry[element].favorite == 1) {
+                        Icon(imageVector = Icons.Outlined.Clear, contentDescription = null)
+                    }
+
+                    Text(
+                        text = countriesListCountry[element].country,
+                        style = typography.bodyLarge,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    IconButton(
+                        onClick = {
+                            viewModel.openListSearchCreateReportInfo.intValue = 1
+                            viewModel.loadTownships(countriesListCountry[element].id)
+                            viewModel.selectedCountryIdInSearch.intValue = countriesListCountry[element].id
+                            viewModel.selectedCountryNameInSearch.value = countriesListCountry[element].country
+                            viewModel.updateRatingCountry(countriesListCountry[element].id)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
+                            contentDescription = null
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@SuppressLint("StateFlowValueCalledInComposition")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ColumnSearchTownship(
+    viewModel: CreateReportInfoViewModel,
+    modifier: Modifier = Modifier
+) {
+    val searchTextTownship by viewModel.searchTextTownship.collectAsState()
+    val townshipsListTownship by viewModel.townshipsListTownship.collectAsState()
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        DockedSearchBar(
+            query = searchTextTownship,
+            onQueryChange = viewModel::onSearchTextChangeTownship,
+            onSearch = viewModel::onSearchTextChangeTownship,
+            active = false,
+            onActiveChange = { viewModel.onToogleSearchTownship() },
+            placeholder = { Text(text = stringResource(R.string.cities)) },
+            leadingIcon = {
+                Icon (imageVector = Icons.Outlined.Search, contentDescription = null)
+            },
+            trailingIcon = {
+                IconButton( onClick = { viewModel.openAddCity() } ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
+                        contentDescription = stringResource(R.string.add)
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {}
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        viewModel.sortTownship.intValue = if(viewModel.sortTownship.intValue == 0) 1 else 0
+                        viewModel.loadTownships(viewModel.selectedCountryIdInSearch.intValue)
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.sort_24px),
+                    contentDescription = null
+                )
+                Text(
+                    text = if (viewModel.sortTownship.intValue == 0) {
+                        stringResource(R.string.alphabetically)
+                    } else {
+                        stringResource(R.string.by_popularity)
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .toggleable(
+                        value = viewModel.isCheckedFavoriteTownship.value,
+                        onValueChange = {
+                            viewModel.isCheckedFavoriteTownship.value =
+                                !viewModel.isCheckedFavoriteTownship.value
+                        },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = viewModel.isCheckedFavoriteTownship.value,
+                    onCheckedChange = {
+                        viewModel.isCheckedFavoriteTownship.value = it
+                        viewModel.loadTownships(viewModel.selectedCountryIdInSearch.intValue)
+                    }
+                )
+                Text( text = stringResource(R.string.favorite) )
+            }
+        }
+
+        Row( modifier = Modifier.fillMaxWidth() ) {
+            Text( text = viewModel.selectedCountryNameInSearch.value )
+            IconButton(
+                onClick = {
+                    viewModel.openListSearchCreateReportInfo.intValue = 0
+                    viewModel.loadCountries()
+                }
+            ) {
+                Icon(imageVector = Icons.Outlined.Clear, contentDescription = null)
+            }
+        }
+
+        if(viewModel.townshipsListTownship.value.isEmpty()) {
+            Column( modifier = Modifier.fillMaxWidth() ) {
+                EmptySearchTownshipReports(isOpenAddCity = viewModel::openAddCity)
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(townshipsListTownship.size) { element ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                viewModel.updateDataCreateReportInfoMainCity(
+                                    townshipsListTownship[element].township
+                                )
+                                viewModel.updateRatingTownship(townshipsListTownship[element].id)
+                                viewModel.closeBottomSheetSearch()
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        if(townshipsListTownship[element].favorite == 1) {
+                            Icon(
+                                imageVector = Icons.Outlined.Star,
+                                contentDescription = null
+                            )
+                        }
+                        Text(
+                            text = townshipsListTownship[element].township,
+                            style = typography.bodyLarge
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BottomSheetAddCity(
+    viewModel: CreateReportInfoViewModel
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    if(viewModel.openBottomAddCityCreateReportInfo.value) {
+        ModalBottomSheet(
+            onDismissRequest = { viewModel.closeAddCity() }, // ДОБАВИТЬ ЗАКРЫТИЕ БОТТОМ ШИТ
+            sheetState = sheetState,
+            modifier = Modifier.fillMaxHeight(0.75f)
+        ) {
+            Text(
+                text = stringResource(R.string.add_city),
+                style = typography.headlineSmall
+            )
+
+            OutlinedTextField(
+                value = viewModel.uiStateAddCity.value.nameCity,
+                onValueChange = { viewModel.updateNameCityAddCityCreateReportInfo(name = it) },
+                label = { Text(stringResource(R.string.name_city)) },
+                singleLine = true,
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateAddCity.value.nameCity.isNotEmpty()) {
+                        IconButton( onClick = { viewModel.updateNameCityAddCityCreateReportInfo("") } ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            ColumnSearchCountryAddCity(viewModel = viewModel)
+
+            Button(
+                onClick = {
+                    viewModel.closeAddCity()
+                    viewModel.saveAddCityInBd()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = viewModel.validateAddCity()
+            ) {
+                Text( text = stringResource(R.string.save) )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ColumnSearchCountryAddCity(
+    viewModel: CreateReportInfoViewModel,
+    modifier: Modifier = Modifier
+) {
+    val searchTextCountryAddCity by viewModel.searchTextCountry.collectAsState()
+    val countriesListCountryAddCity by viewModel.countriesListCountry.collectAsState()
+
+    Column() {
+        DockedSearchBar(
+            query = searchTextCountryAddCity,
+            onQueryChange = viewModel::onSearchTextChangeCountry,
+            onSearch = viewModel::onSearchTextChangeCountry,
+            active = false,
+            onActiveChange = { viewModel.onToogleSearchCountry() },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.country),
+                    style = typography.bodyLarge
+                )
+            },
+            leadingIcon = {
+                Icon(imageVector = Icons.Outlined.Search, contentDescription = null)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {}
+
+        Row( modifier = Modifier.fillMaxWidth() ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        viewModel.sortCountry.intValue = if(viewModel.sortCountry.intValue == 0) 1 else 0
+                        viewModel.loadCountries()
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.sort_24px),
+                    contentDescription = null
+                )
+                Text(
+                    text = if(viewModel.sortCountry.intValue == 0) {
+                        stringResource(R.string.alphabetically)
+                    } else {
+                        stringResource(R.string.by_popularity)
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .toggleable(
+                        value = viewModel.isCheckedFavoriteCountry.value,
+                        onValueChange = {
+                            viewModel.isCheckedFavoriteCountry.value =
+                                !viewModel.isCheckedFavoriteCountry.value
+                        },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = viewModel.isCheckedFavoriteCountry.value,
+                    onCheckedChange = {
+                        viewModel.isCheckedFavoriteCountry.value = it
+                        viewModel.loadCountries()
+                    }
+                )
+                Text( text = stringResource(R.string.favorite) )
+            }
+        }
+
+        if(viewModel.uiStateAddCity.value.country.country.isNotEmpty()) {
+            Row( modifier = Modifier.fillMaxWidth() ) {
+                Text( text = viewModel.uiStateAddCity.value.country.country )
+                IconButton(
+                    onClick = {
+                        viewModel.updateNameCountryAddCityCreateReportInfo(CountryDetailing())
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear)
+                    )
+                }
+            }
+        }
+
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            modifier = Modifier.weight(1f)
+        ) {
+            items(countriesListCountryAddCity.size) { element ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            viewModel.updateNameCountryAddCityCreateReportInfo(countriesListCountryAddCity[element])
+                        }
+                ) {
+                    Text(
+                        text = countriesListCountryAddCity[element].country,
+                        modifier = Modifier.weight(1f),
+                        style = typography.titleLarge
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptySearchTownshipReports(isOpenAddCity: () -> Unit) {
+    TextButton(
+        onClick = isOpenAddCity,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(R.string.not_list_add),
+            textAlign = TextAlign.Center
+        )
     }
 }

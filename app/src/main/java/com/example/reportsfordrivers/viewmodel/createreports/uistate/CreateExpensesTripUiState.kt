@@ -13,5 +13,6 @@ data class CreateExpensesTripDetailingUiState(
     val documentNumber: String = "",
     val expenseItem: String = "",
     val sum: String = "",
-    val currency: String = ""
+    val currency: String = "",
+    val isAdd: Int = 0
 )

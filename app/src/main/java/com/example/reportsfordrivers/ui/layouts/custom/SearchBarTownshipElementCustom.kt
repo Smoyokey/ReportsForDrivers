@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Checkbox
@@ -45,17 +46,20 @@ fun ColumnSearchTownshipCustom(
     townshipsList: StateFlow<List<TownshipDetailing>>,
     onSearchTextChangeTownship: (String) -> Unit,
     onToogleSearchTownship: () -> Unit,
-    openAddCity: () -> Unit,
+    openAddCity: (MutableState<Boolean>) -> Unit,
     modifier: Modifier = Modifier,
     sortTownship: MutableState<Int>,
     loadTownships: (Int) -> Unit,
     selectedCountryIdInSearch: MutableState<Int>,
     isCheckedFavoriteTownship: MutableState<Boolean>,
     listIsEmpty: Boolean,
-    isOpenAddCity: () -> Unit,
+    isOpenAddCity: (MutableState<Boolean>) -> Unit,
     updateData: (String, Int) -> Unit,
     updateRating: (Int) -> Unit,
-    closeBottom: () -> Unit
+    closeBottom: (MutableState<Boolean>) -> Unit,
+    openBottom: MutableState<Boolean>,
+    country: String,
+    openListSearch: () -> Unit
 ) {
     val searchTextTownship by searchText.collectAsState()
     val townshipsListTownship by townshipsList.collectAsState()
@@ -79,7 +83,7 @@ fun ColumnSearchTownshipCustom(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { openAddCity()}
+                    onClick = { openAddCity(openBottom) }
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Add,
@@ -98,12 +102,26 @@ fun ColumnSearchTownshipCustom(
             isCheckedFavoriteTownship = isCheckedFavoriteTownship
         )
 
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = country
+            )
+            IconButton(
+                onClick = { openListSearch() }
+            ) {
+                Icon(imageVector = Icons.Outlined.Clear, contentDescription = null)
+            }
+        }
+
         if(listIsEmpty) {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 EmptySearchTownship(
-                    isOpenAddCity = isOpenAddCity
+                    isOpenAddCity = isOpenAddCity,
+                    openBottom = openBottom
                 )
             }
         } else {
@@ -112,6 +130,7 @@ fun ColumnSearchTownshipCustom(
                 updateData = updateData,
                 updateRating = updateRating,
                 closeBottom = closeBottom,
+                openBottom = openBottom
             )
         }
     }
@@ -204,7 +223,8 @@ fun LazyColumnTownship(
     listTownship: List<TownshipDetailing>,
     updateData: (String, Int) -> Unit,
     updateRating: (Int) -> Unit,
-    closeBottom: () -> Unit
+    closeBottom: (MutableState<Boolean>) -> Unit,
+    openBottom: MutableState<Boolean>
 ) {
 
     LazyColumn(
@@ -217,7 +237,7 @@ fun LazyColumnTownship(
                     .clickable {
                         updateData(listTownship[element].township, 0)
                         updateRating(listTownship[element].id)
-                        closeBottom()
+                        closeBottom(openBottom)
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -238,10 +258,11 @@ fun LazyColumnTownship(
 
 @Composable
 fun EmptySearchTownship(
-    isOpenAddCity: () -> Unit
+    isOpenAddCity: (MutableState<Boolean>) -> Unit,
+    openBottom: MutableState<Boolean>
 ) {
     TextButton(
-        onClick = isOpenAddCity,
+        onClick = { isOpenAddCity(openBottom) },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(

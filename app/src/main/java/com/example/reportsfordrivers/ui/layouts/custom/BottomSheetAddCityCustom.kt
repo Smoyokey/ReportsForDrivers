@@ -51,8 +51,8 @@ fun BottomSheetAddCityCustom(
     isCheckedFavorite: MutableState<Boolean>,
     country: CountryDetailing,
     updateCountry: (CountryDetailing) -> Unit,
-    closeAddCity: () -> Unit,
-    saveAddCityInBd: () -> Unit,
+    closeAddCity: (MutableState<Boolean>) -> Unit,
+    saveAddCityInBd: (MutableState<Boolean>) -> Unit,
     validateAddCity: () -> Boolean
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -196,8 +196,8 @@ fun BottomSheetAddCityCustom(
 
             Button(
                 onClick = {
-                    closeAddCity()
-                    saveAddCityInBd()
+                    closeAddCity(openBottom)
+                    saveAddCityInBd(openBottom)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = validateAddCity()

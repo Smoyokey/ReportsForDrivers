@@ -151,7 +151,6 @@ fun ReportsForDriversNavHost(
         composable(route = ReportsForDriversSchema.Route.name) {
             if(!viewModelCreateRoute.firstOpenCreateRoute.value) {
                 viewModelCreateRoute.startLoadCreateRoute()
-
             }
             CreateReportsDataFillingTwoScreen(
                 viewModel = viewModelCreateRoute,
@@ -159,18 +158,27 @@ fun ReportsForDriversNavHost(
             )
         }
         composable(route = ReportsForDriversSchema.ProgressReport.name) {
+            if(!viewModelCreateProgressReports.firstOpenReportProgressReports.value) {
+                viewModelCreateProgressReports.startLoadCreateProgressReports()
+            }
             CreateReportsProgressReportsScreen(
                 viewModel = viewModelCreateProgressReports,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.TripExpenses.name) {
+            if(!viewModelCreateExpensesTrip.firstOpenReportExpensesTrip.value) {
+                viewModelCreateExpensesTrip.startLoadCreateExpensesTrip()
+            }
             CreateReportsExpensesScreen(
                 viewModel = viewModelCreateExpensesTrip,
                 navController = navController
             )
         }
         composable(route = ReportsForDriversSchema.Preview.name) {
+            if(!viewModelCreatePreviewAndResult.firstOpenReportCreatePreviewAndResult.value) {
+                viewModelCreatePreviewAndResult.startLoadScreen()
+            }
             CreateReportsPreviewScreen(
                 onNext = {
                     navController.navigate(ReportsForDriversSchema.Result.name)

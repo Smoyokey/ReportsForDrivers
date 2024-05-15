@@ -41,5 +41,11 @@ class CreateProgressReportsDiRepo @Inject constructor(private val createProgress
     override suspend fun updateOneElementForIdWeight(id: Int, weight: String) =
         createProgressReportsDao.updateOneElementForIdWeight(id, weight)
 
+    override suspend fun updateOneElementForIdIsAdd(id: Int, isAdd: Int) =
+        createProgressReportsDao.updateOneElementForIdIsAdd(id, isAdd)
+
     override suspend fun deleteAllElements() = createProgressReportsDao.deleteAllElements()
+
+    override suspend fun deleteOneElementForId(id: Int) =
+        createProgressReportsDao.deleteOneElementForId(id)
 }

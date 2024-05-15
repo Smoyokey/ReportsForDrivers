@@ -71,6 +71,9 @@ class CreatePreviewAndResultViewModel @Inject constructor(
     var uiState = mutableStateOf(CreateReports())
         private set
 
+    var firstOpenReportCreatePreviewAndResult = mutableStateOf(false)
+
+    var isOpenPermissionSaveFile = mutableStateOf(false)
 
     fun startLoadScreen() = runBlocking {
         loadCreateReportInfo()
@@ -80,6 +83,7 @@ class CreatePreviewAndResultViewModel @Inject constructor(
         loadCreateProgressReports()
         loadCreateExpensesTrip()
         fioPreferencesRepository.setCreateSelectedPage(7)
+        firstOpenReportCreatePreviewAndResult.value = true
     }
 
     private fun loadCreateReportInfo() =
@@ -99,7 +103,7 @@ class CreatePreviewAndResultViewModel @Inject constructor(
         val createPersonalInfoUiState = CreatePersonalInfoUiState(
             lastName = createPersonalInfo[0].lastName,
             firstName = createPersonalInfo[0].firstName,
-            patronymic = createPersonalInfo[9].patronymic
+            patronymic = createPersonalInfo[0].patronymic
         )
         uiState.value = uiState.value.copy(dataCreatePersonalInfo = createPersonalInfoUiState)
     }
@@ -134,77 +138,38 @@ class CreatePreviewAndResultViewModel @Inject constructor(
     private fun loadCreateProgressReports() = runBlocking {
         val createProgressReports = createProgressReportsDb.getAllItem().first()
         for (i in createProgressReports) {
-            uiState.value.listDataCreateProgressReports.add(
-                CreateProgressReportsDetailingUiState(
-                    country = i.country,
-                    townshipOne = i.townshipOne,
-                    townshipTwo = i.townshipTwo,
-                    distance = i.distance,
-                    cargoWeight = i.weight,
-                    date = i.date
+            if(i.isAdd == 1) {
+                uiState.value.listDataCreateProgressReports.add(
+                    CreateProgressReportsDetailingUiState(
+                        country = i.country,
+                        townshipOne = i.townshipOne,
+                        townshipTwo = i.townshipTwo,
+                        distance = i.distance,
+                        cargoWeight = i.weight,
+                        date = i.date
+                    )
                 )
-            )
+            }
         }
     }
 
     private fun loadCreateExpensesTrip() = runBlocking {
         val createExpensesTrip = createExpensesTripDb.getAllItem().first()
         for (i in createExpensesTrip) {
-            uiState.value.listDataCreateExpensesTrip.add(
-                CreateExpensesTripDetailingUiState(
-                    date = i.date,
-                    documentNumber = i.documentNumber,
-                    expenseItem = i.expenseItem,
-                    sum = i.sum,
-                    currency = i.currency
+            if(i.isAdd == 1) {
+                uiState.value.listDataCreateExpensesTrip.add(
+                    CreateExpensesTripDetailingUiState(
+                        date = i.date,
+                        documentNumber = i.documentNumber,
+                        expenseItem = i.expenseItem,
+                        sum = i.sum,
+                        currency = i.currency
+                    )
                 )
-            )
+            }
         }
     }
 
-
-//    fun startLoadDB() = runBlocking {
-//        val list = vehicleAndTrailer.getAllItem().first()
-//        addListVehicleTrailer(list)
-//    }
-
-//    fun saveObjectInDB(objectVehicle: ObjectVehicle) = runBlocking {
-//        vehicleAndTrailer.insert(
-//            VehicleAndTrailer(
-//                vehicleOrTrailer = objectVehicle.type,
-//                make = objectVehicle.make,
-//                registrationNumber = objectVehicle.rn
-//            )
-//        )
-//        val list = vehicleAndTrailer.getAllItem().first()
-//        addListVehicleTrailer(list)
-//    }
-
-//    private fun addListVehicleTrailer(list: List<VehicleAndTrailer>) {
-//        val listObjectVehicle = mutableListOf<ObjectVehicle>()
-//        val listObjectTrailer = mutableListOf<ObjectVehicle>()
-//        for (i in list) {
-//            if (i.vehicleOrTrailer == VehicleOrTrailer.VEHICLE.name) {
-//                listObjectVehicle.add(
-//                    ObjectVehicle(
-//                        type = i.vehicleOrTrailer,
-//                        make = i.make,
-//                        rn = i.registrationNumber
-//                    )
-//                )
-//            } else {
-//                listObjectTrailer.add(
-//                    ObjectVehicle(
-//                        type = i.vehicleOrTrailer,
-//                        make = i.make,
-//                        rn = i.registrationNumber
-//                    )
-//                )
-//            }
-//        }
-//        uiStateListVehicle.value.listVehicle = listObjectVehicle
-//        uiStateListVehicle.value.listTrailer = listObjectTrailer
-//    }
 
 
     fun updatePreviewReportName(reportName: String) {
@@ -267,6 +232,7 @@ class CreatePreviewAndResultViewModel @Inject constructor(
                 fileOutputStream?.write(onePageHtml().toByteArray())
                 fileOutputStream?.close()
             }
+            Log.i(TAG, "Save report")
         } else {
             try {
                 //Создается объект файла, при этом путь к файлу находиться методом Environment
@@ -285,6 +251,7 @@ class CreatePreviewAndResultViewModel @Inject constructor(
                 // Закрываем поток
                 outputStream.close()
                 // Просто для удобства визуального контроля исполнения метода в приложении
+                Log.i(TAG, "Поток закрыт")
             } catch (e: Exception) {
                 e.printStackTrace()
             }

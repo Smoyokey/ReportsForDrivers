@@ -32,6 +32,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -59,7 +60,9 @@ fun OutlinedTextFieldCustomSearch(
     tag: String,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
-    isOpenSearch: MutableState<Boolean>
+    isOpenSearch: MutableState<Boolean>,
+    isOneAndTwoState: MutableState<Int> = mutableIntStateOf(0),
+    isOneAndTwo: Int = 0
 ) {
     OutlinedTextField(
         value = value,
@@ -83,6 +86,7 @@ fun OutlinedTextFieldCustomSearch(
                 IconButton(
                     onClick = {
                         isOpenSearch.value = true
+                        isOneAndTwoState.value = isOneAndTwo
                     }
                 ) {
                     Icon(

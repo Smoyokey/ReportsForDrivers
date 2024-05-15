@@ -2,6 +2,7 @@ package com.example.reportsfordrivers.viewmodel.createreports
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -95,19 +96,20 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     fun updateDataCreateRouteRoute(route: String, index: Int) {
-        uiStateCreateRoute.value.route[index] = uiStateCreateRoute.value.route[index].copy(text = route)
-        Log.i(TAG, uiStateCreateRoute.value.route.joinToString{ it.text })
+        uiStateCreateRoute.value.route[index] =
+            uiStateCreateRoute.value.route[index].copy(text = route)
+        Log.i(TAG, uiStateCreateRoute.value.route.joinToString { it.text })
         runBlocking {
             createRouteDb.updateOneElementForIdRoute(
                 id = uiStateCreateRoute.value.id,
-                route = uiStateCreateRoute.value.route.joinToString{ it.text }
+                route = uiStateCreateRoute.value.route.joinToString { it.text }
             )
         }
     }
 
     fun updateDataCreateRouteDateReturn(dateReturn: String) {
-        val parseDate = if(dateReturn.isNotEmpty()) parseDate(dateReturn) else dateReturn
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( dateReturn = parseDate )
+        val parseDate = if (dateReturn.isNotEmpty()) parseDate(dateReturn) else dateReturn
+        uiStateCreateRoute.value = uiStateCreateRoute.value.copy(dateReturn = parseDate)
         runBlocking {
             createRouteDb.updateOneElementForIdDateReturn(
                 id = uiStateCreateRoute.value.id,
@@ -118,7 +120,7 @@ class CreateRouteViewModel @Inject constructor(
 
     fun updateDataCreateRouteDateDeparture(dateDeparture: String) {
         val parseDate = if (dateDeparture.isNotEmpty()) parseDate(dateDeparture) else dateDeparture
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( dateDeparture = parseDate )
+        uiStateCreateRoute.value = uiStateCreateRoute.value.copy(dateDeparture = parseDate)
         runBlocking {
             createRouteDb.updateOneElementForIdDateDeparture(
                 id = uiStateCreateRoute.value.id,
@@ -132,7 +134,7 @@ class CreateRouteViewModel @Inject constructor(
             parseDate(dateCrossingDeparture)
         else
             dateCrossingDeparture
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( dateCrossingDeparture = parseDate)
+        uiStateCreateRoute.value = uiStateCreateRoute.value.copy(dateCrossingDeparture = parseDate)
         runBlocking {
             createRouteDb.updateOneElementForIdDateBorderCrossingDeparture(
                 id = uiStateCreateRoute.value.id,
@@ -146,7 +148,7 @@ class CreateRouteViewModel @Inject constructor(
             parseDate(dateCrossingReturn)
         else
             dateCrossingReturn
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( dateCrossingReturn = parseDate )
+        uiStateCreateRoute.value = uiStateCreateRoute.value.copy(dateCrossingReturn = parseDate)
         runBlocking {
             createRouteDb.updateOneElementForIdDateBorderCrossingReturn(
                 id = uiStateCreateRoute.value.id,
@@ -156,7 +158,8 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     fun updateDataCreateRouteSpeedometerDeparture(speedometerDeparture: String) {
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( speedometerDeparture = speedometerDeparture)
+        uiStateCreateRoute.value =
+            uiStateCreateRoute.value.copy(speedometerDeparture = speedometerDeparture)
         runBlocking {
             createRouteDb.updateOneElementForIdSpeedometerReadingDeparture(
                 id = uiStateCreateRoute.value.id,
@@ -166,7 +169,8 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     fun updateDataCreateRouteSpeedometerReturn(speedometerReturn: String) {
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( speedometerReturn = speedometerReturn )
+        uiStateCreateRoute.value =
+            uiStateCreateRoute.value.copy(speedometerReturn = speedometerReturn)
         runBlocking {
             createRouteDb.updateOneElementForIdSpeedometerReadingReturn(
                 id = uiStateCreateRoute.value.id,
@@ -176,7 +180,7 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     fun updateDataCreateRouteFuelled(fuelled: String) {
-        uiStateCreateRoute.value = uiStateCreateRoute.value.copy( fuelled = fuelled)
+        uiStateCreateRoute.value = uiStateCreateRoute.value.copy(fuelled = fuelled)
         runBlocking {
             createRouteDb.updateOneElementForIdFuelled(
                 id = uiStateCreateRoute.value.id,
@@ -211,7 +215,7 @@ class CreateRouteViewModel @Inject constructor(
     override fun filterCountry(): StateFlow<List<CountryDetailing>> {
         return searchTextCountry
             .combine(_countriesListCountry) { text, countries ->
-                if(text.isBlank()) {
+                if (text.isBlank()) {
                     countries
                 }
                 countries.filter { country ->
@@ -230,7 +234,7 @@ class CreateRouteViewModel @Inject constructor(
 
     override fun onToogleSearchCountry() {
         _isSearchingCountry.value = !_isSearchingCountry.value
-        if(_isSearchingCountry.value) {
+        if (_isSearchingCountry.value) {
             onSearchTextChangeCountry("")
         }
     }
@@ -238,15 +242,15 @@ class CreateRouteViewModel @Inject constructor(
     override fun loadCountries() = runBlocking {
         uiStateCountry.value.listCountries = SnapshotStateList()
 
-        if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteCountry.value) {
-                if(sortCountry.intValue == 0) {
+        if (Locale.getDefault().language == "ru") {
+            val a = if (isCheckedFavoriteCountry.value) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameRus()
                 } else {
                     countryDb.getFavoriteSortRatingRus()
                 }
             } else {
-                if(sortCountry.intValue == 0) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getSortNameRus()
                 } else {
                     countryDb.getSortRatingRus()
@@ -265,14 +269,14 @@ class CreateRouteViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteCountry.value) {
-                if(sortCountry.intValue == 0) {
+            val a = if (isCheckedFavoriteCountry.value) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getFavoriteSortNameEng()
                 } else {
                     countryDb.getFavoriteSortRatingEng()
                 }
             } else {
-                if(sortCountry.intValue == 0) {
+                if (sortCountry.intValue == 0) {
                     countryDb.getSortNameEng()
                 } else {
                     countryDb.getSortRatingEng()
@@ -308,7 +312,7 @@ class CreateRouteViewModel @Inject constructor(
     override fun filterTownship(): StateFlow<List<TownshipDetailing>> {
         return searchTextTownship
             .combine(_townshipsListTownship) { text, townships ->
-                if(text.isBlank()) {
+                if (text.isBlank()) {
                     townships
                 }
                 townships.filter { township ->
@@ -327,37 +331,37 @@ class CreateRouteViewModel @Inject constructor(
 
     override fun onToogleSearchTownship() {
         _isSearchingTownship.value = !_isSearchingTownship.value
-        if(_isSearchingTownship.value) {
+        if (_isSearchingTownship.value) {
             onSearchTextChangeTownship("")
         }
     }
 
     override fun loadTownships(countryId: Int) = runBlocking {
         uiStateTownship.value.listTownships = SnapshotStateList()
-        if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteTownship.value) {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+        if (Locale.getDefault().language == "ru") {
+            val a = if (isCheckedFavoriteTownship.value) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameRus()
                     } else {
                         townshipDb.getFavoriteSortRatingRus()
                     }
                 }
             } else {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameRus(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingRus(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getSortNameRus()
                     } else {
                         townshipDb.getSortRatingRus()
@@ -376,29 +380,29 @@ class CreateRouteViewModel @Inject constructor(
                 )
             }
         } else {
-            val a = if(isCheckedFavoriteTownship.value) {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+            val a = if (isCheckedFavoriteTownship.value) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdFavoriteSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdFavoriteSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getFavoriteSortNameEng()
                     } else {
                         townshipDb.getFavoriteSortRatingEng()
                     }
                 }
             } else {
-                if(countryId != 0) {
-                    if(sortTownship.intValue == 0) {
+                if (countryId != 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getCountryIdTownshipSortNameEng(countryId)
                     } else {
                         townshipDb.getCountryIdTownshipSortRatingEng(countryId)
                     }
                 } else {
-                    if(sortTownship.intValue == 0) {
+                    if (sortTownship.intValue == 0) {
                         townshipDb.getSortNameEng()
                     } else {
                         townshipDb.getSortRatingEng()
@@ -424,150 +428,56 @@ class CreateRouteViewModel @Inject constructor(
 
     var uiStateAddCity = mutableStateOf(AddCity())
 
-    private val _isSearchingCountryAddCityCreateRoute = MutableStateFlow(false)
-    private val _searchTextCountryAddCityCreateRoute = MutableStateFlow("")
-    val searchTextCountryAddCityCreateRoute = _searchTextCountryAddCityCreateRoute.asStateFlow()
-    private var _countriesListCountryAddCityCreateRoute =
-        MutableStateFlow(uiStateCountry.value.listCountries)
-    var countriesListCountryAddCityCreateRoute = countryAddCityCreateRouteFilter()
-
-    val isCheckedFavoriteCountryAddCityCreateRoute = mutableStateOf(false)
-    val sortCountryAddCityCreateRoute = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
-
-    private fun countryAddCityCreateRouteFilter(): StateFlow<List<CountryDetailing>> {
-        return searchTextCountryAddCityCreateRoute
-            .combine(_countriesListCountryAddCityCreateRoute) { text, countries ->
-                if(text.isBlank()) {
-                    countries
-                }
-                countries.filter { country ->
-                    country.country.uppercase().contains(text.trim().uppercase())
-                }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(2000),
-                initialValue = _countriesListCountryAddCityCreateRoute.value
-            )
-    }
-
-    fun onSearchTextChangeCountryAddCityCreateRoute(text: String) {
-        _searchTextCountryAddCityCreateRoute.value = text
-    }
-
-    fun onToogleSearchCountryAddCityCreateRoute() {
-        _isSearchingCountryAddCityCreateRoute.value = !_isSearchingCountryAddCityCreateRoute.value
-        if(!_isSearchingCountryAddCityCreateRoute.value) {
-            onSearchTextChangeCountryAddCityCreateRoute("")
-        }
-    }
-
-    fun loadCountriesAddCityCreateRoute() = runBlocking {
-        uiStateCountry.value.listCountries = SnapshotStateList()
-
-        if(Locale.getDefault().language == "ru") {
-            val a = if(isCheckedFavoriteCountryAddCityCreateRoute.value) {
-                if(sortCountryAddCityCreateRoute.intValue == 0) {
-                    countryDb.getFavoriteSortNameRus()
-                } else {
-                    countryDb.getFavoriteSortRatingRus()
-                }
-            } else {
-                if(sortCountryAddCityCreateRoute.intValue == 0) {
-                    countryDb.getSortNameRus()
-                } else {
-                    countryDb.getSortRatingRus()
-                }
-            }
-
-            a.forEach {
-                uiStateCountry.value.listCountries.add(
-                    CountryDetailing(
-                        id = it.id,
-                        country = it.fullNameCountryRus,
-                        shortCountry = it.shortNameCountry,
-                        rating = it.rating,
-                        favorite = it.favorite
-                    )
-                )
-            }
-        } else {
-            val a = if(isCheckedFavoriteCountryAddCityCreateRoute.value) {
-                if(sortCountryAddCityCreateRoute.intValue == 0) {
-                    countryDb.getFavoriteSortNameEng()
-                } else {
-                    countryDb.getFavoriteSortRatingEng()
-                }
-            } else {
-                if(sortCountryAddCityCreateRoute.intValue == 0) {
-                    countryDb.getSortNameEng()
-                } else {
-                    countryDb.getSortRatingEng()
-                }
-            }
-
-            a.forEach {
-                uiStateCountry.value.listCountries.add(
-                    CountryDetailing(
-                        id = it.id,
-                        country = it.fullNameCountryEng,
-                        shortCountry = it.shortNameCountry,
-                        rating = it.rating,
-                        favorite = it.favorite
-                    )
-                )
-            }
-            _countriesListCountryAddCityCreateRoute =
-                MutableStateFlow(uiStateCountry.value.listCountries)
-            countriesListCountryAddCityCreateRoute = countryAddCityCreateRouteFilter()
-        }
-    }
-
     fun updateNameCityAddCityCreateRoute(name: String) {
         uiStateAddCity.value = uiStateAddCity.value.copy(nameCity = name)
     }
 
     fun updateNameCountryAddCityCreateRoute(element: CountryDetailing) {
-        uiStateAddCity.value = uiStateAddCity.value.copy(nameCountry = element.country, country = element)
+        uiStateAddCity.value =
+            uiStateAddCity.value.copy(nameCountry = element.country, country = element)
     }
 
-    fun openAddCity() {
-        loadCountriesAddCityCreateRoute()
+    fun openAddCity(openBottom: MutableState<Boolean> = openBottomSheetCountryCreateRoute) {
+        loadCountries()
         uiStateAddCity.value = uiStateAddCity.value.copy(
-            nameCity = searchTextCountryAddCityCreateRoute.value,
+            nameCity = searchTextCountry.value,
             country = countriesListCountry.value[getPositionInCountry(selectedCountryIdInSearch.intValue)]
         )
         openBottomAddCityCreateRoute.value = true
         openBottomSheetCountryCreateRoute.value = false
     }
 
-    fun closeAddCity() {
+    fun closeAddCity(openBottom: MutableState<Boolean> = openBottomSheetCountryCreateRoute) {
         openBottomSheetCountryCreateRoute.value = true
-        openBottomSheetCountryCreateRoute.value = false
+        openBottomAddCityCreateRoute.value = false
     }
 
     fun validateAddCity(): Boolean {
         return try {
             uiStateAddCity.value.nameCity.isNotEmpty() &&
                     uiStateAddCity.value.country.country.isNotEmpty()
-        } catch (e: NullPointerException) { false }
+        } catch (e: NullPointerException) {
+            false
+        }
     }
 
-    fun saveAddCityInBd() = runBlocking {
-        townshipDb.insert(
-            Township(
-                townshipRus = uiStateAddCity.value.nameCity,
-                townshipEng = uiStateAddCity.value.nameCity,
-                countryId = uiStateAddCity.value.country.id,
-                rating = 0,
-                favorite = 0
+    fun saveAddCityInBd(openBottom: MutableState<Boolean> = openBottomSheetCountryCreateRoute) =
+        runBlocking {
+            townshipDb.insert(
+                Township(
+                    townshipRus = uiStateAddCity.value.nameCity,
+                    townshipEng = uiStateAddCity.value.nameCity,
+                    countryId = uiStateAddCity.value.country.id,
+                    rating = 0,
+                    favorite = 0
+                )
             )
-        )
-        uiStateAddCity = mutableStateOf(AddCity())
-        loadTownships(selectedCountryIdInSearch.intValue)
-        closeAddCity()
-    }
+            uiStateAddCity = mutableStateOf(AddCity())
+            loadTownships(selectedCountryIdInSearch.intValue)
+            closeAddCity()
+        }
 
-    fun closeBottomSheetSearch() {
+    fun closeBottomSheetSearch(openBottom: MutableState<Boolean> = openBottomSheetCountryCreateRoute) {
         openBottomSheetCountryCreateRoute.value = false
     }
 
@@ -582,8 +492,9 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     fun validateSpeedometer(): Boolean {
-        return if(uiStateCreateRoute.value.speedometerDeparture.isNotEmpty() &&
-            uiStateCreateRoute.value.speedometerReturn.isNotEmpty()) {
+        return if (uiStateCreateRoute.value.speedometerDeparture.isNotEmpty() &&
+            uiStateCreateRoute.value.speedometerReturn.isNotEmpty()
+        ) {
             uiStateCreateRoute.value.speedometerDeparture.toInt() >=
                     uiStateCreateRoute.value.speedometerReturn.toInt()
         } else {
@@ -598,7 +509,7 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     private fun loadRouteToList(route: String): SnapshotStateList<RouteElement> {
-        return if(route.isEmpty()) {
+        return if (route.isEmpty()) {
             SnapshotStateList()
         } else {
             val a = SnapshotStateList<RouteElement>()
@@ -613,8 +524,8 @@ class CreateRouteViewModel @Inject constructor(
     }
 
     private fun getPositionInCountry(id: Int): Int {
-        for(i in 0..<countriesListCountryAddCityCreateRoute.value.size) {
-            if(id == countriesListCountryAddCityCreateRoute.value[i].id) return i
+        for (i in 0..<countriesListCountry.value.size) {
+            if (id == countriesListCountry.value[i].id) return i
         }
         return 0
     }

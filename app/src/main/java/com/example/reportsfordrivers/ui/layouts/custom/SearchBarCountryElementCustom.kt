@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.custom
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,17 +28,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.ui.theme.typography
+import com.example.reportsfordrivers.viewmodel.createreports.CreateReportInfoViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
 import kotlinx.coroutines.flow.StateFlow
+
+private const val TAG = "ColumnSearchCountryCustom"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ColumnSearchCountryCustom(
     modifier: Modifier = Modifier,
     searchText: StateFlow<String>,
-    countriesList: StateFlow<List<CountryDetailing>>,
+    countriesListCountry: StateFlow<List<CountryDetailing>>,
     onSearchTextChangeCountry: (String) -> Unit,
     onToogleSearchCountry: () -> Unit,
     sortCountry: MutableState<Int>,
@@ -47,10 +52,13 @@ fun ColumnSearchCountryCustom(
     selectedCountryIdInSearch: MutableState<Int>,
     selectedCountryNameInSearch: MutableState<String>,
     updateRating: (Int) -> Unit,
-    loadTownships: (Int) -> Unit
-    ) {
+    loadTownships: (Int) -> Unit,
+    viewModelCreateReport: CreateReportInfoViewModel = hiltViewModel()
+) {
+
     val searchTextCountry by searchText.collectAsState()
-    val countriesListCountry by countriesList.collectAsState()
+//    Log.i(TAG, countriesListCountry.joinToString("::"))
+
 
     Column(
         modifier = modifier,
@@ -72,11 +80,11 @@ fun ColumnSearchCountryCustom(
             modifier = Modifier.fillMaxWidth()
         ) {}
 
-        RowSortingAndFavoriteCountry(
-            sortCountry = sortCountry,
-            loadCountry = loadCountry,
-            isCheckedFavoriteCountry = isCheckedFavoriteCountry
-        )
+//        RowSortingAndFavoriteCountry(
+//            sortCountry = sortCountry,
+//            loadCountry = loadCountry,
+//            isCheckedFavoriteCountry = isCheckedFavoriteCountry,
+//        )
 
         LazyColumnCountry(
             modifier = Modifier.weight(1f),
@@ -85,7 +93,15 @@ fun ColumnSearchCountryCustom(
             selectedCountryIdInSearch = selectedCountryIdInSearch,
             selectedCountryNameInSearch = selectedCountryNameInSearch,
             updateRating = updateRating,
-            loadTownships = loadTownships
+            loadTownships = loadTownships,
+            viewModelCreateReport = viewModelCreateReport,
+            sortCountry = sortCountry,
+            clickableMethodCountry = {
+                sortCountry.value = if (sortCountry.value == 0) 1 else 0
+                loadCountry()
+            },
+            isCheckedFavoriteCountry = isCheckedFavoriteCountry,
+            clickableMethod = { loadCountry() }
         )
     }
 }
@@ -95,7 +111,7 @@ fun RowSortingAndFavoriteCountry(
     sortCountry: MutableState<Int>,
     loadCountry: () -> Unit,
     isCheckedFavoriteCountry: MutableState<Boolean>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -103,7 +119,7 @@ fun RowSortingAndFavoriteCountry(
         RowSortingCountry(
             sortCountry = sortCountry,
             clickableMethodCountry = {
-                sortCountry.value = if(sortCountry.value == 0) 1 else 0
+                sortCountry.value = if (sortCountry.value == 0) 1 else 0
                 loadCountry()
             }
         )
@@ -111,7 +127,7 @@ fun RowSortingAndFavoriteCountry(
             modifier = Modifier.weight(1f),
             isCheckedFavoriteCountry = isCheckedFavoriteCountry,
             clickableMethod = {
-                loadCountry
+                loadCountry()
             }
         )
     }
@@ -132,7 +148,7 @@ fun RowSortingCountry(
             contentDescription = null
         )
         Text(
-            text = if(sortCountry.value == 0) {
+            text = if (sortCountry.value == 0) {
                 stringResource(R.string.alphabetically)
             } else {
                 stringResource(R.string.by_popularity)
@@ -164,29 +180,79 @@ fun RowFavoriteCountry(
                 clickableMethod()
             }
         )
-        Text( text = stringResource(R.string.favorite) )
+        Text(text = stringResource(R.string.favorite))
     }
 }
 
 @Composable
 fun LazyColumnCountry(
     modifier: Modifier = Modifier,
-    countriesList: List<CountryDetailing>,
+    countriesList: StateFlow<List<CountryDetailing>>,
     openListSearch: MutableState<Int>,
     selectedCountryIdInSearch: MutableState<Int>,
     selectedCountryNameInSearch: MutableState<String>,
     updateRating: (Int) -> Unit,
-    loadTownships: (Int) -> Unit
+    loadTownships: (Int) -> Unit,
+    viewModelCreateReport: CreateReportInfoViewModel,
+    sortCountry: MutableState<Int>,
+    clickableMethodCountry: () -> Unit,
+    isCheckedFavoriteCountry: MutableState<Boolean>,
+    clickableMethod: () -> Unit
 ) {
+    val countriesListT by countriesList.collectAsState()
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { clickableMethodCountry() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.sort_24px),
+                    contentDescription = null
+                )
+                Text(
+                    text = if (sortCountry.value == 0) {
+                        stringResource(R.string.alphabetically)
+                    } else {
+                        stringResource(R.string.by_popularity)
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .toggleable(
+                        value = isCheckedFavoriteCountry.value,
+                        onValueChange = {
+                            isCheckedFavoriteCountry.value = !isCheckedFavoriteCountry.value
+                        },
+                        role = Role.Checkbox
+                    )
+            ) {
+                Checkbox(
+                    checked = isCheckedFavoriteCountry.value,
+                    onCheckedChange = {
+                        isCheckedFavoriteCountry.value = it
+                        clickableMethod()
+                    }
+                )
+                Text(text = stringResource(R.string.favorite))
+            }
+        }
+    }
+
     LazyColumn(
         modifier = modifier
     ) {
-        items(countriesList.size) { element ->
+        items(countriesListT.size) { element ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(countriesList[element].favorite == 1) {
+                if (countriesListT[element].favorite == 1) {
                     Icon(
                         imageVector = Icons.Outlined.Star,
                         contentDescription = null
@@ -194,7 +260,7 @@ fun LazyColumnCountry(
                 }
 
                 Text(
-                    text = countriesList[element].country,
+                    text = countriesListT[element].country,
                     style = typography.bodyLarge,
                     modifier = Modifier.weight(1f)
                 )
@@ -202,10 +268,10 @@ fun LazyColumnCountry(
                 IconButton(
                     onClick = {
                         openListSearch.value = 1
-                        loadTownships(countriesList[element].id)
-                        selectedCountryIdInSearch.value = countriesList[element].id
-                        selectedCountryNameInSearch.value = countriesList[element].country
-                        updateRating(countriesList[element].id)
+                        loadTownships(countriesListT[element].id)
+                        selectedCountryIdInSearch.value = countriesListT[element].id
+                        selectedCountryNameInSearch.value = countriesListT[element].country
+                        updateRating(countriesListT[element].id)
                     }
                 ) {
                     Icon(
