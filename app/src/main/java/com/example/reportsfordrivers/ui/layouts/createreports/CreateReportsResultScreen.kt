@@ -116,7 +116,7 @@ fun CreateReportsResultScreen(
                 )
             }
         }
-    }r
+    }
 }
 
 
