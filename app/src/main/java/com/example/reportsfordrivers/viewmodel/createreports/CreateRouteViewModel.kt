@@ -294,9 +294,9 @@ class CreateRouteViewModel @Inject constructor(
                     )
                 )
             }
-            _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
-            countriesListCountry = filterCountry()
         }
+        _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+        countriesListCountry = filterCountry()
     }
 
     override val uiStateTownship = mutableStateOf(Townships())
@@ -421,7 +421,6 @@ class CreateRouteViewModel @Inject constructor(
                 )
             }
         }
-
         _townshipsListTownship = MutableStateFlow(uiStateTownship.value.listTownships)
         townshipsListTownship = filterTownship()
     }

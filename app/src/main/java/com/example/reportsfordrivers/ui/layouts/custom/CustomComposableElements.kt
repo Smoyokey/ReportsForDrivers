@@ -5,8 +5,11 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imeNestedScroll
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -99,6 +102,7 @@ fun OutlinedTextFieldCustomSearch(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OutlinedTextFieldCustom(
     @StringRes label: Int,
@@ -119,13 +123,14 @@ fun OutlinedTextFieldCustom(
         keyboardOptions = keyboardOptions,
         trailingIcon = {
             if (value.isNotEmpty()) {
-                Icon(
-                    imageVector = Icons.Outlined.Clear,
-                    contentDescription = stringResource(R.string.clear),
-                    modifier = Modifier
-                        .clickable { onValueChange("") }
-                        .testTag(tag)
-                )
+                IconButton(
+                    onClick = { onValueChange("") },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Clear,
+                        contentDescription = stringResource(R.string.clear)
+                    )
+                }
             }
         },
         isError = isError

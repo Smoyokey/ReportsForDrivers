@@ -6,9 +6,24 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,13 +36,26 @@ import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreatePersonalInfoViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreateReportsDataPersonalInfoScreen(
     viewModel: CreatePersonalInfoViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    val (lastName, firstName, patronymic) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    DisposableEffect(Unit) {
+        if(viewModel.uiStateCreatePersonalInfo.value.lastName.isNotEmpty()) {
+            lastName.requestFocus()
+        }
+        onDispose { }
+    }
+
     BackHandler {
         navController.navigate(
             ReportsForDriversSchema.ReportInfo.name,
@@ -55,31 +83,84 @@ fun CreateReportsDataPersonalInfoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            OutlinedTextFieldCustom(
-                label = R.string.last_name,
+            OutlinedTextField(
                 value = viewModel.uiStateCreatePersonalInfo.value.lastName,
-                onValueChange = viewModel::updateDataCreatePersonalInfoLastName,
-                tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_LAST_NAME,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                label = { Text(stringResource(R.string.last_name)) },
+                onValueChange = { viewModel.updateDataCreatePersonalInfoLastName(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(lastName),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreatePersonalInfo.value.lastName.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreatePersonalInfoLastName("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { firstName.requestFocus()} )
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.first_name,
+            OutlinedTextField(
                 value = viewModel.uiStateCreatePersonalInfo.value.firstName,
-                onValueChange = viewModel::updateDataCreatePersonalInfoFirstName,
-                tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_FIRST_NAME,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                label = { Text(stringResource(R.string.first_name)) },
+                onValueChange = { viewModel.updateDataCreatePersonalInfoFirstName(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(firstName),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreatePersonalInfo.value.firstName.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreatePersonalInfoFirstName("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { patronymic.requestFocus()} )
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.patronymic,
+            OutlinedTextField(
                 value = viewModel.uiStateCreatePersonalInfo.value.patronymic,
-                onValueChange = viewModel::updateDataCreatePersonalInfoPatronymic,
-                tag = Tags.TAG_TEST_DATA_PERSONAL_INFO_PATRONYMIC,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+                label = { Text(stringResource(R.string.patronymic)) },
+                onValueChange = { viewModel.updateDataCreatePersonalInfoPatronymic(it) },
+                modifier = Modifier.fillMaxWidth()
+                    .focusRequester(patronymic),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreatePersonalInfo.value.patronymic.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreatePersonalInfoPatronymic("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() })
             )
         }
 

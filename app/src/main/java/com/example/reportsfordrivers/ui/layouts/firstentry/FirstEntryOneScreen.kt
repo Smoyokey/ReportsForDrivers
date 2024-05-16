@@ -7,14 +7,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
@@ -25,6 +40,7 @@ import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.IsSelectedVehicleAndTrailer
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FirstEntryOneScreen(
     viewModel: FirstEntryViewModel = hiltViewModel(),
@@ -32,6 +48,14 @@ fun FirstEntryOneScreen(
 ) {
     val scrollState = rememberScrollState()
     val modifierDivider = Modifier.padding(start = 16.dp, end = 16.dp)
+
+    val (lastName, firstName, patronymic, make, rn) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    DisposableEffect(Unit) {
+        lastName.requestFocus()
+        onDispose { }
+    }
 
     Column(
         modifier = Modifier
@@ -52,28 +76,85 @@ fun FirstEntryOneScreen(
                 style = typography.titleLarge,
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.last_name,
+            OutlinedTextField(
                 value = viewModel.uiState.value.fioItemDetails.lastName,
-                onValueChange = viewModel::updateLastName,
-                tag = Tags.TAG_TEST_FIRST_ENTRY_LAST_NAME,
-                modifier = Modifier.fillMaxWidth()
+                label = { Text(stringResource(R.string.last_name)) },
+                onValueChange = { viewModel.updateLastName(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(lastName),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.uiState.value.fioItemDetails.lastName.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateLastName("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next,
+                ),
+                keyboardActions = KeyboardActions(onNext = { firstName.requestFocus() })
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.first_name,
+            OutlinedTextField(
                 value = viewModel.uiState.value.fioItemDetails.firstName,
-                onValueChange = viewModel::updateFirstName,
-                tag = Tags.TAG_TEST_FIRST_ENTRY_FIRST_NAME,
-                modifier = Modifier.fillMaxWidth()
+                label = { Text(stringResource(R.string.first_name)) },
+                onValueChange = { viewModel.updateFirstName(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(firstName),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.uiState.value.fioItemDetails.firstName.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateFirstName("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { patronymic.requestFocus() })
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.patronymic,
+            OutlinedTextField(
                 value = viewModel.uiState.value.fioItemDetails.patronymic,
-                onValueChange = viewModel::updatePatronymic,
-                tag = Tags.TAG_TEST_FIRST_ENTRY_PATRONYMIC,
-                modifier = Modifier.fillMaxWidth()
+                label = { Text(stringResource(R.string.patronymic)) },
+                onValueChange = { viewModel.updatePatronymic(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(patronymic),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.uiState.value.fioItemDetails.patronymic.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updatePatronymic("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() })
             )
 
             Text(
@@ -104,24 +185,76 @@ fun FirstEntryOneScreen(
                     })
             }
 
-            OutlinedTextFieldCustom(
-                label = if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup) R.string.make_vehicle
-                else {
-                    R.string.make_trailer
-                },
+            OutlinedTextField(
                 value = viewModel.vehicleUiState.value.makeRnItemDetails.make,
-                onValueChange = viewModel::updateMake,
-                tag = Tags.TAG_TEST_FIRST_ENTRY_MAKE,
-                modifier = Modifier.fillMaxWidth()
+                label = {
+                    Text(
+                        stringResource(
+                            if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup)
+                                R.string.make_vehicle
+                            else
+                                R.string.make_trailer
+                        )
+                    )
+                },
+                onValueChange = { viewModel.updateMake(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(make),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.vehicleUiState.value.makeRnItemDetails.make.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateMake("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { rn.requestFocus() })
             )
 
-            OutlinedTextFieldCustom(
-                label = if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup) R.string.rn_vehicle
-                else R.string.rn_trailer,
+            OutlinedTextField(
                 value = viewModel.vehicleUiState.value.makeRnItemDetails.rn,
-                onValueChange = viewModel::updateRn,
-                tag = Tags.TAG_TEST_FIRST_ENTRY_RN,
-                modifier = Modifier.fillMaxWidth()
+                label = {
+                    Text(
+                        stringResource(
+                            if (viewModel.vehicleUiState.value.isSelected.stateRadioGroup)
+                                R.string.rn_vehicle
+                            else
+                                R.string.rn_trailer
+                        )
+                    )
+                },
+                onValueChange = { viewModel.updateRn(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(rn),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.vehicleUiState.value.makeRnItemDetails.rn.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateRn("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Characters,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() })
             )
 
             Row(

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -36,8 +37,13 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -66,11 +72,17 @@ import com.example.reportsfordrivers.viewmodel.createreports.CreateRouteViewMode
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.RouteElement
 import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreateReportsDataFillingTwoScreen(
     viewModel: CreateRouteViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    val (dateDeparture, dateReturn, dateCrossingDeparture, dateCrossingReturn,
+        speedometerDeparture, speedometerReturn, fuelled) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     BackHandler {
         navController.navigate(
             ReportsForDriversSchema.VehicleInfo.name,
@@ -171,40 +183,87 @@ fun CreateReportsDataFillingTwoScreen(
                 text = R.string.date_border_crossing_return
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.speedometer_reading_departure,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateRoute.value.speedometerDeparture,
-                onValueChange = viewModel::updateDataCreateRouteSpeedometerDeparture,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_DEPARTURE,
-                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.speedometer_reading_departure)) },
+                onValueChange = { viewModel.updateDataCreateRouteSpeedometerDeparture(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(speedometerDeparture),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateRoute.value.speedometerDeparture.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreateRouteSpeedometerDeparture("")}
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
                 ),
+                keyboardActions = KeyboardActions(onNext = {speedometerReturn.requestFocus()}),
                 isError = viewModel.validateSpeedometer()
-
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.speedometer_reading_return,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateRoute.value.speedometerReturn,
-                onValueChange = viewModel::updateDataCreateRouteSpeedometerReturn,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_SPEEDOMETER_RETURN,
-                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.speedometer_reading_return)) },
+                onValueChange = { viewModel.updateDataCreateRouteSpeedometerReturn(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(speedometerReturn),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateRoute.value.speedometerReturn.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreateRouteSpeedometerReturn("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next
                 ),
+                keyboardActions = KeyboardActions(onNext = {fuelled.requestFocus()}),
                 isError = viewModel.validateSpeedometer()
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.fuelled,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateRoute.value.fuelled,
-                onValueChange = viewModel::updateDataCreateRouteFuelled,
-                tag = Tags.TAG_TEST_DATA_FILLING_TWO_FUELLED,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                label = { Text(stringResource(R.string.fuelled)) },
+                onValueChange = { viewModel.updateDataCreateRouteFuelled(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(fuelled),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateRoute.value.fuelled.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreateRouteFuelled("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()})
             )
         }
 

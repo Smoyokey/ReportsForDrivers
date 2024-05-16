@@ -88,8 +88,6 @@ fun CreateReportsResultScreen(
                             Log.i(TAG, "Permission DENIED")
                         }
                         else -> {
-//                            permission.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                            viewModel.isOpenPermissionSaveFile.value = true
                             viewModel.saveFile(context)
                             Log.i(TAG, "ELSE")
                         }

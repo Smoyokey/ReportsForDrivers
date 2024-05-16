@@ -333,9 +333,9 @@ class CreateProgressReportsViewModel @Inject constructor(
                     )
                 )
             }
-            _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
-            countriesListCountry = filterCountry()
         }
+        _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+        countriesListCountry = filterCountry()
     }
 
     //Search Township ProgressReports

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -43,10 +44,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -73,11 +79,17 @@ import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
 
 private const val TAG = "CreateReportsProgressReportsScreen"
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreateReportsProgressReportsScreen(
     viewModel: CreateProgressReportsViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    val (date, country, townshipOne, townshipTwo, distance, weight) =
+        remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     BackHandler {
         navController.navigate(
             ReportsForDriversSchema.Route.name,
@@ -116,17 +128,6 @@ fun CreateReportsProgressReportsScreen(
                 text = R.string.date
             )
 
-//            OutlinedTextFieldCustom(
-//                label = R.string.country,
-//                value = viewModel.uiStateCreateProgressReportsDetailing.value.country,
-//                onValueChange = viewModel::updateProgressReportsCountry,
-//                tag = Tags.TAG_TEST_PROGRESS_REPORTS_COUNTRY,
-//                modifier = Modifier.fillMaxWidth(),
-//                keyboardOptions = KeyboardOptions(
-//                    capitalization = KeyboardCapitalization.Words,
-//                    autoCorrect = true
-//                )
-//            )
 
             OutlinedTextField(
                 label = { Text(text = stringResource(R.string.country)) },
@@ -156,50 +157,156 @@ fun CreateReportsProgressReportsScreen(
                     }
                 },
                 modifier = Modifier
-                    .clickable { viewModel.openBottomSheetCountryCreateProgressReports.value = true }
+                    .clickable {
+                        viewModel.openBottomSheetCountryCreateProgressReports.value = true
+                    }
                     .fillMaxWidth()
             )
 
-            OutlinedTextFieldCustomSearch(
-                label = R.string.township_one,
+//            OutlinedTextFieldCustomSearch(
+//                label = R.string.township_one,
+//                value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipOne,
+//                onValueChange = { viewModel.updateProgressReportsTownshipOne(it) },
+//                tag = "",
+//                modifier = Modifier.fillMaxWidth(),
+//                isOpenSearch = viewModel.openBottomSheetTownshipCreateProgressReports,
+//                isOneAndTwoState = viewModel.openSearchBottomSheet,
+//                isOneAndTwo = 0
+//            )
+
+            OutlinedTextField(
                 value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipOne,
+                label = { Text(stringResource(R.string.township_one)) },
                 onValueChange = { viewModel.updateProgressReportsTownshipOne(it) },
-                tag = "",
-                modifier = Modifier.fillMaxWidth(),
-                isOpenSearch = viewModel.openBottomSheetTownshipCreateProgressReports,
-                isOneAndTwoState = viewModel.openSearchBottomSheet,
-                isOneAndTwo = 0
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(townshipOne),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateProgressReportsDetailing.value.townshipOne.isEmpty()) {
+                        IconButton(
+                            onClick = {
+                                viewModel.openBottomSheetTownshipCreateProgressReports.value = true
+                                viewModel.openSearchBottomSheet.intValue = 0
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                contentDescription = null
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = { viewModel.updateProgressReportsTownshipOne("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = {townshipTwo.requestFocus()})
             )
 
-            OutlinedTextFieldCustomSearch(
-                label = R.string.township_two,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipTwo,
+                label = { Text(stringResource(R.string.township_two)) },
                 onValueChange = { viewModel.updateProgressReportsTownshipTwo(it) },
-                tag = "",
-                modifier = Modifier.fillMaxWidth(),
-                isOpenSearch = viewModel.openBottomSheetTownshipCreateProgressReports,
-                isOneAndTwoState = viewModel.openSearchBottomSheet,
-                isOneAndTwo = 1
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(townshipTwo),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateProgressReportsDetailing.value.townshipTwo.isEmpty()) {
+                        IconButton(
+                            onClick = {
+                                viewModel.openBottomSheetTownshipCreateProgressReports.value = true
+                                viewModel.openSearchBottomSheet.intValue = 1
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Search,
+                                contentDescription = null
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = { viewModel.updateProgressReportsTownshipTwo("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = {distance.requestFocus()})
             )
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedTextFieldCustom(
-                    label = R.string.distance,
+                OutlinedTextField(
                     value = viewModel.uiStateCreateProgressReportsDetailing.value.distance,
-                    onValueChange = viewModel::updateProgressReportsDistance,
-                    tag = Tags.TAG_TEST_PROGRESS_REPORTS_DISTANCE,
-                    modifier = Modifier.weight(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                    label = { Text(stringResource(R.string.distance)) },
+                    onValueChange = { viewModel.updateProgressReportsDistance(it) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(distance),
+                    textStyle = typography.bodyLarge,
+                    trailingIcon = {
+                        if(viewModel.uiStateCreateProgressReportsDetailing.value.distance.isNotEmpty()) {
+                            IconButton(
+                                onClick = { viewModel.updateProgressReportsDistance("")}
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(R.string.clear)
+                                )
+                            }
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Decimal
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {weight.requestFocus()})
                 )
-                OutlinedTextFieldCustom(
-                    label = R.string.cargo_weight,
+
+                OutlinedTextField(
                     value = viewModel.uiStateCreateProgressReportsDetailing.value.cargoWeight,
-                    onValueChange = viewModel::updateProgressReportsCargoWeight,
-                    tag = Tags.TAG_TEST_PROGRESS_REPORTS_CARGO_WEIGHT,
-                    modifier = Modifier.weight(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                    label = { Text(stringResource(R.string.cargo_weight)) },
+                    onValueChange = { viewModel.updateProgressReportsCargoWeight(it) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(weight),
+                    textStyle = typography.bodyLarge,
+                    trailingIcon = {
+                        if(viewModel.uiStateCreateProgressReportsDetailing.value.cargoWeight.isNotEmpty()) {
+                            IconButton(
+                                onClick = { viewModel.updateProgressReportsCargoWeight("") }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(R.string.clear)
+                                )
+                            }
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Decimal
+                    ),
+                    keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()})
                 )
             }
 
@@ -245,7 +352,9 @@ fun CreateReportsProgressReportsScreen(
     }
 
     BottomSheetSearch(
-        viewModel = viewModel
+        viewModel = viewModel,
+        townshipTwo = townshipTwo,
+        distance = distance
     )
 
     BottomSheetAddCity(
@@ -323,7 +432,9 @@ private fun ColumnProgressReports(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomSheetSearch(
-    viewModel: CreateProgressReportsViewModel
+    viewModel: CreateProgressReportsViewModel,
+    townshipTwo: FocusRequester,
+    distance: FocusRequester
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -342,7 +453,11 @@ private fun BottomSheetSearch(
                 if (viewModel.openListSearchCreateProgressReports.intValue == 0) {
                     ColumnSearchCountry(viewModel = viewModel)
                 } else {
-                    ColumnSearchTownship(viewModel = viewModel)
+                    ColumnSearchTownship(
+                        viewModel = viewModel,
+                        townshipTwo = townshipTwo,
+                        distance = distance
+                    )
                 }
 
                 Button(
@@ -461,7 +576,9 @@ private fun ColumnSearchCountry(
 @Composable
 private fun ColumnSearchTownship(
     viewModel: CreateProgressReportsViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    townshipTwo: FocusRequester,
+    distance: FocusRequester
 ) {
     val searchTextTownship by viewModel.searchTextTownship.collectAsState()
     val townshipsListTownship by viewModel.townshipsListTownship.collectAsState()
@@ -572,10 +689,12 @@ private fun ColumnSearchTownship(
                                     viewModel.updateProgressReportsTownshipOne(
                                         townshipsListTownship[element].township
                                     )
+                                    townshipTwo.requestFocus()
                                 } else {
                                     viewModel.updateProgressReportsTownshipTwo(
                                         townshipsListTownship[element].township
                                     )
+                                    distance.requestFocus()
                                 }
                                 viewModel.updateRatingTownship(townshipsListTownship[element].id)
                                 viewModel.closeBottomSheetSearch(

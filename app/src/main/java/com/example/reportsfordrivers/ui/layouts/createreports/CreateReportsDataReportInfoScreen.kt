@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
@@ -19,25 +20,38 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.sharp.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -60,14 +74,20 @@ import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateReportInfoViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.CountryDetailing
+import kotlinx.coroutines.launch
+import java.util.Date
 
 private const val TAG = "CreateReportsDataReportInfoScreen"
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreateReportsDataReportInfoScreen(
     viewModel: CreateReportInfoViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    val (date, township, waybill) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     BackHandler {
         navController.navigate(
@@ -97,24 +117,59 @@ fun CreateReportsDataReportInfoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            RowDateWithTextField(
-                openDialog = viewModel.openDialogDateCreateReportInfo,
-                date = viewModel.uiStateCreateReportInfo.value.date,
-                modifier = Modifier.weight(1f),
-                text = R.string.date_create_report
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.date_create_report),
+                    modifier = Modifier.weight(1f),
+                    style = typography.bodyLarge
+                )
+                OutlinedTextField(
+                    label = { Text(text = stringResource(R.string.date)) },
+                    value = viewModel.uiStateCreateReportInfo.value.date,
+                    onValueChange = {},
+                    modifier = Modifier.clickable {
+                        viewModel.openDialogDateCreateReportInfo.value = true
+                    }
+                        .focusRequester(date),
+                    readOnly = true,
+                    enabled = false,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Sharp.DateRange,
+                            contentDescription = stringResource(R.string.calendar),
+                            modifier = Modifier.clickable {
+                                viewModel.openDialogDateCreateReportInfo.value = true
+                            }
+                        )
+                    }
+                )
+            }
 
             OutlinedTextField(
                 value = viewModel.uiStateCreateReportInfo.value.mainCity,
                 onValueChange = viewModel::updateDataCreateReportInfoMainCity,
                 label = { Text(stringResource(R.string.township)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+                    .focusRequester(township),
+//                singleLine = true,
                 textStyle = typography.bodyLarge,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
-                    autoCorrect = true
+                    autoCorrect = true,
+                    imeAction = ImeAction.Next
                 ),
+                keyboardActions = KeyboardActions(onNext = {waybill.requestFocus()}),
                 trailingIcon = {
                     if (viewModel.uiStateCreateReportInfo.value.mainCity.isNotEmpty()) {
                         IconButton(
@@ -142,13 +197,30 @@ fun CreateReportsDataReportInfoScreen(
                 }
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.waybill,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateReportInfo.value.waybill,
-                onValueChange = viewModel::updateDataCreateReportInfoWaybill,
-                tag = Tags.TAG_TEST_DATA_REPORT_INFO_WAYBILL,
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                label = { Text(stringResource(R.string.waybill)) },
+                onValueChange = { viewModel.updateDataCreateReportInfoWaybill(it) },
+                modifier = Modifier.fillMaxWidth()
+                    .focusRequester(waybill),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateReportInfo.value.waybill.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreateReportInfoWaybill("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide()})
             )
         }
 
@@ -159,18 +231,62 @@ fun CreateReportsDataReportInfoScreen(
         )
     }
 
-    DatePickerDialogCustom(
-        openDialog = viewModel.openDialogDateCreateReportInfo,
-        onValueChange = viewModel::updateDataCreateReportInfoDate
+    DatePickerDialogCreate(
+        viewModel = viewModel,
+        township = township
     )
 
     BottomSheetSearch(
-        viewModel = viewModel
+        viewModel = viewModel,
+        waybill = waybill
     )
 
     BottomSheetAddCity(
         viewModel = viewModel
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DatePickerDialogCreate(
+    viewModel: CreateReportInfoViewModel,
+    township: FocusRequester
+) {
+    val snackScope = rememberCoroutineScope()
+    val datePickerState = rememberDatePickerState()
+    if(viewModel.openDialogDateCreateReportInfo.value) {
+        DatePickerDialog(
+            onDismissRequest = { viewModel.openDialogDateCreateReportInfo.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.openDialogDateCreateReportInfo.value = false
+                        if(datePickerState.selectedDateMillis != null) {
+                            snackScope.launch {
+                                viewModel.updateDataCreateReportInfoDate(datePickerState.selectedDateMillis.toString())
+                            }
+                        } else {
+                            viewModel.updateDataCreateReportInfoDate(Date().time.toString())
+                        }
+                        township.requestFocus()
+                    }
+                ) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { viewModel.openDialogDateCreateReportInfo.value = false }
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        ) {
+            DatePicker(
+                state = datePickerState
+            )
+        }
+    }
 }
 
 
@@ -183,7 +299,8 @@ fun CreateReportsDataReportInfoScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BottomSheetSearch(
-    viewModel: CreateReportInfoViewModel
+    viewModel: CreateReportInfoViewModel,
+    waybill: FocusRequester
 ) {
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -207,7 +324,8 @@ private fun BottomSheetSearch(
                 } else {
                     ColumnSearchTownship(
                         viewModel = viewModel,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        waybill = waybill
                     )
                 }
 
@@ -339,7 +457,8 @@ private fun ColumnSearchCountry(
 @Composable
 private fun ColumnSearchTownship(
     viewModel: CreateReportInfoViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    waybill: FocusRequester
 ) {
     val searchTextTownship by viewModel.searchTextTownship.collectAsState()
     val townshipsListTownship by viewModel.townshipsListTownship.collectAsState()
@@ -445,6 +564,7 @@ private fun ColumnSearchTownship(
                                 )
                                 viewModel.updateRatingTownship(townshipsListTownship[element].id)
                                 viewModel.closeBottomSheetSearch()
+                                waybill.requestFocus()
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ) {

@@ -307,13 +307,9 @@ class CreateReportInfoViewModel @Inject constructor(
                     )
                 )
             }
-            _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
-            Log.i(TAG, _countriesListCountry.value.joinToString("**"))
-
-            countriesListCountry = filterCountry()
-
-            Log.i(TAG, countriesListCountry.value.joinToString("::"))
         }
+        _countriesListCountry = MutableStateFlow(uiStateCountry.value.listCountries)
+        countriesListCountry = filterCountry()
     }
 
     override val uiStateTownship = mutableStateOf(Townships())

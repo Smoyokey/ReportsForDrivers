@@ -1,11 +1,14 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.DropdownMenuItem
@@ -20,8 +23,15 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -33,15 +43,22 @@ import com.example.reportsfordrivers.ui.layouts.custom.AlertDialogAddVehicle
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
 import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
+import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateVehicleTrailerViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.VehicleOrTrailer
 
-@OptIn(ExperimentalMaterial3Api::class)
+private const val TAG = "CreateReportsDataVehicleInfoScreen"
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun CreateReportsDataVehicleInfoScreen(
     viewModel: CreateVehicleTrailerViewModel = hiltViewModel<CreateVehicleTrailerViewModel>(),
     navController: NavHostController = rememberNavController()
 ) {
+
+    val (makeVehicle, rnVehicle, makeTrailer, rnTrailer) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     BackHandler {
         navController.navigate(
             ReportsForDriversSchema.PersonalInfo.name,
@@ -69,52 +86,116 @@ fun CreateReportsDataVehicleInfoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            ExposedDropdownMenuBox(
-                expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value,
-                onExpandedChange = {
-                    viewModel.openMenuMakeVehicleCreateVehicleTrailer.value =
-                        !viewModel.openMenuMakeVehicleCreateVehicleTrailer.value
+            if(viewModel.uiStateListVehicle.value.listVehicle.isNotEmpty()) {
+                ExposedDropdownMenuBox(
+                    expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value,
+                    onExpandedChange = {
+                        viewModel.openMenuMakeVehicleCreateVehicleTrailer.value =
+                            !viewModel.openMenuMakeVehicleCreateVehicleTrailer.value
+                    }
+                ) {
+                    OutlinedTextField(
+                        label = { Text(text = stringResource(R.string.make_vehicle)) },
+                        value = viewModel.uiStateCreateVehicleTrailer.value.makeVehicle,
+                        onValueChange = viewModel::updateDataCreateVehicleTrailerMakeVehicle,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        trailingIcon = {
+                            if(viewModel.uiStateCreateVehicleTrailer.value.makeVehicle.isNotEmpty()) {
+                                IconButton(
+                                    onClick = {viewModel.updateDataCreateVehicleTrailerMakeVehicle("")}
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Clear,
+                                        contentDescription = stringResource(R.string.clear)
+                                    )
+                                }
+                            } else if(viewModel.uiStateListVehicle.value.listVehicle.isNotEmpty()) {
+                                ExposedDropdownMenuDefaults.TrailingIcon(
+                                    expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value
+                                )
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {rnVehicle.requestFocus()})
+                    )
+                    ExposedDropdownMenu(
+                        expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value,
+                        onDismissRequest = {
+                            viewModel.openMenuMakeVehicleCreateVehicleTrailer.value = false
+                        })
+                    {
+                        for(i in viewModel.uiStateListVehicle.value.listVehicle) {
+                            DropdownMenuItem(
+                                text = { Text(text = "${i.makeVehicle}: ${i.rnVehicle}") },
+                                onClick = {
+                                    viewModel.updateDataCreateVehicleTrailerMakeVehicle(i.makeVehicle)
+                                    viewModel.updateDataCreateVehicleTrailerRnVehicle(i.rnVehicle)
+                                    viewModel.openMenuMakeVehicleCreateVehicleTrailer.value = false
+                                    makeTrailer.requestFocus()
+                                }
+                            )
+                        }
+                    }
                 }
-            ) {
+            } else { //Если нет ниодного добавленного транспорта
                 OutlinedTextField(
-                    label = { Text(text = stringResource(R.string.make_vehicle)) },
                     value = viewModel.uiStateCreateVehicleTrailer.value.makeVehicle,
-                    onValueChange = viewModel::updateDataCreateVehicleTrailerMakeVehicle,
+                    label = { Text(stringResource(R.string.make_vehicle)) },
+                    onValueChange = { viewModel.updateDataCreateVehicleTrailerMakeVehicle(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor(),
+                        .focusRequester(makeVehicle),
+                    textStyle = typography.bodyLarge,
                     trailingIcon = {
-
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value
-                        )
-                    }
-                )
-                ExposedDropdownMenu(
-                    expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value,
-                    onDismissRequest = {
-                        viewModel.openMenuMakeVehicleCreateVehicleTrailer.value = false
-                    })
-                {
-                    for(i in viewModel.uiStateListVehicle.value.listVehicle) {
-                        DropdownMenuItem(
-                            text = { Text(text = "${i.makeVehicle}: ${i.rnVehicle}") },
-                            onClick = {
-                                viewModel.updateDataCreateVehicleTrailerMakeVehicle(i.makeVehicle)
-                                viewModel.updateDataCreateVehicleTrailerRnVehicle(i.rnVehicle)
-                                viewModel.openMenuMakeVehicleCreateVehicleTrailer.value = false
+                        if(viewModel.uiStateCreateVehicleTrailer.value.makeVehicle.isNotEmpty()) {
+                            IconButton(
+                                onClick = { viewModel.updateDataCreateVehicleTrailerMakeVehicle("") }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(R.string.clear)
+                                )
                             }
-                        )
-                    }
-                }
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {rnVehicle.requestFocus()})
+                )
             }
 
-            OutlinedTextFieldCustom(
-                label = R.string.rn_vehicle,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateVehicleTrailer.value.rnVehicle,
-                onValueChange = viewModel::updateDataCreateVehicleTrailerRnVehicle,
-                tag = "",
-                modifier = Modifier.fillMaxWidth()
+                label = { Text(stringResource(R.string.rn_vehicle)) },
+                onValueChange = { viewModel.updateDataCreateVehicleTrailerRnVehicle(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(rnVehicle),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateVehicleTrailer.value.rnVehicle.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreateVehicleTrailerRnVehicle("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = {makeTrailer.requestFocus()})
             )
 
             TextButton(
@@ -127,65 +208,119 @@ fun CreateReportsDataVehicleInfoScreen(
             }
 
 
-            ExposedDropdownMenuBox(
-                expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value,
-                onExpandedChange = {
-                    viewModel.openMenuMakeTrailerCreateVehicleTrailer.value =
-                        !viewModel.openMenuMakeTrailerCreateVehicleTrailer.value
+            if(viewModel.uiStateListTrailer.value.listTrailer.isNotEmpty()) {
+                ExposedDropdownMenuBox(
+                    expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value,
+                    onExpandedChange = {
+                        viewModel.openMenuMakeTrailerCreateVehicleTrailer.value =
+                            !viewModel.openMenuMakeTrailerCreateVehicleTrailer.value
+                    }
+                ) {
+                    OutlinedTextField(
+                        label = { Text(text = stringResource(R.string.make_trailer)) },
+                        value = viewModel.uiStateCreateVehicleTrailer.value.makeTrailer,
+                        onValueChange = viewModel::updateDataCreateVehicleTrailerMakeTrailer,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(makeTrailer)
+                            .menuAnchor(),
+                        trailingIcon = {
+                            if(viewModel.uiStateCreateVehicleTrailer.value.makeTrailer.isEmpty()) {
+                                ExposedDropdownMenuDefaults.TrailingIcon(
+                                    expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value
+                                )
+                            } else {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.updateDataCreateVehicleTrailerMakeTrailer("")
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Clear,
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {rnTrailer.requestFocus()})
+                    )
+                    ExposedDropdownMenu(
+                        expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value,
+                        onDismissRequest = {
+                            viewModel.openMenuMakeTrailerCreateVehicleTrailer.value = false
+                        })
+                    {
+                        for(i in viewModel.uiStateListTrailer.value.listTrailer) {
+                            DropdownMenuItem(
+                                text = { Text(text = "${i.makeTrailer}: ${i.rnTrailer}") },
+                                onClick = {
+                                    viewModel.updateDataCreateVehicleTrailerMakeTrailer(i.makeTrailer)
+                                    viewModel.updateDataCreateVehicleTrailerRnTrailer(i.rnTrailer)
+                                    viewModel.openMenuMakeTrailerCreateVehicleTrailer.value = false
+                                    keyboardController?.hide()
+                                }
+                            )
+                        }
+                    }
                 }
-            ) {
+            } else {
                 OutlinedTextField(
-                    label = { Text(text = stringResource(R.string.make_trailer)) },
                     value = viewModel.uiStateCreateVehicleTrailer.value.makeTrailer,
-                    onValueChange = viewModel::updateDataCreateVehicleTrailerMakeTrailer,
+                    label = { Text(stringResource(R.string.make_trailer)) },
+                    onValueChange = { viewModel.updateDataCreateVehicleTrailerMakeTrailer("") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor(),
+                        .focusRequester(makeTrailer),
+                    textStyle = typography.bodyLarge,
                     trailingIcon = {
-                        if(viewModel.uiStateCreateVehicleTrailer.value.makeTrailer.isEmpty()) {
-                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value
-                            )
-                        } else {
+                        if(viewModel.uiStateCreateVehicleTrailer.value.makeTrailer.isNotEmpty()) {
                             IconButton(
-                                onClick = {
-                                    viewModel.updateDataCreateVehicleTrailerMakeTrailer("")
-                                }
+                                onClick = { viewModel.updateDataCreateVehicleTrailerMakeTrailer("")}
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.Clear,
-                                    contentDescription = null
+                                    contentDescription = stringResource(R.string.clear)
                                 )
                             }
                         }
-
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {rnTrailer.requestFocus()})
                 )
-                ExposedDropdownMenu(
-                    expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value,
-                    onDismissRequest = {
-                        viewModel.openMenuMakeTrailerCreateVehicleTrailer.value = false
-                    })
-                {
-                    for(i in viewModel.uiStateListTrailer.value.listTrailer) {
-                        DropdownMenuItem(
-                            text = { Text(text = "${i.makeTrailer}: ${i.rnTrailer}") },
-                            onClick = {
-                                viewModel.updateDataCreateVehicleTrailerMakeTrailer(i.makeTrailer)
-                                viewModel.updateDataCreateVehicleTrailerRnTrailer(i.rnTrailer)
-                                viewModel.openMenuMakeTrailerCreateVehicleTrailer.value = false
-                            }
-                        )
-                    }
-                }
             }
 
-            OutlinedTextFieldCustom(
-                label = R.string.rn_trailer,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateVehicleTrailer.value.rnTrailer,
-                onValueChange = viewModel::updateDataCreateVehicleTrailerRnTrailer,
-                tag = "",
-                modifier = Modifier.fillMaxWidth()
+                label = { Text(stringResource(R.string.rn_trailer)) },
+                onValueChange = { viewModel.updateDataCreateVehicleTrailerRnTrailer(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(rnTrailer),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if(viewModel.uiStateCreateVehicleTrailer.value.rnTrailer.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateDataCreateVehicleTrailerRnTrailer("")}
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Characters,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()})
             )
 
             TextButton(

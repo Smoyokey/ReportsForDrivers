@@ -597,6 +597,22 @@ fun BottomSheetAddCity(
                 modifier = Modifier.fillMaxWidth()
             ) {}
 
+            if(viewModel.addCityUiState.value.country.country.isNotEmpty()) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text( text = viewModel.addCityUiState.value.country.country )
+                    IconButton(
+                        onClick = {
+                            viewModel.updateAddCityCountry(CountryDetailing())
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Clear,
+                            contentDescription = stringResource(R.string.clear)
+                        )
+                    }
+                }
+            }
+
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {

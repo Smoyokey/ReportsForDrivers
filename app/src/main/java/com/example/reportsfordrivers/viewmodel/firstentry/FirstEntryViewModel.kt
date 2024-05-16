@@ -146,6 +146,7 @@ class FirstEntryViewModel @Inject constructor(
      */
     fun addElementVehicle() {
         uiState.value.listVehicles.add(createObjectVehicle())
+        Log.i(TAG, uiState.value.listVehicles.joinToString("::"))
         resetVehicle()
         Log.i(TAG, "Add Element vehicle")
     }

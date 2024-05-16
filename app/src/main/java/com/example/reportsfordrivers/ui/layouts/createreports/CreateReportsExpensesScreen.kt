@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -35,8 +36,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -60,15 +66,15 @@ import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateExpensesTripViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreateReportsExpensesScreen(
     viewModel: CreateExpensesTripViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
 
-//    if (viewModel.listCurrency.value.isEmpty()) {
-//        viewModel.startCurrency()
-//    }
+    val (date, documentNumber, expenseItem, sum, currency) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     BackHandler {
         navController.navigate(
@@ -86,7 +92,7 @@ fun CreateReportsExpensesScreen(
         viewModel.openDialogDateCreateExpensesTrip.value = true
 
     Column {
-        TabRowCustom( index = 5, navController = navController, isEnabledSix = false)
+        TabRowCustom(index = 5, navController = navController, isEnabledSix = false)
 
         Column(
             modifier = Modifier
@@ -103,41 +109,92 @@ fun CreateReportsExpensesScreen(
                 text = R.string.date
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.document_number,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateExpensesTripDetailing.value.documentNumber,
-                onValueChange = viewModel::updateCreateExpensesTripDocumentNumber,
-                tag = Tags.TAG_TEST_EXPENSES_DOCUMENT_NUMBER,
-                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.document_number)) },
+                onValueChange = { viewModel.updateCreateExpensesTripDocumentNumber(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(documentNumber),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.uiStateCreateExpensesTripDetailing.value.documentNumber.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateCreateExpensesTripDocumentNumber("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    autoCorrect = true
-                )
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { expenseItem.requestFocus() })
             )
 
-            OutlinedTextFieldCustom(
-                label = R.string.expense_item,
+            OutlinedTextField(
                 value = viewModel.uiStateCreateExpensesTripDetailing.value.expenseItem,
-                onValueChange = viewModel::updateCreateExpensesTripExpenseItem,
-                tag = Tags.TAG_TEST_EXPENSES_EXPENSE_ITEM,
-                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.expense_item)) },
+                onValueChange = { viewModel.updateCreateExpensesTripExpenseItem(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(expenseItem),
+                textStyle = typography.bodyLarge,
+                trailingIcon = {
+                    if (viewModel.uiStateCreateExpensesTripDetailing.value.expenseItem.isNotEmpty()) {
+                        IconButton(
+                            onClick = { viewModel.updateCreateExpensesTripExpenseItem("") }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Clear,
+                                contentDescription = stringResource(R.string.clear)
+                            )
+                        }
+                    }
+                },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    autoCorrect = true
-                )
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { sum.requestFocus() })
             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedTextFieldCustom(
-                    label = R.string.sum,
+
+                OutlinedTextField(
                     value = viewModel.uiStateCreateExpensesTripDetailing.value.sum,
-                    onValueChange = viewModel::updateCreateExpensesTripSum,
-                    tag = Tags.TAG_TEST_EXPENSES_SUM,
-                    modifier = Modifier.weight(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                    label = { Text(stringResource(R.string.sum)) },
+                    onValueChange = { viewModel.updateCreateExpensesTripSum(it) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(sum),
+                    textStyle = typography.bodyLarge,
+                    trailingIcon = {
+                        if (viewModel.uiStateCreateExpensesTripDetailing.value.sum.isNotEmpty()) {
+                            IconButton(
+                                onClick = { viewModel.updateCreateExpensesTripSum("") }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(id = R.string.clear)
+                                )
+                            }
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal,
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        viewModel.openBottomSheetCurrencyCreateExpensesTrip.value = true
+                    })
                 )
 
                 OutlinedTextField(
