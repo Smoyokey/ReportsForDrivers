@@ -20,4 +20,6 @@ class TrailerDiRepo @Inject constructor(private val trailerDao: TrailerDao) : Tr
     override suspend fun deleteItem(item: Trailer) = trailerDao.delete(item)
 
     override suspend fun updateItem(item: Trailer) = trailerDao.update(item)
+
+    override suspend fun getLastId(): Int = trailerDao.getLastId()
 }

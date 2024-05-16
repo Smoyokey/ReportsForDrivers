@@ -26,9 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.MainActivity
 import com.example.reportsfordrivers.R
+import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.theme.typography
+import com.example.reportsfordrivers.viewmodel.MainMenuViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.CreatePreviewAndResultViewModel
 
 private const val TAG = "CreateReportsResultScreen"
@@ -42,9 +46,10 @@ data class PermissionScreenState(
 
 @Composable
 fun CreateReportsResultScreen(
-    viewModel: CreatePreviewAndResultViewModel = hiltViewModel<CreatePreviewAndResultViewModel>()
+    viewModel: CreatePreviewAndResultViewModel = hiltViewModel<CreatePreviewAndResultViewModel>(),
+    viewModelMainMenu: MainMenuViewModel = hiltViewModel<MainMenuViewModel>(),
+    navController: NavHostController = rememberNavController()
 ) {
-//    val permissionScreenState: MutableState<>
 
     val context = LocalContext.current
     val permission = rememberLauncherForActivityResult(
@@ -89,6 +94,8 @@ fun CreateReportsResultScreen(
                         }
                         else -> {
                             viewModel.saveFile(context)
+//                            viewModel.saveDataInBd()
+                            navController.navigate(ReportsForDriversSchema.Start.name)
                             Log.i(TAG, "ELSE")
                         }
                     }

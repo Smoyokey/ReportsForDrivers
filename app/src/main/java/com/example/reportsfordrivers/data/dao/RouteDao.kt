@@ -28,4 +28,7 @@ interface RouteDao {
 
     @Query("DELETE FROM ROUTE WHERE id = :id")
     suspend fun deleteOneElementForId(id: Int)
+
+    @Query("SELECT id FROM ROUTE ORDER BY id DESC LIMIT 1")
+    suspend fun getLastId(): Int
 }

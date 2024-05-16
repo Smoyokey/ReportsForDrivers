@@ -20,4 +20,6 @@ class ReportNameDiRepo @Inject constructor(private val reportNameDao: ReportName
     override suspend fun deleteItem(item: ReportName) = reportNameDao.delete(item)
 
     override suspend fun updateItem(item: ReportName) = reportNameDao.update(item)
+
+    override suspend fun getLastId(): Int = reportNameDao.getLastId()
 }

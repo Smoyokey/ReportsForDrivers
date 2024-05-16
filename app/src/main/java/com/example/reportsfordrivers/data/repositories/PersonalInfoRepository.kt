@@ -15,4 +15,6 @@ interface PersonalInfoRepository {
     suspend fun deleteItem(item: PersonalInfo)
 
     suspend fun updateItem(item: PersonalInfo)
+
+    suspend fun getLastId(): Int
 }

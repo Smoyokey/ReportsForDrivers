@@ -21,4 +21,6 @@ class PersonalInfoDiRepo @Inject constructor(private val personalInfoDao: Person
     override suspend fun deleteItem(item: PersonalInfo) = personalInfoDao.delete(item)
 
     override suspend fun updateItem(item: PersonalInfo) = personalInfoDao.update(item)
+
+    override suspend fun getLastId(): Int = personalInfoDao.getLastId()
 }

@@ -13,12 +13,28 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
+import com.example.reportsfordrivers.data.dao.MainInfoDao
+import com.example.reportsfordrivers.data.dao.PersonalInfoDao
+import com.example.reportsfordrivers.data.dao.ProgressReportDao
+import com.example.reportsfordrivers.data.dao.ReportNameDao
+import com.example.reportsfordrivers.data.dao.RouteDao
+import com.example.reportsfordrivers.data.dao.TrailerDao
+import com.example.reportsfordrivers.data.dao.TripExpensesDao
+import com.example.reportsfordrivers.data.dao.VehicleDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateExpensesTripDao
 import com.example.reportsfordrivers.data.dao.createReport.CreatePersonalInfoDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReportsDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateReportInfoDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateRouteDao
 import com.example.reportsfordrivers.data.dao.createReport.CreateVehicleTrailerDao
+import com.example.reportsfordrivers.data.structure.MainInfo
+import com.example.reportsfordrivers.data.structure.PersonalInfo
+import com.example.reportsfordrivers.data.structure.ProgressReport
+import com.example.reportsfordrivers.data.structure.ReportName
+import com.example.reportsfordrivers.data.structure.Route
+import com.example.reportsfordrivers.data.structure.Trailer
+import com.example.reportsfordrivers.data.structure.TripExpenses
+import com.example.reportsfordrivers.data.structure.Vehicle
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreatePersonalInfoUiState
@@ -64,6 +80,30 @@ class CreatePreviewAndResultViewModel @Inject constructor(
     @Inject
     lateinit var createExpensesTripDb: CreateExpensesTripDao
 
+
+    @Inject
+    lateinit var mainInfoDb: MainInfoDao
+
+    @Inject
+    lateinit var reportNameDb: ReportNameDao
+
+    @Inject
+    lateinit var personalInfoDb: PersonalInfoDao
+
+    @Inject
+    lateinit var vehicleDb: VehicleDao
+
+    @Inject
+    lateinit var trailerDb: TrailerDao
+
+    @Inject
+    lateinit var routeDb: RouteDao
+
+    @Inject
+    lateinit var progressReportsDb: ProgressReportDao
+
+    @Inject
+    lateinit var expensesTripDb: TripExpensesDao
 
     @SuppressLint("StaticFieldLeak")
     lateinit var activity: Activity
@@ -138,7 +178,7 @@ class CreatePreviewAndResultViewModel @Inject constructor(
     private fun loadCreateProgressReports() = runBlocking {
         val createProgressReports = createProgressReportsDb.getAllItem().first()
         for (i in createProgressReports) {
-            if(i.isAdd == 1) {
+            if (i.isAdd == 1) {
                 uiState.value.listDataCreateProgressReports.add(
                     CreateProgressReportsDetailingUiState(
                         country = i.country,
@@ -156,7 +196,7 @@ class CreatePreviewAndResultViewModel @Inject constructor(
     private fun loadCreateExpensesTrip() = runBlocking {
         val createExpensesTrip = createExpensesTripDb.getAllItem().first()
         for (i in createExpensesTrip) {
-            if(i.isAdd == 1) {
+            if (i.isAdd == 1) {
                 uiState.value.listDataCreateExpensesTrip.add(
                     CreateExpensesTripDetailingUiState(
                         date = i.date,
@@ -171,9 +211,119 @@ class CreatePreviewAndResultViewModel @Inject constructor(
     }
 
 
-
     fun updatePreviewReportName(reportName: String) {
         uiState.value = uiState.value.copy(reportName = reportName)
+    }
+
+    fun saveDataInBd() {
+        savePersonalInfo()
+        saveVehicle()
+        saveTrailer()
+        saveRoute()
+        saveReportName()
+        saveProgressReports()
+        saveExpensesTrip()
+        saveMainInfo()
+    }
+
+    private fun savePersonalInfo() = runBlocking {
+        personalInfoDb.insert(
+            PersonalInfo(
+                lastName = uiState.value.dataCreatePersonalInfo.lastName,
+                firstName = uiState.value.dataCreatePersonalInfo.firstName,
+                patronymic = uiState.value.dataCreatePersonalInfo.patronymic
+            )
+        )
+    }
+
+    private fun saveVehicle() = runBlocking {
+        vehicleDb.insert(
+            Vehicle(
+                makeVehicle = uiState.value.dataCreateVehicleInfo.makeVehicle,
+                registrationNumberVehicle = uiState.value.dataCreateVehicleInfo.rnVehicle
+            )
+        )
+    }
+
+    private fun saveTrailer() = runBlocking {
+        trailerDb.insert(
+            Trailer(
+                makeTrailer = uiState.value.dataCreateVehicleInfo.makeTrailer,
+                registrationNumberTrailer = uiState.value.dataCreateVehicleInfo.rnTrailer
+            )
+        )
+    }
+
+    private fun saveRoute() = runBlocking {
+        routeDb.insert(
+            Route(
+                route = uiState.value.dataCreateRoute.route,
+                dateDeparture = uiState.value.dataCreateRoute.dateDeparture,
+                dateReturn = uiState.value.dataCreateRoute.dateReturn,
+                dateBorderCrossingDeparture = uiState.value.dataCreateRoute.dateCrossingDeparture,
+                dateBorderCrossingReturn = uiState.value.dataCreateRoute.dateCrossingReturn,
+                speedometerReadingDeparture = uiState.value.dataCreateRoute.speedometerDeparture,
+                speedometerReadingReturn = uiState.value.dataCreateRoute.speedometerReturn,
+                fuelled = uiState.value.dataCreateRoute.fuelled
+            )
+        )
+    }
+
+    private fun saveProgressReports() = runBlocking {
+        for(i in uiState.value.listDataCreateProgressReports) {
+            progressReportsDb.insert(
+                ProgressReport(
+                    date = i.date,
+                    country = i.country,
+                    townshipOne = i.townshipOne,
+                    townshipTwo = i.townshipTwo,
+                    distance = i.distance,
+                    weight = i.cargoWeight,
+                    reportNameId = reportNameDb.getLastId()
+                )
+            )
+        }
+    }
+
+    private fun saveExpensesTrip() = runBlocking {
+        if(uiState.value.listDataCreateExpensesTrip.isEmpty()) return@runBlocking
+        for(i in uiState.value.listDataCreateExpensesTrip) {
+            expensesTripDb.insert(
+                TripExpenses(
+                    date = i.date,
+                    documentNumber = i.documentNumber,
+                    expenseItem = i.expenseItem,
+                    sum = i.sum,
+                    currency = i.currency,
+                    reportNameId = reportNameDb.getLastId()
+                )
+            )
+        }
+    }
+
+    private fun saveReportName() = runBlocking {
+        reportNameDb.insert(
+            ReportName(
+                waybill = uiState.value.dataCreateReportInfo.waybill,
+                mainCity = uiState.value.dataCreateReportInfo.mainCity,
+                date = uiState.value.dataCreateReportInfo.date,
+                personalInfoId = personalInfoDb.getLastId(),
+                vehicleId = vehicleDb.getLastId(),
+                trailerId = trailerDb.getLastId(),
+                routeId = routeDb.getLastId()
+            )
+        )
+    }
+
+    private fun saveMainInfo() = runBlocking {
+        mainInfoDb.insert(
+            MainInfo(
+                nameReport = uiState.value.reportName,
+                dateCreate = uiState.value.dataCreateReportInfo.date,
+                routeMainInfo = uiState.value.dataCreateRoute.route,
+                reportNameId = reportNameDb.getLastId()
+            )
+        )
     }
 
 

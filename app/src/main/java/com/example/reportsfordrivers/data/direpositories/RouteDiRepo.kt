@@ -20,4 +20,6 @@ class RouteDiRepo @Inject constructor(private val routeDao: RouteDao) : RouteRep
     override suspend fun deleteItem(item: Route) = routeDao.delete(item)
 
     override suspend fun updateItem(item: Route) = routeDao.update(item)
+
+    override suspend fun getLastId(): Int = routeDao.getLastId()
 }

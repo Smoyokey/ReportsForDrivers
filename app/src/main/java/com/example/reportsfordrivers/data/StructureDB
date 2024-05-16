@@ -65,7 +65,7 @@
 6. Валюта. Тип: String. Название: "currency". NOT NULL.
 7. Связь со второй таблицей. Тип: Int. Название: "reportNameId". NOT NULL.
 
-Девятая таблица VehicleTrailerSaveData (vehicle_trailer_save_data(
+Девятая таблица VehicleTrailerSaveData (vehicle_trailer_save_data)
 1. Порядковый номер. Тип: Int. Название: "id". NOT NULL, PRIMARY KEY, AUTOINCREMENT.
 2. Машина или прицеп. Тип: String. Название: "vehicleOrTrailer". NOT NULL.
 3. Марка. Тип: String. Название: "make". NOT NULL.

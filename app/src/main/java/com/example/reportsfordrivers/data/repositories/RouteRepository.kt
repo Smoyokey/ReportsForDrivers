@@ -15,4 +15,6 @@ interface RouteRepository {
     suspend fun deleteItem(item: Route)
 
     suspend fun updateItem(item: Route)
+
+    suspend fun getLastId(): Int
 }

@@ -15,4 +15,6 @@ interface TrailerRepository {
     suspend fun deleteItem(item: Trailer)
 
     suspend fun updateItem(item: Trailer)
+
+    suspend fun getLastId(): Int
 }

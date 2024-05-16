@@ -191,7 +191,9 @@ fun ReportsForDriversNavHost(
         }
         composable(route = ReportsForDriversSchema.Result.name) {
             CreateReportsResultScreen(
-                viewModel = viewModelCreatePreviewAndResult
+                viewModel = viewModelCreatePreviewAndResult,
+                viewModelMainMenu = viewModelMain,
+                navController = navController
             )
         }
 

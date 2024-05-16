@@ -15,4 +15,6 @@ interface ReportNameRepository {
     suspend fun deleteItem(item: ReportName)
 
     suspend fun updateItem(item: ReportName)
+
+    suspend fun getLastId(): Int
 }

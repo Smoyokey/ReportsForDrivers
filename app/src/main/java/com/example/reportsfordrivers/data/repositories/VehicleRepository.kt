@@ -15,4 +15,6 @@ interface  VehicleRepository {
     suspend fun deleteItem(item: Vehicle)
 
     suspend fun updateItem(item: Vehicle)
+
+    suspend fun getLastId(): Int
 }

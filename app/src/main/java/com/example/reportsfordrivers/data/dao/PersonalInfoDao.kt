@@ -28,4 +28,7 @@ interface PersonalInfoDao {
 
     @Query("DELETE FROM PERSONAL_INFO WHERE id = :id")
     suspend fun deleteOneElementForId(id: Int)
+
+    @Query("SELECT id FROM PERSONAL_INFO ORDER BY id DESC LIMIT 1")
+    suspend fun getLastId(): Int
 }

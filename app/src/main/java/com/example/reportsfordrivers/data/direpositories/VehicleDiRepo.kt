@@ -20,4 +20,6 @@ class VehicleDiRepo @Inject constructor(private val vehicleDao: VehicleDao) : Ve
     override suspend fun deleteItem(item: Vehicle) = vehicleDao.delete(item)
 
     override suspend fun updateItem(item: Vehicle) = vehicleDao.delete(item)
+
+    override suspend fun getLastId(): Int = vehicleDao.getLastId()
 }

@@ -17,6 +17,8 @@ class MainMenuViewModel @Inject constructor(
 
     val isToBeContinued = mutableStateOf(isToBeContinued())
 
+    val openSnackBarSaveReport = mutableStateOf(false)
+
     fun isFirstEntry(): Boolean = runBlocking {
         return@runBlocking firstEntryPreferencesRepository.getFirstEntry().getOrNull() ?: false
     }

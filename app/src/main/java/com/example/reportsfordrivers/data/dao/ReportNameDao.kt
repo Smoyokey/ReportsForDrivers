@@ -28,4 +28,7 @@ interface ReportNameDao {
 
     @Query("DELETE FROM REPORT_NAME WHERE id = :id")
     suspend fun deleteOneElementForId(id: Int)
+
+    @Query("SELECT id FROM REPORT_NAME ORDER BY id DESC LIMIT 1")
+    suspend fun getLastId(): Int
 }
