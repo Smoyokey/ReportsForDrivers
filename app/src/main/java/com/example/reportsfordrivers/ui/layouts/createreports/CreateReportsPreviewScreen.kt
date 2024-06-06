@@ -124,8 +124,6 @@ fun CreateReportsPreviewScreen(
                     )
                 }
             }
-
-
         }
 
         BottomBarCustom(
@@ -135,7 +133,7 @@ fun CreateReportsPreviewScreen(
 }
 
 @Composable
-fun LinePreviewText(@StringRes textName: Int, previewText: String) {
+private fun LinePreviewText(@StringRes textName: Int, previewText: String) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -158,7 +156,7 @@ fun LinePreviewText(@StringRes textName: Int, previewText: String) {
 }
 
 @Composable
-fun ProgressReportItem(item: CreateProgressReportsDetailingUiState, size: Int, current: Int) {
+private fun ProgressReportItem(item: CreateProgressReportsDetailingUiState, size: Int, current: Int) {
     Column {
         RowProgressAndExpenses(title = R.string.date, text = item.date)
         RowProgressAndExpenses(title = R.string.country, text = item.country)
@@ -171,7 +169,7 @@ fun ProgressReportItem(item: CreateProgressReportsDetailingUiState, size: Int, c
 }
 
 @Composable
-fun TripExpensesItem(item: CreateExpensesTripDetailingUiState, size: Int, current: Int) {
+private fun TripExpensesItem(item: CreateExpensesTripDetailingUiState, size: Int, current: Int) {
     Column {
         RowProgressAndExpenses(title = R.string.date, text = item.date)
         RowProgressAndExpenses(title = R.string.document_number, text = item.documentNumber)

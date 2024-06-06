@@ -20,6 +20,9 @@ interface ReportNameDao {
     @Update
     suspend fun update(item: ReportName)
 
+    @Query("UPDATE report_name SET waybill = :waybill, main_city = :mainCity, date = :date WHERE id = :id")
+    suspend fun updateWaybillMainCityDate(waybill: String, mainCity: String, date: String, id: Int)
+
     @Query("SELECT * FROM report_name")
     fun getAllItem(): Flow<List<ReportName>>
 

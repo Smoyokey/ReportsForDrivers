@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reportsfordrivers.data.dao.CountryDao
 import com.example.reportsfordrivers.data.dao.TownshipDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateRouteDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateRouteDao
 import com.example.reportsfordrivers.data.structure.Township
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.interfaces.search.SearchCountry
@@ -305,7 +305,7 @@ class CreateRouteViewModel @Inject constructor(
 
     override val _isSearchingTownship = MutableStateFlow(false)
     override val _searchTextTownship = MutableStateFlow("")
-    override val searchTextTownship = _searchTextCountry.asStateFlow()
+    override val searchTextTownship = _searchTextTownship.asStateFlow()
     override var _townshipsListTownship = MutableStateFlow(uiStateTownship.value.listTownships)
     override var townshipsListTownship = filterTownship()
 

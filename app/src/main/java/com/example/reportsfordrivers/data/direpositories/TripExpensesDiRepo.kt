@@ -16,9 +16,15 @@ class TripExpensesDiRepo @Inject constructor(private val tripExpensesDao: TripEx
 
     override suspend fun deleteOneElementForId(id: Int) = tripExpensesDao.deleteOneElementForId(id)
 
+    override suspend fun deleteAllElementsForReportNameId(reportNameId: Int) =
+        tripExpensesDao.deleteAllElementsForReportNameId(reportNameId)
+
     override suspend fun insertItem(item: TripExpenses) = tripExpensesDao.insert(item)
 
     override suspend fun deleteItem(item: TripExpenses) = tripExpensesDao.delete(item)
 
     override suspend fun updateItem(item: TripExpenses) = tripExpensesDao.update(item)
+
+    override fun getAllElementsForReportNameId(reportNameId: Int): Flow<List<TripExpenses>> =
+        tripExpensesDao.getAllElementsForReportNameId(reportNameId)
 }

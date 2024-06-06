@@ -15,4 +15,13 @@ interface MainInfoRepository {
     suspend fun deleteItem (item: MainInfo)
 
     suspend fun updateItem (item: MainInfo)
+
+    suspend fun updateNameReportDateCreateRouteMainInfoForId(
+        nameReport: String,
+        dateCreate: String,
+        routeMainInfo: String,
+        id: Int
+    )
+
+    suspend fun getLastNameReport(): String
 }

@@ -10,9 +10,13 @@ interface TripExpensesRepository {
 
     suspend fun deleteOneElementForId(id: Int)
 
+    suspend fun deleteAllElementsForReportNameId(reportNameId: Int)
+
     suspend fun insertItem(item: TripExpenses)
 
     suspend fun deleteItem(item: TripExpenses)
 
     suspend fun updateItem(item: TripExpenses)
+
+    fun getAllElementsForReportNameId(reportNameId: Int): Flow<List<TripExpenses>>
 }

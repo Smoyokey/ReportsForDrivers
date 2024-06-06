@@ -31,10 +31,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
-import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
-import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreatePersonalInfoViewModel

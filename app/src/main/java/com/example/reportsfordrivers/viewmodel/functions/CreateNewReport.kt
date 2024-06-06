@@ -1,17 +1,17 @@
 package com.example.reportsfordrivers.viewmodel.functions
 
-import com.example.reportsfordrivers.data.dao.createReport.CreateExpensesTripDao
-import com.example.reportsfordrivers.data.dao.createReport.CreatePersonalInfoDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReportsDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateReportInfoDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateRouteDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateVehicleTrailerDao
-import com.example.reportsfordrivers.data.structure.createReport.CreateExpensesTrip
-import com.example.reportsfordrivers.data.structure.createReport.CreatePersonalInfo
-import com.example.reportsfordrivers.data.structure.createReport.CreateProgressReports
-import com.example.reportsfordrivers.data.structure.createReport.CreateReportInfo
-import com.example.reportsfordrivers.data.structure.createReport.CreateRoute
-import com.example.reportsfordrivers.data.structure.createReport.CreateVehicleTrailer
+import com.example.reportsfordrivers.data.dao.createreport.CreateExpensesTripDao
+import com.example.reportsfordrivers.data.dao.createreport.CreatePersonalInfoDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateProgressReportsDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateReportInfoDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateRouteDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateVehicleTrailerDao
+import com.example.reportsfordrivers.data.structure.createreport.CreateExpensesTrip
+import com.example.reportsfordrivers.data.structure.createreport.CreatePersonalInfo
+import com.example.reportsfordrivers.data.structure.createreport.CreateProgressReports
+import com.example.reportsfordrivers.data.structure.createreport.CreateReportInfo
+import com.example.reportsfordrivers.data.structure.createreport.CreateRoute
+import com.example.reportsfordrivers.data.structure.createreport.CreateVehicleTrailer
 import kotlinx.coroutines.runBlocking
 
 object CreateNewReport {

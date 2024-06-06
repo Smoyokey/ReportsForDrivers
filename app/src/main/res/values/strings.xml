@@ -154,4 +154,7 @@
     <string name="by_popularity" tools:ignore="MissingTranslation">By popularity</string>
     <string name="favorite" tools:ignore="MissingTranslation">Favorite</string>
 
+    <!-- HistoryReportsList -->
+    <string name="export_to_word" tools:ignore="MissingTranslation">Export to MS Word</string>
+
 </resources>

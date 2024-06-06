@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reportsfordrivers.data.dao.CountryDao
 import com.example.reportsfordrivers.data.dao.TownshipDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReportsDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateProgressReportsDao
 import com.example.reportsfordrivers.data.structure.Township
-import com.example.reportsfordrivers.data.structure.createReport.CreateProgressReports
+import com.example.reportsfordrivers.data.structure.createreport.CreateProgressReports
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.interfaces.search.SearchCountry
 import com.example.reportsfordrivers.interfaces.search.SearchTownship
@@ -138,7 +138,7 @@ class CreateProgressReportsViewModel @Inject constructor(
         }
     }
 
-    fun updateProgressReportsTownshipOne(townshipOne: String, id: Int = 0) {
+    fun updateProgressReportsTownshipOne(townshipOne: String) {
         uiStateCreateProgressReportsDetailing.value =
             uiStateCreateProgressReportsDetailing.value.copy(
                 townshipOne = townshipOne
@@ -151,7 +151,7 @@ class CreateProgressReportsViewModel @Inject constructor(
         }
     }
 
-    fun updateProgressReportsTownshipTwo(townshipTwo: String, id: Int = 0) {
+    fun updateProgressReportsTownshipTwo(townshipTwo: String) {
         uiStateCreateProgressReportsDetailing.value =
             uiStateCreateProgressReportsDetailing.value.copy(
                 townshipTwo = townshipTwo
@@ -242,7 +242,7 @@ class CreateProgressReportsViewModel @Inject constructor(
         uiStateCreateProgressReports.value.createProgressReportsList.removeAt(position)
     }
 
-    //SearchCountry ProgressReports
+    //SearchCountry CreateProgressReports
     override val uiStateCountry = mutableStateOf(Countries())
     override val isCheckedFavoriteCountry = mutableStateOf(false)
     override val sortCountry = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность
@@ -338,7 +338,7 @@ class CreateProgressReportsViewModel @Inject constructor(
         countriesListCountry = filterCountry()
     }
 
-    //Search Township ProgressReports
+    //Search Township CreateProgressReports
     override val uiStateTownship = mutableStateOf(Townships())
     override val isCheckedFavoriteTownship = mutableStateOf(false)
     override val sortTownship = mutableIntStateOf(0) //0 - Алфавит, 1 - Популярность

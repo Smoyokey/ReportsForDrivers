@@ -16,9 +16,15 @@ class ProgressReportDiRepo @Inject constructor(private val progressReportDao: Pr
 
     override suspend fun deleteOneElementForId(id: Int) = progressReportDao.deleteOneElementForId(id)
 
+    override suspend fun deleteAllElementsForReportNameId(reportNameId: Int) =
+        progressReportDao.deleteAllElementsForReportNameId(reportNameId)
+
     override suspend fun insertItem(item: ProgressReport) = progressReportDao.insert(item)
 
     override suspend fun deleteItem(item: ProgressReport) = progressReportDao.delete(item)
 
     override suspend fun updateItem(item: ProgressReport) = progressReportDao.update(item)
+
+    override fun getAllElementsForReportNameId(reportNameId: Int): Flow<List<ProgressReport>> =
+        progressReportDao.getAllElementsForReportNameId(reportNameId)
 }

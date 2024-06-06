@@ -246,4 +246,40 @@ class FioFirstEntryRepo @Inject constructor(
             value
         }
     }
+
+    override suspend fun setEditSelectedPage(editSelectedPage: Int) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.EDIT_SELECTED_PAGE] = editSelectedPage
+        }
+    }
+
+    override suspend fun getEditSelectedPage(): Result<Int> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.EDIT_SELECTED_PAGE]
+                }
+            val value = flow.firstOrNull() ?: 0
+            value
+        }
+    }
+
+    override suspend fun setEditSelectedId(editSelectedId: Int) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.EDIT_SELECTED_ID] = editSelectedId
+        }
+    }
+
+    override suspend fun getEditSelectedId(): Result<Int> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.EDIT_SELECTED_ID]
+                }
+            val value = flow.firstOrNull() ?: 0
+            value
+        }
+    }
 }

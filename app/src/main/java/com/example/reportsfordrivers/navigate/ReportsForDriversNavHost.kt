@@ -19,6 +19,14 @@ import com.example.reportsfordrivers.ui.layouts.createreports.CreateReportsResul
 import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryOneScreen
 import com.example.reportsfordrivers.ui.layouts.firstentry.FirstEntryTwoScreen
 import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.HistoryReportsSelectedScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportDataPersonalInfoScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportDataRouteScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportDataVehicleInfoScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportExpensesScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportProgressReportsScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportsDataReportInfoScreen
+import com.example.reportsfordrivers.ui.layouts.hirstoryreports.editreport.EditReportsPreviewScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingCountriesCitiesScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingDataVehiclesTrailersScreen
 import com.example.reportsfordrivers.ui.layouts.setting.SettingMainScreen
@@ -32,6 +40,15 @@ import com.example.reportsfordrivers.viewmodel.createreports.CreateReportInfoVie
 import com.example.reportsfordrivers.viewmodel.createreports.CreateRouteViewModel
 import com.example.reportsfordrivers.viewmodel.createreports.CreateVehicleTrailerViewModel
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.HistoryReportsDetailingViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.HistoryReportsListViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditExpensesTripViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditPersonalInfoViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditPreviewAndResultViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditProgressReportsViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditReportInfoViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditRouteViewModel
+import com.example.reportsfordrivers.viewmodel.historyreports.editreport.viewmodel.EditVehicleTrailerViewModel
 import com.example.reportsfordrivers.viewmodel.setting.CountriesAndCitiesViewModel
 
 @Composable
@@ -57,6 +74,11 @@ fun ReportsForDriversNavHost(
         hiltViewModel<CreateExpensesTripViewModel>()
     val viewModelCreatePreviewAndResult: CreatePreviewAndResultViewModel =
         hiltViewModel<CreatePreviewAndResultViewModel>()
+    val viewModelHistoryReportsList: HistoryReportsListViewModel =
+        hiltViewModel<HistoryReportsListViewModel>()
+    val viewModelHistoryReportsSelected: HistoryReportsDetailingViewModel =
+        hiltViewModel<HistoryReportsDetailingViewModel>()
+
     viewModelCreatePreviewAndResult.activity = activity
 
     NavHost(
@@ -115,6 +137,7 @@ fun ReportsForDriversNavHost(
                         navController.navigate(ReportsForDriversSchema.SettingStart.name)
                     },
                     viewModel = viewModelMain,
+                    viewModelResult = viewModelCreatePreviewAndResult
                 )
             }
         }
@@ -198,7 +221,68 @@ fun ReportsForDriversNavHost(
         }
 
         composable(route = ReportsForDriversSchema.ListHistory.name) {
-            HistoryReportsScreen()
+            if(!viewModelHistoryReportsList.firstOpenHistoryReportsList.value) {
+                viewModelHistoryReportsList.startLoadScreen()
+            }
+            HistoryReportsScreen(
+                viewModel = viewModelHistoryReportsList,
+                navigate = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.SelectElementHistory.name) {
+            if(!viewModelHistoryReportsSelected.firstOpenHistoryDetailing.value) {
+                viewModelHistoryReportsSelected.firstEntrySelectedReport(viewModelHistoryReportsList.selectedId.value)
+            }
+            HistoryReportsSelectedScreen(
+                viewModel = viewModelHistoryReportsSelected,
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditReportInfo.name) {
+            EditReportsDataReportInfoScreen(
+                viewModel = hiltViewModel<EditReportInfoViewModel>(),
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditPersonalInfo.name) {
+            EditReportDataPersonalInfoScreen(
+                viewModel = hiltViewModel<EditPersonalInfoViewModel>(),
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditVehicleInfo.name) {
+            EditReportDataVehicleInfoScreen(
+                viewModel = hiltViewModel<EditVehicleTrailerViewModel>(),
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditRoute.name) {
+            EditReportDataRouteScreen(
+                viewModel = hiltViewModel<EditRouteViewModel>(),
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditProgressReport.name) {
+            EditReportProgressReportsScreen(
+                viewModel = hiltViewModel<EditProgressReportsViewModel>(),
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditTripExpenses.name) {
+            EditReportExpensesScreen(
+                viewModel = hiltViewModel<EditExpensesTripViewModel>(),
+                navController = navController
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditPreview.name) {
+            EditReportsPreviewScreen(
+                viewModel = hiltViewModel<EditPreviewAndResultViewModel>(),
+                onNext = { navController.navigate(ReportsForDriversSchema.EditTripExpenses.name) },
+                onBack = { navController.navigate(ReportsForDriversSchema.EditResult.name) }
+            )
+        }
+        composable(route = ReportsForDriversSchema.EditResult.name) {
+
         }
 
         composable(route = ReportsForDriversSchema.SettingStart.name) {

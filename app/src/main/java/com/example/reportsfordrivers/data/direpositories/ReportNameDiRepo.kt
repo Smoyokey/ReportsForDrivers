@@ -21,5 +21,12 @@ class ReportNameDiRepo @Inject constructor(private val reportNameDao: ReportName
 
     override suspend fun updateItem(item: ReportName) = reportNameDao.update(item)
 
+    override suspend fun updateWaybillMainCityDate(
+        waybill: String,
+        mainCity: String,
+        date: String,
+        id: Int
+    ) = reportNameDao.updateWaybillMainCityDate(waybill, mainCity, date, id)
+
     override suspend fun getLastId(): Int = reportNameDao.getLastId()
 }

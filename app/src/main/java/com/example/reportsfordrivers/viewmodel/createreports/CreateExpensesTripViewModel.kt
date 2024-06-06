@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.data.dao.CurrencyDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateExpensesTripDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateExpensesTripDao
 import com.example.reportsfordrivers.data.structure.Currency
-import com.example.reportsfordrivers.data.structure.createReport.CreateExpensesTrip
+import com.example.reportsfordrivers.data.structure.createreport.CreateExpensesTrip
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripDetailingUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateExpensesTripUiState

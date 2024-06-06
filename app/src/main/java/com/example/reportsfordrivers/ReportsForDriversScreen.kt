@@ -78,11 +78,15 @@ fun ReportsForDriversApp(
 
     Scaffold(
         topBar = {
-            ReportsForDriversTopBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.currentBackStackEntry != null,
-                navigate = navController
-            )
+            if(navController.currentDestination?.route == ReportsForDriversSchema.SelectElementHistory.name ||
+                navController.currentDestination?.route == ReportsForDriversSchema.ListHistory.name) {
+            } else {
+                ReportsForDriversTopBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.currentBackStackEntry != null,
+                    navigate = navController
+                )
+            }
         }
     ) { innerPadding ->
         Column() {

@@ -16,5 +16,7 @@ interface ReportNameRepository {
 
     suspend fun updateItem(item: ReportName)
 
+    suspend fun updateWaybillMainCityDate(waybill: String, mainCity: String, date: String, id: Int)
+
     suspend fun getLastId(): Int
 }

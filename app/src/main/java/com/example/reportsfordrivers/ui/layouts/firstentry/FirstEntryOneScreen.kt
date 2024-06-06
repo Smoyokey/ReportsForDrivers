@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
-import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.RowVehicleAndTrailerElement
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.firstentry.FirstEntryViewModel

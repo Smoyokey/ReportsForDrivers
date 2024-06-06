@@ -60,4 +60,12 @@ object DataStoreName {
     val START_CREATE_REPORT = booleanPreferencesKey(
         name = "start_create_report"
     )
+
+    val EDIT_SELECTED_PAGE = intPreferencesKey(
+        name = "edit_selected_page"
+    )
+
+    val EDIT_SELECTED_ID = intPreferencesKey(
+        name = "edit_selected_id"
+    )
 }

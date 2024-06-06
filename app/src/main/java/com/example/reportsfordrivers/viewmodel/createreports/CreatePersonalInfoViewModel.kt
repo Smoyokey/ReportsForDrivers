@@ -3,7 +3,7 @@ package com.example.reportsfordrivers.viewmodel.createreports
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.reportsfordrivers.data.dao.createReport.CreatePersonalInfoDao
+import com.example.reportsfordrivers.data.dao.createreport.CreatePersonalInfoDao
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreatePersonalInfoUiState
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.SelectedNavigationUiState
@@ -48,9 +48,9 @@ class CreatePersonalInfoViewModel @Inject constructor(
             lastName = lastName
         )
         runBlocking {
-            createPersonalInfoDb.updateOneElementForIdFirstName(
+            createPersonalInfoDb.updateOneElementForIdLastName(
                 id = uiStateCreatePersonalInfo.value.id,
-                firstName = uiStateCreatePersonalInfo.value.firstName
+                lastName = uiStateCreatePersonalInfo.value.lastName
             )
         }
     }
@@ -60,9 +60,9 @@ class CreatePersonalInfoViewModel @Inject constructor(
             firstName = firstName
         )
         runBlocking {
-            createPersonalInfoDb.updateOneElementForIdLastName(
+            createPersonalInfoDb.updateOneElementForIdFirstName(
                 id = uiStateCreatePersonalInfo.value.id,
-                lastName = uiStateCreatePersonalInfo.value.firstName
+                firstName = uiStateCreatePersonalInfo.value.firstName
             )
         }
     }

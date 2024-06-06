@@ -1,6 +1,5 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,8 +17,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -41,7 +38,6 @@ import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.custom.AlertDialogAddVehicle
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
-import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
 import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.createreports.CreateVehicleTrailerViewModel
@@ -271,7 +267,7 @@ fun CreateReportsDataVehicleInfoScreen(
                 OutlinedTextField(
                     value = viewModel.uiStateCreateVehicleTrailer.value.makeTrailer,
                     label = { Text(stringResource(R.string.make_trailer)) },
-                    onValueChange = { viewModel.updateDataCreateVehicleTrailerMakeTrailer("") },
+                    onValueChange = { viewModel.updateDataCreateVehicleTrailerMakeTrailer(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(makeTrailer),
@@ -357,7 +353,7 @@ fun CreateReportsDataVehicleInfoScreen(
             title = R.string.test,
             headText = R.string.test,
             labelMake = R.string.make_trailer,
-            labelRn = R.string.rn_vehicle,
+            labelRn = R.string.rn_trailer,
             saveInDB = viewModel::saveTrailerInDb,
             type = VehicleOrTrailer.TRAILER.name
         )

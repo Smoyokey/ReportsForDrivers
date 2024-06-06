@@ -19,6 +19,14 @@ enum class ReportsForDriversSchema(@StringRes val title: Int) {
 
     ListHistory(title = R.string.history_report),
     SelectElementHistory(title = R.string.history_report),
+    EditReportInfo(title = R.string.report_information),
+    EditPersonalInfo(title = R.string.personal_information),
+    EditVehicleInfo(title = R.string.vehicle_trailer_information),
+    EditRoute(title = R.string.route),
+    EditProgressReport(title = R.string.stages_movement),
+    EditTripExpenses(title = R.string.business_trip_expenses),
+    EditPreview(title = R.string.preview),
+    EditResult(title = R.string.result),
 
     SettingStart(title = R.string.settings),
     PersonalInformation(title = R.string.personal_data),

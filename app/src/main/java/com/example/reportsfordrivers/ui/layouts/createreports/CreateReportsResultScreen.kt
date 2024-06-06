@@ -1,10 +1,8 @@
 package com.example.reportsfordrivers.ui.layouts.createreports
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -12,12 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,7 +23,6 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.reportsfordrivers.MainActivity
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.theme.typography
@@ -94,8 +88,10 @@ fun CreateReportsResultScreen(
                         }
                         else -> {
                             viewModel.saveFile(context)
-//                            viewModel.saveDataInBd()
+                            viewModel.saveDataInBd()
+                            viewModel.adShowScreen(context)
                             navController.navigate(ReportsForDriversSchema.Start.name)
+                            viewModelMainMenu.openSnackBarSaveReport.value = true
                             Log.i(TAG, "ELSE")
                         }
                     }

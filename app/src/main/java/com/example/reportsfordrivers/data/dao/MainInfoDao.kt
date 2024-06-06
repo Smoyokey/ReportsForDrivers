@@ -20,6 +20,15 @@ interface MainInfoDao {
     @Update
     suspend fun update(item: MainInfo)
 
+    @Query("UPDATE main_info SET name_report = :nameReport, date_create = :dateCreate, " +
+            "route_main_info = :routeMainInfo WHERE id = :id")
+    fun updateNameReportDateCreateRouteMainInfoForId(
+        nameReport: String,
+        dateCreate: String,
+        routeMainInfo: String,
+        id: Int
+    )
+
     @Query("SELECT * FROM MAIN_INFO")
     fun getAllItem(): Flow<List<MainInfo>>
 
@@ -28,4 +37,7 @@ interface MainInfoDao {
 
     @Query("DELETE FROM MAIN_INFO WHERE id = :id")
     suspend fun deleteOneElementForId(id: Int)
+
+    @Query("SELECT name_report FROM MAIN_INFO ORDER BY id DESC LIMIT 1")
+    suspend fun getLastNameReport(): String
 }

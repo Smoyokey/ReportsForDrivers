@@ -21,4 +21,13 @@ class MainInfoDiRepo @Inject constructor(private val mainInfoDao: MainInfoDao) :
     override suspend fun deleteItem(item: MainInfo) = mainInfoDao.delete(item)
 
     override suspend fun updateItem(item: MainInfo) = mainInfoDao.update(item)
+
+    override suspend fun updateNameReportDateCreateRouteMainInfoForId(
+        nameReport: String,
+        dateCreate: String,
+        routeMainInfo: String,
+        id: Int
+    ) = mainInfoDao.updateNameReportDateCreateRouteMainInfoForId(nameReport, dateCreate, routeMainInfo, id)
+
+    override suspend fun getLastNameReport(): String = mainInfoDao.getLastNameReport()
 }

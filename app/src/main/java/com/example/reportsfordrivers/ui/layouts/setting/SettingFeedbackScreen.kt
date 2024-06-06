@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
@@ -57,7 +55,7 @@ fun SettingFeedbackScreen() {
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
+
                             }
                             .testTag(Tags.TAG_TEST_SETTING_FEEDBACK_TEXT),
                     )
@@ -133,7 +131,7 @@ fun OutlinedTextFieldSettingFeedback() {
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
+
                             }
                             .testTag(Tags.TAG_TEST_SETTING_FEEDBACK_YOUR_NAME)
                     )
@@ -153,7 +151,7 @@ fun OutlinedTextFieldSettingFeedback() {
                         contentDescription = stringResource(R.string.clear),
                         modifier = Modifier
                             .clickable {
-//                                onValueChane(itemDetails.copy(tt = ""))
+
                             }
                             .testTag(Tags.TAG_TEST_SETTING_FEEDBACK_YOUR_EMAIL)
                     )

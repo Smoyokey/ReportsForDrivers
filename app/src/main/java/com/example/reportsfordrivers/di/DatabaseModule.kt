@@ -15,18 +15,23 @@ import com.example.reportsfordrivers.data.dao.TrailerDao
 import com.example.reportsfordrivers.data.dao.TripExpensesDao
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.dao.VehicleDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateExpensesTripDao
-import com.example.reportsfordrivers.data.dao.createReport.CreatePersonalInfoDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateProgressReportsDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateReportInfoDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateRouteDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateVehicleTrailerDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateExpensesTripDao
+import com.example.reportsfordrivers.data.dao.createreport.CreatePersonalInfoDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateProgressReportsDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateReportInfoDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateRouteDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateVehicleTrailerDao
+import com.example.reportsfordrivers.data.dao.editreport.EditExpensesTripDao
+import com.example.reportsfordrivers.data.dao.editreport.EditPersonalInfoDao
+import com.example.reportsfordrivers.data.dao.editreport.EditProgressReportsDao
+import com.example.reportsfordrivers.data.dao.editreport.EditReportInfoDao
+import com.example.reportsfordrivers.data.dao.editreport.EditRouteDao
+import com.example.reportsfordrivers.data.dao.editreport.EditVehicleTrailerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -120,7 +125,37 @@ object DatabaseModule {
 
     @Provides
     fun provideCreateVehicleTrailer(database: AppDatabase): CreateVehicleTrailerDao {
-        return database.createVehicleTrailer()
+        return database.createVehicleTrailerDao()
+    }
+
+    @Provides
+    fun provideEditExpensesTrip(database: AppDatabase): EditExpensesTripDao {
+        return database.editExpensesTripDao()
+    }
+
+    @Provides
+    fun provideEditPersonalInfo(database: AppDatabase): EditPersonalInfoDao {
+        return database.editPersonalInfoDao()
+    }
+
+    @Provides
+    fun provideEditProgressReports(database: AppDatabase): EditProgressReportsDao {
+        return database.editProgressReportsDao()
+    }
+
+    @Provides
+    fun provideEditReportInfo(database: AppDatabase): EditReportInfoDao {
+        return database.editReportInfoDao()
+    }
+
+    @Provides
+    fun provideEditRoute(database: AppDatabase): EditRouteDao {
+        return database.editRouteDao()
+    }
+
+    @Provides
+    fun provideEditVehicleTrailer(database: AppDatabase): EditVehicleTrailerDao {
+        return database.editVehicleTrailerDao()
     }
 
     @Provides

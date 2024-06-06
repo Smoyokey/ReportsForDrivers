@@ -3,7 +3,7 @@ package com.example.reportsfordrivers.viewmodel.createreports
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
-import com.example.reportsfordrivers.data.dao.createReport.CreateVehicleTrailerDao
+import com.example.reportsfordrivers.data.dao.createreport.CreateVehicleTrailerDao
 import com.example.reportsfordrivers.data.structure.VehicleAndTrailer
 import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
 import com.example.reportsfordrivers.viewmodel.createreports.uistate.CreateObjectVehicleOrTrailer

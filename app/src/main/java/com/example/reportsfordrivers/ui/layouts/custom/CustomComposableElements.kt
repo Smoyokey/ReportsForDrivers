@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imeNestedScroll
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -41,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -102,7 +99,6 @@ fun OutlinedTextFieldCustomSearch(
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OutlinedTextFieldCustom(
     @StringRes label: Int,
@@ -118,7 +114,6 @@ fun OutlinedTextFieldCustom(
         onValueChange = { onValueChange(it) },
         label = { Text(stringResource(label)) },
         modifier = modifier,
-//        singleLine = true,
         textStyle = typography.bodyLarge,
         keyboardOptions = keyboardOptions,
         trailingIcon = {

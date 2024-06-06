@@ -62,13 +62,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import com.example.reportsfordrivers.R
-import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigate.ReportsForDriversSchema
 import com.example.reportsfordrivers.ui.layouts.custom.AlertDialogDeleteElement
 import com.example.reportsfordrivers.ui.layouts.custom.BottomBarCustom
 import com.example.reportsfordrivers.ui.layouts.custom.DatePickerDialogCustom
-import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustom
-import com.example.reportsfordrivers.ui.layouts.custom.OutlinedTextFieldCustomSearch
 import com.example.reportsfordrivers.ui.layouts.custom.RowDateWithTextField
 import com.example.reportsfordrivers.ui.layouts.custom.RowProgressAndExpenses
 import com.example.reportsfordrivers.ui.layouts.custom.TabRowCustom
@@ -162,17 +159,6 @@ fun CreateReportsProgressReportsScreen(
                     }
                     .fillMaxWidth()
             )
-
-//            OutlinedTextFieldCustomSearch(
-//                label = R.string.township_one,
-//                value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipOne,
-//                onValueChange = { viewModel.updateProgressReportsTownshipOne(it) },
-//                tag = "",
-//                modifier = Modifier.fillMaxWidth(),
-//                isOpenSearch = viewModel.openBottomSheetTownshipCreateProgressReports,
-//                isOneAndTwoState = viewModel.openSearchBottomSheet,
-//                isOneAndTwo = 0
-//            )
 
             OutlinedTextField(
                 value = viewModel.uiStateCreateProgressReportsDetailing.value.townshipOne,
@@ -565,7 +551,6 @@ private fun ColumnSearchCountry(
                         countriesListCountry = countriesListCountry
                     )
                 }
-
             }
         }
     }

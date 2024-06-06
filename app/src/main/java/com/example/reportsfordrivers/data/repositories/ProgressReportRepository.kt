@@ -10,9 +10,13 @@ interface ProgressReportRepository {
 
     suspend fun deleteOneElementForId(id: Int)
 
+    suspend fun deleteAllElementsForReportNameId(reportNameId: Int)
+
     suspend fun insertItem(item: ProgressReport)
 
     suspend fun deleteItem(item: ProgressReport)
 
     suspend fun updateItem(item: ProgressReport)
+
+    fun getAllElementsForReportNameId(reportNameId: Int): Flow<List<ProgressReport>>
 }
