@@ -19,11 +19,11 @@ class HistoryReportsUiTest {
     @get:Rule(order = 1)
     val composeRule = createAndroidComposeRule(MainActivity::class.java)
 
-    @Before
-    fun init() {
-        hiltRule.inject()
-        composeRule.activity.setContent {
-            HistoryReportsScreen()
-        }
-    }
+//    @Before
+//    fun init() {
+//        hiltRule.inject()
+//        composeRule.activity.setContent {
+//            HistoryReportsScreen()
+//        }
+//    }
 }

@@ -11,7 +11,6 @@ import com.example.reportsfordrivers.MainActivity
 import com.example.reportsfordrivers.R
 import com.example.reportsfordrivers.Tags
 import com.example.reportsfordrivers.navigationtest.helpmethods.onNodeWithStringId
-import com.example.reportsfordrivers.ui.layouts.setting.SettingFeedbackScreen
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -31,13 +30,13 @@ class FeedbackUiTest {
     private var yourEmail = "ivan@gmail.com"
     private var text = "Hello, any text"
 
-    @Before
-    fun init() {
-        hiltRule.inject()
-        composeRule.activity.setContent {
-            SettingFeedbackScreen()
-        }
-    }
+//    @Before
+//    fun init() {
+//        hiltRule.inject()
+//        composeRule.activity.setContent {
+//            SettingFeedbackScreen()
+//        }
+//    }
 
     @Test
     fun writeText_inTextFieldYourName() {

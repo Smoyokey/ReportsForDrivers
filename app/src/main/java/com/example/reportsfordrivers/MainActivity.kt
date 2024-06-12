@@ -45,15 +45,14 @@ class MainActivity : ComponentActivity() {
         MobileAds.initialize(this) {}
 
         setContent {
-            AppTheme {
-                // A surface container using the 'background' color from the theme
+            AppTheme(content = {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ReportsForDriversApp(activity = this@MainActivity)
                 }
-            }
+            })
         }
     }
 

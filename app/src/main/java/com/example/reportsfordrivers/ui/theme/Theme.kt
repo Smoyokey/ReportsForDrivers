@@ -14,6 +14,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepo
+import com.example.reportsfordrivers.datastore.fiofirstentry.FioFirstEntryRepository
+import com.example.reportsfordrivers.viewmodel.AppThemeViewModel
+import javax.inject.Inject
 
 private val DarkColorScheme = darkColorScheme(
     primary = md_theme_dark_primary,
@@ -82,16 +87,37 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
+    viewModel: AppThemeViewModel = hiltViewModel()
 ) {
+
+
     val context = LocalContext.current
-    val colors = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            if(useDarkTheme) dynamicDarkColorScheme(context)
-            else dynamicLightColorScheme(context)
+    val colors = if(viewModel.onSelectedTheme().value == "DE") {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                if (useDarkTheme) dynamicDarkColorScheme(context)
+                else dynamicLightColorScheme(context)
+            }
+
+            useDarkTheme -> DarkColorScheme
+            else -> LightColorScheme
         }
-        useDarkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    } else {
+        if(viewModel.onSelectedTheme().value == "L") {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                dynamicLightColorScheme(context)
+            } else {
+                LightColorScheme
+            }
+        } else {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                dynamicDarkColorScheme(context)
+            } else {
+                DarkColorScheme
+            }
+            DarkColorScheme
+        }
     }
 
     val view = LocalView.current
