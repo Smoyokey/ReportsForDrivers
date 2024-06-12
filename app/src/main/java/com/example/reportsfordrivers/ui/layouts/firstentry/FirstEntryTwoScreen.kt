@@ -96,7 +96,8 @@ fun FirstEntryTwoScreen(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             TextButton(
                 onClick = { viewModel.openBottomSheetCurrency() },
@@ -110,7 +111,7 @@ fun FirstEntryTwoScreen(
             Text(
                 text = viewModel.uiState.value.currency,
                 modifier = Modifier.weight(1f),
-                textAlign = TextAlign.End,
+                textAlign = TextAlign.Center,
                 style = typography.titleLarge
             )
         }
@@ -142,7 +143,8 @@ fun FirstEntryTwoScreen(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedButton(
                 onClick = {
@@ -178,9 +180,7 @@ fun FirstEntryTwoScreen(
     if (viewModel.openBottomSheetAddCity.value) {
         BottomSheetAddCity(
             isOpen = viewModel.openBottomSheetAddCity,
-            listCountry = viewModel.listCountriesUiState.value.listCountries,
             viewModel = viewModel,
-
         )
     }
 }
@@ -525,7 +525,6 @@ fun BottomSheetCurrency(
 @Composable
 fun BottomSheetAddCity(
     isOpen: MutableState<Boolean>,
-    listCountry: List<CountryDetailing>,
     viewModel: FirstEntryViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -541,12 +540,15 @@ fun BottomSheetAddCity(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
         ) {
             Text(
                 text = stringResource(R.string.add_city),
-                style = typography.headlineSmall
+                style = typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                textAlign = TextAlign.Center,
+
             )
 
             OutlinedTextField(
@@ -572,6 +574,7 @@ fun BottomSheetAddCity(
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 15.dp)
             )
 
             DockedSearchBar(
@@ -595,11 +598,20 @@ fun BottomSheetAddCity(
                     )
                 },
                 modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 10.dp)
             ) {}
 
             if(viewModel.addCityUiState.value.country.country.isNotEmpty()) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text( text = viewModel.addCityUiState.value.country.country )
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = viewModel.addCityUiState.value.country.country,
+                        modifier = Modifier.weight(1f),
+                        style = typography.titleLarge
+                    )
                     IconButton(
                         onClick = {
                             viewModel.updateAddCityCountry(CountryDetailing())
@@ -614,7 +626,8 @@ fun BottomSheetAddCity(
             }
 
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(15.dp)
+                verticalArrangement = Arrangement.spacedBy(15.dp),
+                modifier = Modifier.weight(1f)
             ) {
                 items(countriesListAddCity.size) { element ->
                     Row(
@@ -628,36 +641,42 @@ fun BottomSheetAddCity(
                         Text(
                             text = countriesListAddCity[element].country,
                             modifier = Modifier.weight(1f),
-                            style = typography.titleLarge
+                            style = typography.bodyLarge
                         )
                     }
                 }
             }
+
+            Button(
+                onClick = {
+                    isOpen.value = false
+                    viewModel.saveAddCity()
+                },
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 8.dp),
+                enabled = viewModel.validateAddCity()
+            ) {
+                Text(
+                    text = stringResource(R.string.save)
+                )
+            }
         }
 
-        Button(
-            onClick = {
-                isOpen.value = false
-                viewModel.saveAddCity()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = viewModel.validateAddCity()
-        ) {
-            Text(
-                text = stringResource(R.string.save)
-            )
-        }
+
     }
 }
 
 @Composable
 fun RowSearchCountry(name: String, viewModel: FirstEntryViewModel) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = name,
             modifier = Modifier.weight(1f)
+                .padding(start = 6.dp),
+            style = typography.titleLarge,
         )
         IconButton(
             onClick = {
@@ -679,11 +698,12 @@ fun EmptySearchTownship(isOpenAddCity: MutableState<Boolean>) {
         onClick = {
             isOpenAddCity.value = !isOpenAddCity.value
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
             text = stringResource(R.string.not_list_add),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = typography.titleLarge
         )
     }
 }

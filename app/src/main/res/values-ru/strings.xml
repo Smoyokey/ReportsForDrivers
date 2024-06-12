@@ -8,13 +8,12 @@
     <string name="last_name">Фамилия</string>
     <string name="first_name">Имя</string>
     <string name="patronymic">Отчество</string>
+    <string name="add_makes_registration_vehicles_trailers">Марка и государственный номер автомобилей (прицепов):</string>
     <string name="vehicle">Авто/м</string>
     <string name="trailer">Прицеп</string>
     <string name="make_vehicle_trailer">Марка авто/м / прицепа</string>
     <string name="make_vehicle">Марка авто/м</string>
     <string name="make_trailer">Марка прицепа</string>
-    <string name="registration_number_vehicle_trailer">Registration number of the vehicle /
-        trailer</string>
     <string name="registration_number_vehicle">Государственный номер авто/м</string>
     <string name="registration_number_trailer">Государственный номер прицепа</string>
     <string name="rn_vehicle_trailer">Г/н авто/м / прицепа</string>
@@ -27,6 +26,8 @@
     <string name="save_entered_data">Сохранить введенные данные?</string>
     <string name="skip">Пропустить</string>
     <string name="save">Сохранить</string>
+    <string name="save_file">Сохранить файл</string>
+    <string name="save_and_exit">Сохранить и выйти</string>
     <string name="info">Информация</string>
     <string name="clear">Очистить</string>
     <string name="driver">Водитель:</string>
@@ -38,7 +39,7 @@
     <string name="settings">Настройки</string>
 
 
-<!--    <string name="selecting_layout">Selecting a </string>-->
+
     <string name="next">Дальше</string>
     <string name="date">Дата</string>
     <string name="data_filling">Data filling</string>
@@ -53,6 +54,8 @@
     <string name="progress_report">Отчет о этапах</string>
     <string name="country">Страна</string>
     <string name="township">Город</string>
+    <string name="township_one">Первый город</string>
+    <string name="township_two">Второй город</string>
     <string name="townships">Населенные пункты</string>
     <string name="distance">Расстояние, км</string>
     <string name="cargo_weight">Вес груза, т</string>
@@ -64,7 +67,6 @@
     <string name="come_out">Come out</string>
     <string name="delete">Удалить</string>
     <string name="ok">Ок</string>
-<!--    <string name="choosing_layout">Choosing a layout</string>-->
     <string name="data">Дата</string>
     <string name="stages_movement">Этапы движения</string>
     <string name="business_trip_expenses">Расходы по командировке</string>
@@ -81,9 +83,7 @@
     <string name="edit">Edit</string>
 
 
-    <string name="personal_data">Личные данные</string>
-    <string name="data_vehicles_trailers">Данные о авто/м и прицепах</string>
-    <string name="feedback">Обратная свяль (предложения и пожелания)</string>
+
     <string name="cancel">Отмена</string>
     <string name="your_name">Ваше имя</string>
     <string name="your_contact_email">Your contact email</string>
@@ -108,7 +108,54 @@
     <string name="personal_information">Персональная информация</string>
     <string name="vehicle_trailer_information">Информация о авто/м и прицепе</string>
 
+    <string name="load_date">Загрузить дату</string>
+    <string name="select_date">Выбрать дату</string>
     <string name="missing_from_list_create">Отсутствует в списке? Создать</string>
-    <string name="select_currency">Select currency</string>
+    <string name="calendar">Календарь</string>
+
+
+    <!-- FirstEntryTwo -->
+    <string name="report_language">Язык отчёта:</string>
+    <string name="russian">Русский</string>
+    <string name="english">Английский</string>
+    <string name="select_currency">Выберите валюту:</string>
+    <string name="make_list_favorite_countries_cities">
+        Добавить список избранных стран и городов
+    </string>
+    <string name="countries">Страны</string>
+    <string name="cities">Города</string>
+    <string name="add_city">Добавить город</string>
+    <string name="name_city">Город</string>
+    <string name="name_country">Страна</string>
+    <string name="not_list_add">Нет в списке? Добавить</string>
+
+
+    <!-- CreateReportsDataVehicleInfoScreen -->
+    <string name="enter_make_number_vehicle">Введите марку и гос номер т/с</string>
+    <string name="enter_make_number_trailer">Введите марку и гос номер прицепа</string>
+
+
+    <!-- SettingMainMenu -->
+    <string name="personal_data">Личные данные</string>
+    <string name="data_vehicles_trailers">Данные о авто/м и прицепах</string>
+    <string name="countries_cities">Страны и города</string>
+    <string name="default_currency">Валюта по-умолчанию</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="information">Информация</string>
+    <string name="send_questions_suggestions">Отправить вопросы или предложения</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="light_theme">Светлая тема</string>
+    <string name="system_default">Система по умолчанию</string>
+    <string name="app_name_version">Легкие отчёты. Версия: 1.0.0</string>
+    <string name="text_information">Мы помогаем создавать отчёты для водителей и работников других сфер.
+        Позволяет легко и быстро создавать отчёты.</string>
+
+    <!-- SettingCountriesCitiesScreen -->
+    <string name="alphabetically">По алфавиту</string>
+    <string name="by_popularity">По популярности</string>
+    <string name="favorite">Избранные</string>
+
+    <!-- HistoryReportsList -->
+    <string name="export_to_word">Экспортировать в Word</string>
 
 </resources>

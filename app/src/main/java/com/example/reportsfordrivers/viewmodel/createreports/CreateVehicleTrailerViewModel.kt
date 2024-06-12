@@ -1,6 +1,7 @@
 package com.example.reportsfordrivers.viewmodel.createreports
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.example.reportsfordrivers.data.dao.VehicleAndTrailerSaveDataDao
 import com.example.reportsfordrivers.data.dao.createreport.CreateVehicleTrailerDao
@@ -42,6 +43,9 @@ class CreateVehicleTrailerViewModel @Inject constructor(
     var openMenuMakeTrailerCreateVehicleTrailer = mutableStateOf(false)
 
     var firstOpenCreateVehicleTrailer = mutableStateOf(false)
+
+    var isHaveVehicleInList = mutableStateOf(false)
+    var isHaveTrailerInList = mutableStateOf(false)
 
     fun startLoadCreateVehicleTrailer() = runBlocking {
         val createVehicleTrailer = createVehicleTrailerDb.getAllItem().first()
@@ -115,11 +119,12 @@ class CreateVehicleTrailerViewModel @Inject constructor(
     fun saveVehicleInDb(createVehicle: CreateObjectVehicleOrTrailer) = runBlocking {
         vehicleAndTrailerDb.insert(
             VehicleAndTrailer(
-                vehicleOrTrailer = createVehicle.rn,
+                vehicleOrTrailer = createVehicle.type,
                 make = createVehicle.make,
                 registrationNumber = createVehicle.rn
             )
         )
+        loadVehicleAndTrailerInDb()
     }
 
     fun saveTrailerInDb(createTrailer: CreateObjectVehicleOrTrailer) = runBlocking {
@@ -130,9 +135,12 @@ class CreateVehicleTrailerViewModel @Inject constructor(
                 registrationNumber = createTrailer.rn
             )
         )
+        loadVehicleAndTrailerInDb()
     }
 
     private fun loadVehicleAndTrailerInDb() = runBlocking {
+        uiStateListVehicle.value.listVehicle = SnapshotStateList()
+        uiStateListTrailer.value.listTrailer = SnapshotStateList()
         val a = vehicleAndTrailerDb.getAllItem().first()
         for(i in a) {
             if(i.vehicleOrTrailer == "VEHICLE") {
@@ -151,5 +159,7 @@ class CreateVehicleTrailerViewModel @Inject constructor(
                 )
             }
         }
+        isHaveVehicleInList.value = uiStateListVehicle.value.listVehicle.isNotEmpty()
+        isHaveTrailerInList.value = uiStateListTrailer.value.listTrailer.isNotEmpty()
     }
 }

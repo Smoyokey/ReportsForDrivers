@@ -121,6 +121,24 @@ class FioFirstEntryRepo @Inject constructor(
         }
     }
 
+    override suspend fun setThemeApp(themeApp: String) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreName.THEME_APP] = themeApp
+        }
+    }
+
+    override suspend fun getThemeApp(): Result<String> {
+        return Result.runCatching {
+            val flow = dataStore.data
+                .catch {}
+                .map { preferences ->
+                    preferences[DataStoreName.THEME_APP]
+                }
+            val value = flow.firstOrNull() ?: ""
+            value
+        }
+    }
+
     override suspend fun setIsValidateCreateReportInfo(isValidateCreateReportInfo: Boolean) {
         dataStore.edit { preferences ->
             preferences[DataStoreName.IS_VALIDATE_CREATE_REPORT_INFO] = isValidateCreateReportInfo

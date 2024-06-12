@@ -27,6 +27,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -314,6 +315,7 @@ private fun BottomSheetSearch(
                 Button(
                     onClick = { viewModel.closeBottomSheetSearch() },
                     modifier = Modifier.fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp, bottom = 20.dp)
                 ) {
                     Text(text = stringResource(R.string.cancel))
                 }
@@ -332,8 +334,8 @@ private fun ColumnSearchCountry(
     val countriesListCountry by viewModel.countriesListCountry.collectAsState()
 
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier = modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         DockedSearchBar(
             query = searchTextCountry,
@@ -352,7 +354,8 @@ private fun ColumnSearchCountry(
         ) {}
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 modifier = Modifier
@@ -360,7 +363,9 @@ private fun ColumnSearchCountry(
                     .clickable {
                         viewModel.sortCountry.intValue = if(viewModel.sortCountry.intValue == 0) 1 else 0
                         viewModel.loadCountries()
-                    }
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.sort_24px),
@@ -371,7 +376,8 @@ private fun ColumnSearchCountry(
                         stringResource(R.string.alphabetically)
                     } else {
                         stringResource(R.string.by_popularity)
-                    }
+                    },
+                    style = typography.titleLarge
                 )
             }
             Row(
@@ -383,7 +389,8 @@ private fun ColumnSearchCountry(
                             viewModel.isCheckedFavoriteCountry.value = !viewModel.isCheckedFavoriteCountry.value
                         },
                         role = Role.Checkbox
-                    )
+                    ),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = viewModel.isCheckedFavoriteCountry.value,
@@ -392,7 +399,10 @@ private fun ColumnSearchCountry(
                         viewModel.loadCountries()
                     }
                 )
-                Text( text = stringResource(R.string.favorite) )
+                Text(
+                    text = stringResource(R.string.favorite),
+                    style = typography.titleLarge
+                )
             }
         }
 
@@ -412,6 +422,7 @@ private fun ColumnSearchCountry(
                         text = countriesListCountry[element].country,
                         style = typography.bodyLarge,
                         modifier = Modifier.weight(1f)
+                            .padding(start = if(countriesListCountry[element].favorite == 1) 0.dp else 32.dp)
                     )
 
                     IconButton(
@@ -448,8 +459,8 @@ private fun ColumnSearchTownship(
     val townshipsListTownship by viewModel.townshipsListTownship.collectAsState()
 
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier = modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         DockedSearchBar(
             query = searchTextTownship,
@@ -473,7 +484,8 @@ private fun ColumnSearchTownship(
         ) {}
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
                 modifier = Modifier
@@ -481,7 +493,9 @@ private fun ColumnSearchTownship(
                     .clickable {
                         viewModel.sortTownship.intValue = if(viewModel.sortTownship.intValue == 0) 1 else 0
                         viewModel.loadTownships(viewModel.selectedCountryIdInSearch.intValue)
-                    }
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.sort_24px),
@@ -492,7 +506,8 @@ private fun ColumnSearchTownship(
                         stringResource(R.string.alphabetically)
                     } else {
                         stringResource(R.string.by_popularity)
-                    }
+                    },
+                    style = typography.titleLarge
                 )
             }
             Row(
@@ -505,7 +520,8 @@ private fun ColumnSearchTownship(
                                 !viewModel.isCheckedFavoriteTownship.value
                         },
                         role = Role.Checkbox
-                    )
+                    ),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = viewModel.isCheckedFavoriteTownship.value,
@@ -514,12 +530,22 @@ private fun ColumnSearchTownship(
                         viewModel.loadTownships(viewModel.selectedCountryIdInSearch.intValue)
                     }
                 )
-                Text( text = stringResource(R.string.favorite))
+                Text(
+                    text = stringResource(R.string.favorite),
+                    style = typography.titleLarge
+                )
             }
         }
 
-        Row( modifier = Modifier.fillMaxWidth() ) {
-            Text( text = viewModel.selectedCountryNameInSearch.value )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = viewModel.selectedCountryNameInSearch.value,
+                modifier = Modifier.weight(1f),
+                style = typography.titleLarge
+            )
             IconButton(
                 onClick = {
                     viewModel.openListSearchEditReportInfo.intValue = 0
@@ -530,13 +556,18 @@ private fun ColumnSearchTownship(
             }
         }
 
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+            thickness = 1.dp
+        )
+
         if(viewModel.townshipsListTownship.value.isEmpty()) {
             Column( modifier = Modifier.fillMaxWidth()) {
                 EmptySearchTownshipReports(isOpenAddCity = viewModel::openAddCity)
             }
         } else {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(townshipsListTownship.size) { element ->
                     Row(
@@ -562,7 +593,7 @@ private fun ColumnSearchTownship(
                         }
                         Text(
                             text = townshipsListTownship[element].township,
-                            style = typography.bodyLarge
+                            style = typography.titleLarge
                         )
                     }
                 }
@@ -584,41 +615,38 @@ private fun BottomSheetAddCity(
             sheetState = sheetState,
             modifier = Modifier.fillMaxHeight(0.75f)
         ) {
-            Text(
-                text = stringResource(R.string.add_city),
-                style = typography.headlineSmall
-            )
 
-            OutlinedTextField(
-                value = viewModel.uiStateAddCity.value.nameCity,
-                onValueChange = { viewModel.updateNameCityAddCityEditReportInfo(name = it) },
-                label = { Text(stringResource(R.string.name_city)) },
-                singleLine = true,
-                textStyle = typography.bodyLarge,
-                trailingIcon = {
-                    if (viewModel.uiStateAddCity.value.nameCity.isNotEmpty()) {
-                        IconButton( onClick = { viewModel.updateNameCityAddCityEditReportInfo("" ) } ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Clear,
-                                contentDescription = stringResource(R.string.clear)
-                            )
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            ColumnSearchCountryAddCity(viewModel = viewModel)
-
-            Button(
-                onClick = {
-                    viewModel.closeAddCity()
-                    viewModel.saveAddCityInBd()
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = viewModel.validateAddCity()
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
             ) {
-                Text ( text = stringResource(R.string.save))
+                Text(
+                    text = stringResource(R.string.add_city),
+                    style = typography.headlineSmall
+                )
+
+                OutlinedTextField(
+                    value = viewModel.uiStateAddCity.value.nameCity,
+                    onValueChange = { viewModel.updateNameCityAddCityEditReportInfo(name = it) },
+                    label = { Text(stringResource(R.string.name_city)) },
+                    singleLine = true,
+                    textStyle = typography.bodyLarge,
+                    trailingIcon = {
+                        if (viewModel.uiStateAddCity.value.nameCity.isNotEmpty()) {
+                            IconButton( onClick = { viewModel.updateNameCityAddCityEditReportInfo("" ) } ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(R.string.clear)
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(bottom = 15.dp)
+                )
+
+                ColumnSearchCountryAddCity(viewModel = viewModel)
             }
         }
     }
@@ -652,7 +680,10 @@ private fun ColumnSearchCountryAddCity(
             modifier = Modifier.fillMaxWidth()
         ) {}
 
-        Row( modifier = Modifier.fillMaxWidth() ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Row(
                 modifier = Modifier
                     .weight(1f)
@@ -661,7 +692,9 @@ private fun ColumnSearchCountryAddCity(
                             sortCountry.intValue = if(sortCountry.intValue == 0) 1 else 0
                             loadCountries()
                         }
-                    }
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.sort_24px),
@@ -672,7 +705,8 @@ private fun ColumnSearchCountryAddCity(
                         stringResource(R.string.alphabetically)
                     } else {
                         stringResource(R.string.by_popularity)
-                    }
+                    },
+                    style = typography.titleLarge
                 )
             }
             Row(
@@ -685,7 +719,8 @@ private fun ColumnSearchCountryAddCity(
                                 !viewModel.isCheckedFavoriteCountry.value
                         },
                         role = Role.Checkbox
-                    )
+                    ),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = viewModel.isCheckedFavoriteCountry.value,
@@ -696,13 +731,23 @@ private fun ColumnSearchCountryAddCity(
                         }
                     }
                 )
-                Text( text = stringResource(R.string.favorite) )
+                Text(
+                    text = stringResource(R.string.favorite),
+                    style = typography.titleLarge
+                )
             }
         }
 
         if(viewModel.uiStateAddCity.value.country.country.isNotEmpty()) {
-            Row( modifier = Modifier.fillMaxWidth() ) {
-                Text( text = viewModel.uiStateAddCity.value.country.country )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = viewModel.uiStateAddCity.value.country.country,
+                    modifier = Modifier.weight(1f),
+                    style = typography.titleLarge
+                )
                 IconButton(
                     onClick = {
                         viewModel.updateNameCountryAddCityEditReportInfo(CountryDetailing())
@@ -716,9 +761,15 @@ private fun ColumnSearchCountryAddCity(
             }
         }
 
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+            thickness = 1.dp
+        )
+
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(15.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.weight(1f)
+                .padding(top = 8.dp)
         ) {
             items(countriesListCountryAddCity.size) { element ->
                 Row(
@@ -736,6 +787,18 @@ private fun ColumnSearchCountryAddCity(
                 }
             }
         }
+
+        Button(
+            onClick = {
+                viewModel.closeAddCity()
+                viewModel.saveAddCityInBd()
+            },
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 10.dp, bottom = 8.dp),
+            enabled = viewModel.validateAddCity()
+        ) {
+            Text ( text = stringResource(R.string.save))
+        }
     }
 }
 
@@ -747,7 +810,8 @@ private fun EmptySearchTownshipReports(isOpenAddCity: () -> Unit) {
     ) {
         Text(
             text = stringResource(R.string.not_list_add),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = typography.titleLarge
         )
     }
 }

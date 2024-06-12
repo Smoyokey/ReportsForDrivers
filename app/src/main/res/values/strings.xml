@@ -7,15 +7,13 @@
     <string name="last_name">Last name</string>
     <string name="first_name">First name</string>
     <string name="patronymic">Patronymic</string>
-    <string name="add_makes_registration_vehicles_trailers" tools:ignore="MissingTranslation">Makes and license plates
+    <string name="add_makes_registration_vehicles_trailers">Makes and license plates
         of vehicles (trailers):</string>
     <string name="vehicle">Vehicle</string>
     <string name="trailer">Trailer</string>
     <string name="make_vehicle_trailer">Make of the vehicle / trailer</string>
     <string name="make_vehicle">Make of the vehicle</string>
     <string name="make_trailer">Make of the trailer</string>
-    <string name="registration_number_vehicle_trailer">Registration number of the vehicle /
-        trailer</string>
     <string name="registration_number_vehicle">Registration number of the vehicle</string>
     <string name="registration_number_trailer">Registration number of the trailer</string>
     <string name="rn_vehicle_trailer">R/n of the vehicle / trailer</string>
@@ -28,8 +26,8 @@
     <string name="save_entered_data">Save the entered data?</string>
     <string name="skip">Skip</string>
     <string name="save">Save</string>
-    <string name="save_file" tools:ignore="MissingTranslation">Save file</string>
-    <string name="save_and_exit" tools:ignore="MissingTranslation">Save and exit</string>
+    <string name="save_file">Save file</string>
+    <string name="save_and_exit">Save and exit</string>
     <string name="info">Info</string>
     <string name="clear">Clear</string>
     <string name="driver">Driver:</string>
@@ -42,7 +40,7 @@
     <string name="settings">Settings</string>
 
 
-<!--    <string name="selecting_layout">Selecting a layout</string>-->
+
     <string name="next">Next</string>
     <string name="date">Date</string>
     <string name="data_filling">Data filling</string>
@@ -55,11 +53,10 @@
     <string name="speedometer_reading_return">Speedometer reading on return</string>
     <string name="fuelled">Fuelled, litres</string>
     <string name="progress_report">Progress report</string>
-<!--    <string name="report_stages_voucher">The report</string>-->
     <string name="country">Country</string>
     <string name="township">Township</string>
-    <string name="township_one" tools:ignore="MissingTranslation">Township one</string>
-    <string name="township_two" tools:ignore="MissingTranslation">Township two</string>
+    <string name="township_one">Township one</string>
+    <string name="township_two">Township two</string>
     <string name="townships">Townships</string>
     <string name="distance">Distance, km</string>
     <string name="cargo_weight">Weight, t</string>
@@ -71,7 +68,6 @@
     <string name="come_out">Come out</string>
     <string name="delete">Delete</string>
     <string name="ok">Ok</string>
-<!--    <string name="choosing_layout">Choosing a layout</string>-->
     <string name="data">Data</string>
     <string name="stages_movement">Stages of the movement</string>
     <string name="business_trip_expenses">Business trip expenses</string>
@@ -114,47 +110,54 @@
     <string name="personal_information">Personal information</string>
     <string name="vehicle_trailer_information">Vehicle and trailer info</string>
 
-    <string name="load_date" tools:ignore="MissingTranslation">Load date</string>
-    <string name="select_date" tools:ignore="MissingTranslation">Select date</string>
+    <string name="load_date">Load date</string>
+    <string name="select_date">Select date</string>
     <string name="missing_from_list_create">Missing from the list? Create</string>
-    <string name="calendar" tools:ignore="MissingTranslation">Calendar</string>
+    <string name="calendar">Calendar</string>
 
 
     <!-- FirstEntryTwo -->
-    <string name="report_language" tools:ignore="MissingTranslation">Report language:</string>
-    <string name="russian" tools:ignore="MissingTranslation">Russian</string>
-    <string name="english" tools:ignore="MissingTranslation">English</string>
+    <string name="report_language">Report language:</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
     <string name="select_currency">Select currency:</string>
-    <string name="make_list_favorite_countries_cities" tools:ignore="MissingTranslation">
+    <string name="make_list_favorite_countries_cities">
         Make a list of favorite countries and cities
     </string>
-    <string name="countries" tools:ignore="MissingTranslation">Countries</string>
-    <string name="cities" tools:ignore="MissingTranslation">Cities</string>
-    <string name="add_city" tools:ignore="MissingTranslation">Add city</string>
-    <string name="name_city" tools:ignore="MissingTranslation">Name of the city</string>
-    <string name="name_country" tools:ignore="MissingTranslation">Country name</string>
-    <string name="not_list_add" tools:ignore="MissingTranslation">Not on the list? Add</string>
+    <string name="countries">Countries</string>
+    <string name="cities">Cities</string>
+    <string name="add_city">Add city</string>
+    <string name="name_city">Name of the city</string>
+    <string name="name_country">Country name</string>
+    <string name="not_list_add">Not on the list? Add</string>
 
+
+    <!-- CreateReportsDataVehicleInfoScreen -->
+    <string name="enter_make_number_vehicle">Enter the make and state number of the vehicle</string>
+    <string name="enter_make_number_trailer">Enter the make and state number of the trailer</string>
 
 
     <!-- SettingMainMenu -->
     <string name="personal_data">Personal data</string>
     <string name="data_vehicles_trailers">Data on vehicles and trailers</string>
-    <string name="countries_cities" tools:ignore="MissingTranslation">Countries and cities</string>
-    <string name="default_currency" tools:ignore="MissingTranslation">Default currency</string>
-    <string name="dark_theme" tools:ignore="MissingTranslation">Dark theme</string>
-    <string name="information" tools:ignore="MissingTranslation">Information</string>
-    <string name="send_questions_suggestions" tools:ignore="MissingTranslation">
-        Send questions or suggestions
-    </string>
-    <string name="privacy_policy" tools:ignore="MissingTranslation">Privacy policy</string>
+    <string name="countries_cities">Countries and cities</string>
+    <string name="default_currency">Default currency</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="information">Information</string>
+    <string name="send_questions_suggestions">Send questions or suggestions</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="light_theme">Light theme</string>
+    <string name="system_default">System default</string>
+    <string name="app_name_version">Easy reports. Version: 1.0.0</string>
+    <string name="text_information">We help create reports for drivers and workers in other areas.
+        Allows you to easily and quickly create reports.</string>
 
     <!-- SettingCountriesCitiesScreen -->
-    <string name="alphabetically" tools:ignore="MissingTranslation">Alphabetically</string>
-    <string name="by_popularity" tools:ignore="MissingTranslation">By popularity</string>
-    <string name="favorite" tools:ignore="MissingTranslation">Favorite</string>
+    <string name="alphabetically">Alphabetically</string>
+    <string name="by_popularity">By popularity</string>
+    <string name="favorite">Favorite</string>
 
     <!-- HistoryReportsList -->
-    <string name="export_to_word" tools:ignore="MissingTranslation">Export to MS Word</string>
+    <string name="export_to_word">Export to MS Word</string>
 
 </resources>

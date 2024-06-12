@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
@@ -38,8 +39,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -253,13 +260,13 @@ fun RowProgressAndExpenses(@StringRes title: Int, text: String) {
         Text(
             text = stringResource(title),
             modifier = Modifier.weight(1f),
-            style = typography.bodyMedium
+            style = typography.titleLarge
         )
         Text(
             text = text,
             modifier = Modifier.weight(2f),
             textAlign = TextAlign.End,
-            style = typography.bodyMedium
+            style = typography.titleLarge
         )
     }
 }
@@ -360,6 +367,7 @@ fun AlertDialogDeleteElementVehicle(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun AlertDialogAddVehicle(
@@ -372,6 +380,9 @@ fun AlertDialogAddVehicle(
     type: String
 ) {
     val uiStateVehicleObject = remember { mutableStateOf(ObjectVehicle(type = type)) }
+
+    val (make, rn) = remember { FocusRequester.createRefs() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     AlertDialog(
         onDismissRequest = { isOpenDialog.value = false },
@@ -404,21 +415,59 @@ fun AlertDialogAddVehicle(
         text = {
             Column {
                 Text(text = stringResource(headText))
-                OutlinedTextFieldCustom(
-                    label = labelMake,
+
+                OutlinedTextField(
                     value = uiStateVehicleObject.value.make,
-                    onValueChange = { text ->
-                        uiStateVehicleObject.value = uiStateVehicleObject.value.copy(make = text)
+                    label = { Text(stringResource(labelMake)) },
+                    onValueChange = { uiStateVehicleObject.value = uiStateVehicleObject.value.copy(make = it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(make),
+                    textStyle = typography.bodyLarge,
+                    trailingIcon = {
+                        if(uiStateVehicleObject.value.make.isNotEmpty()) {
+                            IconButton(
+                                onClick = { uiStateVehicleObject.value = uiStateVehicleObject.value.copy(make = "")}
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(R.string.clear)
+                                )
+                            }
+                        }
                     },
-                    tag = ""
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {rn.requestFocus()})
                 )
-                OutlinedTextFieldCustom(
-                    label = labelRn,
+
+                OutlinedTextField(
                     value = uiStateVehicleObject.value.rn,
-                    onValueChange = { text ->
-                        uiStateVehicleObject.value = uiStateVehicleObject.value.copy(rn = text)
+                    label = { Text(stringResource(labelRn)) },
+                    onValueChange = { uiStateVehicleObject.value = uiStateVehicleObject.value.copy(rn = it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(rn),
+                    textStyle = typography.bodyLarge,
+                    trailingIcon = {
+                        if(uiStateVehicleObject.value.rn.isNotEmpty()) {
+                            IconButton(
+                                onClick = { uiStateVehicleObject.value = uiStateVehicleObject.value.copy(rn = "")}
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Clear,
+                                    contentDescription = stringResource(R.string.clear)
+                                )
+                            }
+                        }
                     },
-                    tag = ""
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Characters,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()})
                 )
             }
         }

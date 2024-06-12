@@ -509,7 +509,10 @@ class CreateRouteViewModel @Inject constructor(
 
     private fun loadRouteToList(route: String): SnapshotStateList<RouteElement> {
         return if (route.isEmpty()) {
-            SnapshotStateList()
+            val a = SnapshotStateList<RouteElement>()
+            a.add(RouteElement(1, ""))
+            a.add(RouteElement(2, ""))
+            a
         } else {
             val a = SnapshotStateList<RouteElement>()
             val b = route.split(", ")

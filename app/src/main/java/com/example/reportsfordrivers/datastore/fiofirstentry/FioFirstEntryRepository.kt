@@ -26,6 +26,10 @@ interface FioFirstEntryRepository {
 
     suspend fun getDefaultCurrency(): Result<String>
 
+    suspend fun setThemeApp(themeApp: String)
+
+    suspend fun getThemeApp(): Result<String>
+
     suspend fun setIsValidateCreateReportInfo(isValidateCreateReportInfo: Boolean)
 
     suspend fun getIsValidateCreateReportInfo(): Result<Boolean>

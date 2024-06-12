@@ -140,16 +140,16 @@ private fun LinePreviewText(@StringRes textName: Int, previewText: String) {
         Text(
             text = stringResource(textName),
             modifier = Modifier.weight(1f),
-            style = typography.bodyMedium
+            style = typography.titleLarge
         )
         Text(
             text = "-",
-            style = typography.bodyMedium
+            style = typography.titleLarge
         )
         Text(
             text = previewText,
             modifier = Modifier.weight(1f),
-            style = typography.bodyMedium,
+            style = typography.titleLarge,
             textAlign = TextAlign.Right
         )
     }

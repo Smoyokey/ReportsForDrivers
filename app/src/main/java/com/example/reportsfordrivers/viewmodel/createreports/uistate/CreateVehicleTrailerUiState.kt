@@ -11,7 +11,7 @@ data class CreateVehicleTrailerUiState (
 )
 
 data class CreateVehicleTrailerListVehicle(
-    val listVehicle: SnapshotStateList<CreateVehicleTrailerDetailingListVehicle> = SnapshotStateList()
+    var listVehicle: SnapshotStateList<CreateVehicleTrailerDetailingListVehicle> = SnapshotStateList()
 )
 
 data class CreateVehicleTrailerDetailingListVehicle(
@@ -20,7 +20,7 @@ data class CreateVehicleTrailerDetailingListVehicle(
 )
 
 data class CreateVehicleTrailerListTrailer(
-    val listTrailer: SnapshotStateList<CreateVehicleTrailerDetailingListTrailer> = SnapshotStateList()
+    var listTrailer: SnapshotStateList<CreateVehicleTrailerDetailingListTrailer> = SnapshotStateList()
 )
 
 data class CreateVehicleTrailerDetailingListTrailer(

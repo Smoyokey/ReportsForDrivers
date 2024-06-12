@@ -48,7 +48,7 @@ fun CreateReportsDataPersonalInfoScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     DisposableEffect(Unit) {
-        if(viewModel.uiStateCreatePersonalInfo.value.lastName.isNotEmpty()) {
+        if(viewModel.uiStateCreatePersonalInfo.value.lastName.isEmpty()) {
             lastName.requestFocus()
         }
         onDispose { }

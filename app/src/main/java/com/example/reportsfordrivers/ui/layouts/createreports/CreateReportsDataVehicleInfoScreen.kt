@@ -82,7 +82,7 @@ fun CreateReportsDataVehicleInfoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
 
-            if(viewModel.uiStateListVehicle.value.listVehicle.isNotEmpty()) {
+            if(viewModel.isHaveVehicleInList.value) { //ДОБАВЛЕНО
                 ExposedDropdownMenuBox(
                     expanded = viewModel.openMenuMakeVehicleCreateVehicleTrailer.value,
                     onExpandedChange = {
@@ -204,7 +204,7 @@ fun CreateReportsDataVehicleInfoScreen(
             }
 
 
-            if(viewModel.uiStateListTrailer.value.listTrailer.isNotEmpty()) {
+            if(viewModel.isHaveTrailerInList.value) {
                 ExposedDropdownMenuBox(
                     expanded = viewModel.openMenuMakeTrailerCreateVehicleTrailer.value,
                     onExpandedChange = {
@@ -339,8 +339,8 @@ fun CreateReportsDataVehicleInfoScreen(
     if(viewModel.openDialogCreateVehicleCreateVehicleTrailer.value) {
         AlertDialogAddVehicle(
             isOpenDialog = viewModel.openDialogCreateVehicleCreateVehicleTrailer,
-            title = R.string.test,
-            headText = R.string.test,
+            title = R.string.add,
+            headText = R.string.enter_make_number_vehicle,
             labelMake = R.string.make_vehicle,
             labelRn = R.string.rn_vehicle,
             saveInDB = viewModel::saveVehicleInDb,
@@ -350,8 +350,8 @@ fun CreateReportsDataVehicleInfoScreen(
     if(viewModel.openDialogCreateTrailerCreateVehicleTrailer.value) {
         AlertDialogAddVehicle(
             isOpenDialog = viewModel.openDialogCreateTrailerCreateVehicleTrailer,
-            title = R.string.test,
-            headText = R.string.test,
+            title = R.string.add,
+            headText = R.string.enter_make_number_trailer,
             labelMake = R.string.make_trailer,
             labelRn = R.string.rn_trailer,
             saveInDB = viewModel::saveTrailerInDb,

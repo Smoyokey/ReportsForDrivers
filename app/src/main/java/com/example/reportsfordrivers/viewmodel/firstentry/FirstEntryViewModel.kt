@@ -578,7 +578,7 @@ class FirstEntryViewModel @Inject constructor(
     /**
      * Сохранение валюты по умолчанию в DataStore
      */
-    private fun saveCurrency() = runBlocking    {
+    private fun saveCurrency() = runBlocking {
         if(uiState.value.currency.isNotEmpty()) {
             fioFirstEntryPreferencesRepository.setDefaultCurrency(uiState.value.currency)
         }
