@@ -151,6 +151,10 @@
     <string name="app_name_version">Easy reports. Version: 1.0.0</string>
     <string name="text_information">We help create reports for drivers and workers in other areas.
         Allows you to easily and quickly create reports.</string>
+    <string name="setting_save_restart_application">Settings have been saved. You must restart the
+        application to take effect</string>
+    <string name="choosing_theme">Choosing a theme</string>
+    <string name="selecting_report_language">Selecting the report language</string>
 
     <!-- SettingCountriesCitiesScreen -->
     <string name="alphabetically">Alphabetically</string>

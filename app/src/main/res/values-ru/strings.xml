@@ -149,6 +149,10 @@
     <string name="app_name_version">Легкие отчёты. Версия: 1.0.0</string>
     <string name="text_information">Мы помогаем создавать отчёты для водителей и работников других сфер.
         Позволяет легко и быстро создавать отчёты.</string>
+    <string name="setting_save_restart_application">Настройки сохранены. Для вступления в силу
+        необходимо перезапустить приложение</string>
+    <string name="choosing_theme">Выбор темы</string>
+    <string name="selecting_report_language">Выбор языка отчёта</string>
 
     <!-- SettingCountriesCitiesScreen -->
     <string name="alphabetically">По алфавиту</string>

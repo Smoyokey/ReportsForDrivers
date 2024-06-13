@@ -93,13 +93,12 @@ fun AppTheme(
 
 
     val context = LocalContext.current
-    val colors = if(viewModel.onSelectedTheme().value == "DE") {
+    val colors = if(viewModel.selectedTheme.value.isEmpty() || viewModel.selectedTheme.value == "DE") {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
                 if (useDarkTheme) dynamicDarkColorScheme(context)
                 else dynamicLightColorScheme(context)
             }
-
             useDarkTheme -> DarkColorScheme
             else -> LightColorScheme
         }
@@ -116,7 +115,6 @@ fun AppTheme(
             } else {
                 DarkColorScheme
             }
-            DarkColorScheme
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.reportsfordrivers.ui.layouts.setting
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -16,9 +17,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,10 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.reportsfordrivers.R
-import com.example.reportsfordrivers.ui.layouts.setting.customsettingmain.BottomSheetCurrency
+import com.example.reportsfordrivers.ui.layouts.setting.customsettingmain.AlertDialogThemeSettingMain
+import com.example.reportsfordrivers.ui.layouts.setting.customsettingmain.BottomSheetCurrencySettingMain
 import com.example.reportsfordrivers.ui.theme.typography
 import com.example.reportsfordrivers.viewmodel.setting.SettingMainViewModel
+import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun SettingMainScreen(
     onPersonalData: () -> Unit,
@@ -41,83 +51,117 @@ fun SettingMainScreen(
     modifier: Modifier = Modifier,
     viewModel: SettingMainViewModel = hiltViewModel()
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 10.dp, bottom = 10.dp, end = 20.dp, start = 20.dp)
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    val settingSaveRestartApplicationTheme = stringResource(R.string.setting_save_restart_application)
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
+        }
     ) {
-        ButtonRowSetting(
-            text = R.string.personal_data,
-            icon = R.drawable.person_24px,
-            onClick = onPersonalData
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 10.dp, bottom = 10.dp, end = 20.dp, start = 20.dp)
+        ) {
+            ButtonRowSetting(
+                text = R.string.personal_data,
+                icon = R.drawable.person_24px,
+                onClick = onPersonalData
+            )
+
+            ButtonRowSetting(
+                text = R.string.data_vehicles_trailers,
+                icon = R.drawable.local_shipping_24px,
+                onClick = onVehicleAndTrailerDate
+            )
+
+            ButtonRowSetting(
+                text = R.string.countries_cities,
+                icon = R.drawable.apartment_24px,
+                onClick = onCountriesCities
+            )
+
+            ButtonRowSetting(
+                text = R.string.report_language,
+                icon = R.drawable.language_24px,
+                onClick = {}
+            )
+
+            ButtonRowSetting(
+                text = R.string.default_currency,
+                icon = R.drawable.attach_money_24px,
+                onClick = { viewModel.openBottomSheetCurrency() }
+            )
+
+            ButtonRowSetting(
+                text = R.string.dark_theme,
+                icon = R.drawable.palette_24px,
+                onClick = { viewModel.openDialogTheme() }
+            )
+
+            HorizontalDivider(
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+                thickness = 1.dp
+            )
+
+            ButtonRowSetting(
+                text = R.string.information,
+                icon = R.drawable.info_24px,
+                onClick = {}
+            )
+
+            ButtonRowSetting(
+                text = R.string.send_questions_suggestions,
+                icon = R.drawable.mail_24px,
+                onClick = {}
+            )
+
+            ButtonRowSetting(
+                text = R.string.privacy_policy,
+                icon = R.drawable.policy_24px,
+                onClick = {}
+            )
+        }
+
+        AlertDialogThemeSettingMain(
+            isOpen = viewModel.isOpenDialogTheme,
+            onSave = viewModel::onSaveTheme,
+            onCancel = viewModel::onCancelTheme,
+            selectedTheme = viewModel.selectedTheme
         )
 
-        ButtonRowSetting(
-            text = R.string.data_vehicles_trailers,
-            icon = R.drawable.local_shipping_24px,
-            onClick = onVehicleAndTrailerDate
-        )
+        AlertDialogLanguage(viewModel = viewModel)
+        AlertDialogInformation(viewModel = viewModel)
 
-        ButtonRowSetting(
-            text = R.string.countries_cities,
-            icon = R.drawable.apartment_24px,
-            onClick = onCountriesCities
-        )
-
-        ButtonRowSetting(
-            text = R.string.report_language,
-            icon = R.drawable.language_24px,
-            onClick = {}
-        )
-
-        ButtonRowSetting(
-            text = R.string.default_currency,
-            icon = R.drawable.attach_money_24px,
-            onClick = { viewModel.openBottomSheetCurrency() }
-        )
-
-        ButtonRowSetting(
-            text = R.string.dark_theme,
-            icon = R.drawable.palette_24px,
-            onClick = {}
-        )
-
-        HorizontalDivider(
-            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-            thickness = 1.dp
-        )
-
-        ButtonRowSetting(
-            text = R.string.information,
-            icon = R.drawable.info_24px,
-            onClick = {}
-        )
-
-        ButtonRowSetting(
-            text = R.string.send_questions_suggestions,
-            icon = R.drawable.mail_24px,
-            onClick = {}
-        )
-
-        ButtonRowSetting(
-            text = R.string.privacy_policy,
-            icon = R.drawable.policy_24px,
-            onClick = {}
+        BottomSheetCurrencySettingMain(
+            isOpen = viewModel.isOpenBottomSheetCurrency,
+            listCurrency = viewModel.listCurrency.value,
+            selectedCurrency = viewModel.selectedCurrency,
+            onSave = viewModel::onSaveCurrency,
+            onCancel = viewModel::onCancelCurrency
         )
     }
 
-    AlertDialogTheme(viewModel = viewModel)
-    AlertDialogLanguage(viewModel = viewModel)
-    AlertDialogInformation(viewModel = viewModel)
-    BottomSheetCurrency(
-        isOpen = viewModel.isOpenBottomSheetCurrency,
-        listCurrency = viewModel.listCurrency.value,
-        selectedCurrency = viewModel.selectedCurrency,
-        onSave = viewModel::onSaveCurrency,
-        onCancel = viewModel::onCancelCurrency
-    )
+    if(viewModel.isOpenSnackBarTheme.value) {
+        scope.launch {
+            viewModel.isOpenSnackBarTheme.value = false
+            val snackBarResult = snackBarHostState.showSnackbar(
+                message = settingSaveRestartApplicationTheme
+            )
+            when(snackBarResult) {
+                SnackbarResult.Dismissed -> {
+
+                }
+                SnackbarResult.ActionPerformed -> {}
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -203,75 +247,6 @@ private fun AlertDialogLanguage(
                     Text(text = stringResource(R.string.cancel))
                 }
             }
-        )
-    }
-}
-
-@Composable
-fun AlertDialogTheme(
-    viewModel: SettingMainViewModel
-) {
-    if (viewModel.isOpenDialogTheme.value) {
-        AlertDialog(
-            title = { Text(text = stringResource(R.string.test)) },
-            onDismissRequest = { viewModel.isOpenDialogTheme.value = false },
-            confirmButton = {
-                Button(
-                    onClick = {}
-                ) {
-                    Text(text = stringResource(R.string.save))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {}
-                ) {
-                    Text(text = stringResource(R.string.cancel))
-                }
-            },
-            text = {
-                Column() {
-                    Row(
-                        modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = true,
-                            onClick = { },
-                            modifier = Modifier.semantics { contentDescription = "" }
-                        )
-                        Text(
-                            text = stringResource(R.string.dark_theme)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = false,
-                            onClick = { },
-                            modifier = Modifier.semantics { contentDescription = "" }
-                        )
-                        Text(
-                            text = stringResource(R.string.light_theme)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = false,
-                            onClick = {},
-                            modifier = Modifier.semantics { contentDescription = "" }
-                        )
-                        Text(
-                            text = stringResource(R.string.system_default)
-                        )
-                    }
-                }
-            },
         )
     }
 }

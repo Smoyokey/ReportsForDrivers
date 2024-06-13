@@ -20,6 +20,7 @@ class SettingMainViewModel @Inject constructor(
     var isOpenDialogLanguage = mutableStateOf(false)
     var isOpenBottomSheetCurrency = mutableStateOf(false)
     var isOpenDialogTheme = mutableStateOf(false)
+    var isOpenSnackBarTheme = mutableStateOf(false)
     var isOpenDialogInformation = mutableStateOf(false)
 
     var listCurrency = mutableStateOf(listOf<Currency>())
@@ -28,6 +29,7 @@ class SettingMainViewModel @Inject constructor(
     var selectedTheme = mutableStateOf("")
     var selectedLanguage = mutableStateOf("")
 
+    /* BottomSheetCurrency */
     fun openBottomSheetCurrency() = runBlocking {
         isOpenBottomSheetCurrency.value = true
         if (listCurrency.value.isEmpty()) {
@@ -47,17 +49,26 @@ class SettingMainViewModel @Inject constructor(
         selectedCurrency.value = ""
     }
 
+    /* AlertDialogTheme */
     fun openDialogTheme() = runBlocking {
+        selectedTheme.value = fioPreferencesRepository.getThemeApp().getOrDefault("DE")
         isOpenDialogTheme.value = true
     }
 
     fun onSaveTheme() = runBlocking {
         isOpenDialogTheme.value = false
-//        fioPreferencesRepository.
+        fioPreferencesRepository.setThemeApp(selectedTheme.value)
+        selectedTheme.value = ""
+        openSnackBarTheme()
     }
 
     fun onCancelTheme() {
         isOpenDialogTheme.value = false
         selectedTheme.value = ""
+    }
+
+    /* SnackBarSaveTheme */
+    private fun openSnackBarTheme() {
+        isOpenSnackBarTheme.value = true
     }
 }

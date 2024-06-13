@@ -31,7 +31,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetCurrency(
+fun BottomSheetCurrencySettingMain(
     isOpen: MutableState<Boolean> = mutableStateOf(false),
     listCurrency: List<Currency>,
     selectedCurrency: MutableState<String> = mutableStateOf(""),
@@ -42,7 +42,7 @@ fun BottomSheetCurrency(
 
     if(isOpen.value) {
         ModalBottomSheet(
-            onDismissRequest = { isOpen.value = false },
+            onDismissRequest = onCancel,
             sheetState = sheetState,
             modifier = Modifier.fillMaxHeight(0.75f)
         ) {
